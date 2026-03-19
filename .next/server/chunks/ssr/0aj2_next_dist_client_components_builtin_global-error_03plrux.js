@@ -1,0 +1,3 @@
+module.exports=[71602,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(35475);a.n(d("[project]/Projects/chess-network-project/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},15740,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(35475);a.n(d("[project]/Projects/chess-network-project/node_modules/next/dist/client/components/builtin/global-error.js"))},87513,a=>{"use strict";a.i(71602);var b=a.i(15740);a.n(b)},68085,a=>{a.n(a.i(87513))}];
+
+//# sourceMappingURL=0aj2_next_dist_client_components_builtin_global-error_03plrux.js.map

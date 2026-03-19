@@ -1,0 +1,17 @@
+# Optional: local Postgres on 5432. If you use 127.0.0.1:5433/db instead,
+# set DATABASE_URL in .env / .env.local and do not start this service.
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chessnet
+    volumes:
+      - chessnet_pg:/var/lib/postgresql/data
+
+volumes:
+  chessnet_pg:
+
