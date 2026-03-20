@@ -70,12 +70,12 @@ var _s = __turbopack_context__.k.signature();
 ;
 function RootNav() {
     _s();
-    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(11);
-    if ($[0] !== "67bf7afa9c89662816948c282f3aab32ee73bbba2ab031dbf2fa61ebd93a43f9") {
-        for(let $i = 0; $i < 11; $i += 1){
+    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(20);
+    if ($[0] !== "b228b2b2f9c47cb8435b72474cc9448a55f131d68667fbebcfde2dd9177a58dd") {
+        for(let $i = 0; $i < 20; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "67bf7afa9c89662816948c282f3aab32ee73bbba2ab031dbf2fa61ebd93a43f9";
+        $[0] = "b228b2b2f9c47cb8435b72474cc9448a55f131d68667fbebcfde2dd9177a58dd";
     }
     const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$components$2f$auth$2f$useAuthUser$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthUser"])();
@@ -112,75 +112,98 @@ function RootNav() {
     }
     let t3;
     if ($[5] !== linkClassName || $[6] !== user) {
-        t3 = user ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                    href: "/dashboard",
-                    className: linkClassName("/dashboard"),
-                    children: "Dashboard"
-                }, void 0, false, {
-                    fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
-                    lineNumber: 44,
-                    columnNumber: 19
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                    href: `/user/${user.id}`,
-                    className: linkClassName(`/user/${user.id}`),
-                    children: "Profile"
-                }, void 0, false, {
-                    fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
-                    lineNumber: 44,
-                    columnNumber: 99
-                }, this)
-            ]
-        }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                    href: "/login",
-                    className: linkClassName("/login"),
-                    children: "Login"
-                }, void 0, false, {
-                    fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
-                    lineNumber: 44,
-                    columnNumber: 199
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                    href: "/register",
-                    className: linkClassName("/register"),
-                    children: "Register"
-                }, void 0, false, {
-                    fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
-                    lineNumber: 44,
-                    columnNumber: 267
-                }, this)
-            ]
-        }, void 0, true);
+        t3 = user ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+            href: "/dashboard",
+            className: linkClassName("/dashboard"),
+            children: "Dashboard"
+        }, void 0, false, {
+            fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
+            lineNumber: 44,
+            columnNumber: 17
+        }, this) : null;
         $[5] = linkClassName;
         $[6] = user;
         $[7] = t3;
     } else {
         t3 = $[7];
     }
-    let t4;
-    if ($[8] !== t2 || $[9] !== t3) {
-        t4 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-            className: "flex justify-center gap-2",
+    const t4 = linkClassName("/blog");
+    let t5;
+    if ($[8] !== t4) {
+        t5 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+            href: "/blog",
+            className: t4,
+            children: "Blog"
+        }, void 0, false, {
+            fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
+            lineNumber: 54,
+            columnNumber: 10
+        }, this);
+        $[8] = t4;
+        $[9] = t5;
+    } else {
+        t5 = $[9];
+    }
+    const t6 = linkClassName("/news");
+    let t7;
+    if ($[10] !== t6) {
+        t7 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+            href: "/news",
+            className: t6,
+            children: "News"
+        }, void 0, false, {
+            fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
+            lineNumber: 63,
+            columnNumber: 10
+        }, this);
+        $[10] = t6;
+        $[11] = t7;
+    } else {
+        t7 = $[11];
+    }
+    const t8 = linkClassName("/about-us");
+    let t9;
+    if ($[12] !== t8) {
+        t9 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+            href: "/about-us",
+            className: t8,
+            children: "About Us"
+        }, void 0, false, {
+            fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
+            lineNumber: 72,
+            columnNumber: 10
+        }, this);
+        $[12] = t8;
+        $[13] = t9;
+    } else {
+        t9 = $[13];
+    }
+    let t10;
+    if ($[14] !== t2 || $[15] !== t3 || $[16] !== t5 || $[17] !== t7 || $[18] !== t9) {
+        t10 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+            className: "flex justify-center flex-wrap gap-2",
             children: [
                 t2,
-                t3
+                t3,
+                t5,
+                t7,
+                t9
             ]
         }, void 0, true, {
             fileName: "[project]/Projects/chess-network-project/src/app/RootNav.tsx",
-            lineNumber: 53,
-            columnNumber: 10
+            lineNumber: 80,
+            columnNumber: 11
         }, this);
-        $[8] = t2;
-        $[9] = t3;
-        $[10] = t4;
+        $[14] = t2;
+        $[15] = t3;
+        $[16] = t5;
+        $[17] = t7;
+        $[18] = t9;
+        $[19] = t10;
     } else {
-        t4 = $[10];
+        t10 = $[19];
     }
-    return t4;
+    return t10;
 }
 _s(RootNav, "KmIfs2ZUk2Nu8F3pVNtLIt+uJr4=", false, function() {
     return [
@@ -238,38 +261,28 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network
 ;
 function Logo() {
     const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(2);
-    if ($[0] !== "81037b14c6eed1bf8b38cea4b9be39dc4a70be88b076f6495ea53570d3ffba8b") {
+    if ($[0] !== "61010af4ffe68457bd8225c1faf051e30318324bb6d05a1284614cf8e78802d1") {
         for(let $i = 0; $i < 2; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "81037b14c6eed1bf8b38cea4b9be39dc4a70be88b076f6495ea53570d3ffba8b";
+        $[0] = "61010af4ffe68457bd8225c1faf051e30318324bb6d05a1284614cf8e78802d1";
     }
     let t0;
     if ($[1] === Symbol.for("react.memo_cache_sentinel")) {
         t0 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
             href: "/",
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                    src: __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$public$2f$images$2f$Logo$2e$png$2e$mjs__$7b$__IMAGE__$3d3e$__$225b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$public$2f$images$2f$Logo$2e$png__$28$static__in__ecmascript$2c$__tag__client$2922$__$7d$__$5b$app$2d$client$5d$__$28$structured__image__object__with__data__url$2c$__ecmascript$29$__["default"].src,
-                    alt: "Logo",
-                    width: 300,
-                    height: 300,
-                    className: "w-30 h-30"
-                }, void 0, false, {
-                    fileName: "[project]/Projects/chess-network-project/src/components/layout/Logo.tsx",
-                    lineNumber: 15,
-                    columnNumber: 25
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                    className: "text-2xl font-bold",
-                    children: "ChessConnect"
-                }, void 0, false, {
-                    fileName: "[project]/Projects/chess-network-project/src/components/layout/Logo.tsx",
-                    lineNumber: 15,
-                    columnNumber: 110
-                }, this)
-            ]
-        }, void 0, true, {
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                src: __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$public$2f$images$2f$Logo$2e$png$2e$mjs__$7b$__IMAGE__$3d3e$__$225b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$public$2f$images$2f$Logo$2e$png__$28$static__in__ecmascript$2c$__tag__client$2922$__$7d$__$5b$app$2d$client$5d$__$28$structured__image__object__with__data__url$2c$__ecmascript$29$__["default"].src,
+                alt: "Logo",
+                width: 300,
+                height: 300,
+                className: "w-40 h-40"
+            }, void 0, false, {
+                fileName: "[project]/Projects/chess-network-project/src/components/layout/Logo.tsx",
+                lineNumber: 15,
+                columnNumber: 25
+            }, this)
+        }, void 0, false, {
             fileName: "[project]/Projects/chess-network-project/src/components/layout/Logo.tsx",
             lineNumber: 15,
             columnNumber: 10
@@ -311,14 +324,15 @@ var _s = __turbopack_context__.k.signature();
 function Header() {
     _s();
     const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(9);
-    if ($[0] !== "b40608a2e5a3ebab6b6fd5ca08a0dc8352bb2f75a44f735c32f81d91fe1a2674") {
+    if ($[0] !== "a69b5cb550a84fc768b86f745c2ca901950fc6b7730d64727a8ce3407814b028") {
         for(let $i = 0; $i < 9; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "b40608a2e5a3ebab6b6fd5ca08a0dc8352bb2f75a44f735c32f81d91fe1a2674";
+        $[0] = "a69b5cb550a84fc768b86f745c2ca901950fc6b7730d64727a8ce3407814b028";
     }
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$components$2f$auth$2f$useAuthUser$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthUser"])();
+    user?.userName ?? user?.email;
     let t0;
     if ($[1] !== router) {
         t0 = async function handleLogout() {
@@ -338,12 +352,12 @@ function Header() {
     if ($[3] === Symbol.for("react.memo_cache_sentinel")) {
         t1 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$components$2f$layout$2f$Logo$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
             fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-            lineNumber: 37,
+            lineNumber: 38,
             columnNumber: 10
         }, this);
         t2 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$app$2f$RootNav$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
             fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-            lineNumber: 38,
+            lineNumber: 39,
             columnNumber: 10
         }, this);
         $[3] = t1;
@@ -354,77 +368,83 @@ function Header() {
     }
     let t3;
     if ($[5] !== handleLogout || $[6] !== router || $[7] !== user) {
-        t3 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
-            className: "flex justify-between items-center p-4 gap-4 h-16",
-            children: [
-                t1,
-                t2,
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center gap-2",
-                    children: user ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: {
-                                    "Header[<button>.onClick]": ()=>router.replace(`/user/${user.id}`)
-                                }["Header[<button>.onClick]"],
-                                className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
-                                children: "Profile"
-                            }, void 0, false, {
-                                fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-                                lineNumber: 47,
-                                columnNumber: 138
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: handleLogout,
-                                className: "bg-red-200 hover:bg-red-300 px-4 py-2 rounded-md text-sm font-medium",
-                                children: "Logout"
-                            }, void 0, false, {
-                                fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-                                lineNumber: 49,
-                                columnNumber: 141
-                            }, this)
-                        ]
-                    }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: {
-                                    "Header[<button>.onClick]": ()=>router.replace("/login")
-                                }["Header[<button>.onClick]"],
-                                className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
-                                children: "Login"
-                            }, void 0, false, {
-                                fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-                                lineNumber: 49,
-                                columnNumber: 290
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: {
-                                    "Header[<button>.onClick]": ()=>router.replace("/register")
-                                }["Header[<button>.onClick]"],
-                                className: "bg-[#6c47ff] text-white rounded-full font-medium text-sm h-10 px-5 cursor-pointer",
-                                children: "Register"
-                            }, void 0, false, {
-                                fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-                                lineNumber: 51,
-                                columnNumber: 139
-                            }, this)
-                        ]
-                    }, void 0, true)
-                }, void 0, false, {
-                    fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-                    lineNumber: 47,
-                    columnNumber: 87
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-            lineNumber: 47,
-            columnNumber: 10
-        }, this);
+        t3 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
+                className: "flex justify-between items-center p-4 gap-4 h-16",
+                children: [
+                    t1,
+                    t2,
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center gap-2",
+                        children: user ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    onClick: {
+                                        "Header[<button>.onClick]": ()=>router.replace("/dashboard")
+                                    }["Header[<button>.onClick]"],
+                                    className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
+                                    children: [
+                                        "Hello, ",
+                                        user.userName ? user.userName : user.email,
+                                        "!"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
+                                    lineNumber: 48,
+                                    columnNumber: 140
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    onClick: handleLogout,
+                                    className: "bg-red-200 hover:bg-red-300 px-4 py-2 rounded-md text-sm font-medium",
+                                    children: "Logout"
+                                }, void 0, false, {
+                                    fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
+                                    lineNumber: 50,
+                                    columnNumber: 188
+                                }, this)
+                            ]
+                        }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    onClick: {
+                                        "Header[<button>.onClick]": ()=>router.replace("/login")
+                                    }["Header[<button>.onClick]"],
+                                    className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
+                                    children: "Login"
+                                }, void 0, false, {
+                                    fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
+                                    lineNumber: 50,
+                                    columnNumber: 337
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    onClick: {
+                                        "Header[<button>.onClick]": ()=>router.replace("/register")
+                                    }["Header[<button>.onClick]"],
+                                    className: "bg-[#6c47ff] text-white rounded-full font-medium text-sm h-10 px-5 cursor-pointer",
+                                    children: "Register"
+                                }, void 0, false, {
+                                    fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
+                                    lineNumber: 52,
+                                    columnNumber: 141
+                                }, this)
+                            ]
+                        }, void 0, true)
+                    }, void 0, false, {
+                        fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
+                        lineNumber: 48,
+                        columnNumber: 89
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
+                lineNumber: 48,
+                columnNumber: 12
+            }, this)
+        }, void 0, false);
         $[5] = handleLogout;
         $[6] = router;
         $[7] = user;

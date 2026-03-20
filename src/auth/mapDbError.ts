@@ -5,9 +5,16 @@ import { Prisma } from "@prisma/client";
  */
 export function mapDbErrorToMessage(error: unknown): string {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    // e.g. table missing
     if (error.code === "P2021") {
       return "Database table missing. Run: npx prisma migrate deploy";
+    }
+    // Unique constraint (race: two signups at once)
+    if (error.code === "P2002") {
+      const target = error.meta?.target;
+      const fields = Array.isArray(target) ? target.join(", ") : String(target ?? "");
+      if (fields.includes("email")) return "This email is already registered.";
+      if (fields.includes("userName")) return "This username is already taken.";
+      return "This value is already in use.";
     }
   }
 

@@ -123,9 +123,16 @@ var __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$ex
 ;
 function mapDbErrorToMessage(error) {
     if (error instanceof __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$2c$__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f40$prisma$2f$client$29$__["Prisma"].PrismaClientKnownRequestError) {
-        // e.g. table missing
         if (error.code === "P2021") {
             return "Database table missing. Run: npx prisma migrate deploy";
+        }
+        // Unique constraint (race: two signups at once)
+        if (error.code === "P2002") {
+            const target = error.meta?.target;
+            const fields = Array.isArray(target) ? target.join(", ") : String(target ?? "");
+            if (fields.includes("email")) return "This email is already registered.";
+            if (fields.includes("userName")) return "This username is already taken.";
+            return "This value is already in use.";
         }
     }
     if (error instanceof __TURBOPACK__imported__module__$5b$externals$5d2f40$prisma$2f$client__$5b$external$5d$__$2840$prisma$2f$client$2c$__cjs$2c$__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f40$prisma$2f$client$29$__["Prisma"].PrismaClientInitializationError) {
@@ -216,21 +223,42 @@ function hashPassword(password, saltBytes) {
     const hash = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["pbkdf2Sync"])(password, saltBytes, 310_000, 32, "sha256");
     return hash.toString("base64");
 }
-async function registerUser(email, password) {
+function normalizeUserName(userName) {
+    return userName.trim();
+}
+async function registerUser(email, userName, password) {
     const normalizedEmail = normalizeEmail(email);
+    const normalizedUserName = normalizeUserName(userName);
+    if (normalizedUserName.length < 3) throw new Error("Username must be at least 3 characters long.");
     if (normalizedEmail.length < 4) throw new Error("Email is too short.");
-    if (password.length < 4) throw new Error("Password is too short.");
-    const existing = await __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
-        where: {
-            email: normalizedEmail
-        }
-    });
-    if (existing) throw new Error("User already exists.");
+    if (password.length < 8) throw new Error("Password must be at least 8 characters long.");
+    const [existingEmail, existingName] = await Promise.all([
+        __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
+            where: {
+                email: normalizedEmail
+            }
+        }),
+        __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
+            where: {
+                userName: normalizedUserName
+            }
+        })
+    ]);
+    if (existingEmail && existingName) {
+        throw new Error("This email and username are already registered.");
+    }
+    if (existingEmail) {
+        throw new Error("This email is already registered.");
+    }
+    if (existingName) {
+        throw new Error("This username is already taken.");
+    }
     const saltBytes = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["randomBytes"])(16);
     const passwordHashB64 = hashPassword(password, saltBytes);
     const saltB64 = saltBytes.toString("base64");
     const user = await __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.create({
         data: {
+            userName: normalizedUserName,
             email: normalizedEmail,
             passwordHashB64,
             saltB64
@@ -285,15 +313,57 @@ var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
 ;
 ;
 ;
-;
 async function POST(req) {
     const body = await req.json().catch(()=>null);
+    const userName = body?.userName ?? "";
     const email = body?.email ?? "";
     const password = body?.password ?? "";
+    const confirmPassword = body?.confirmPassword ?? "";
+    if (userName.trim().length < 3) {
+        return Response.json({
+            ok: false,
+            error: "Username must be at least 3 characters long"
+        }, {
+            status: 400
+        });
+    }
+    const normalizedEmail = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$userStore$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["normalizeEmail"])(email);
+    if (normalizedEmail.length < 4) {
+        return Response.json({
+            ok: false,
+            error: "Email is too short"
+        }, {
+            status: 400
+        });
+    }
+    if (!normalizedEmail.includes("@")) {
+        return Response.json({
+            ok: false,
+            error: "Email must contain an @ symbol"
+        }, {
+            status: 400
+        });
+    }
+    if (password !== confirmPassword) {
+        return Response.json({
+            ok: false,
+            error: "Passwords do not match"
+        }, {
+            status: 400
+        });
+    }
+    if (password.length < 8) {
+        return Response.json({
+            ok: false,
+            error: "Password must be at least 8 characters long"
+        }, {
+            status: 400
+        });
+    }
     try {
-        const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$userStore$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["registerUser"])(email, password);
-        // Auto-login after registration
-        const exp = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days
+        // userName, email, password (+ confirm уже проверен выше). В БД: userName, email, hash, salt — без plain password / confirm.
+        const user = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$userStore$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["registerUser"])(normalizedEmail, userName.trim(), password);
+        const exp = Date.now() + 7 * 24 * 60 * 60 * 1000;
         const sessionValue = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$session$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["signSession"])({
             userId: String(user.id),
             exp

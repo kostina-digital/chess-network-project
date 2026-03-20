@@ -20,33 +20,26 @@ export default function RootNav() {
   };
 
   return (
-    <nav className="flex justify-center gap-2">
+    <nav className="flex justify-center flex-wrap gap-2">
       <Link href="/" className={linkClassName("/")}>
         Home
       </Link>
 
       {user ? (
-        <>
-          <Link href="/dashboard" className={linkClassName("/dashboard")}>
-            Dashboard
-          </Link>
-          <Link
-            href={`/user/${user.id}`}
-            className={linkClassName(`/user/${user.id}`)}
-          >
-            Profile
-          </Link>
-        </>
-      ) : (
-        <>
-          <Link href="/login" className={linkClassName("/login")}>
-            Login
-          </Link>
-          <Link href="/register" className={linkClassName("/register")}>
-            Register
-          </Link>
-        </>
-      )}
+        <Link href="/dashboard" className={linkClassName("/dashboard")}>
+          Dashboard
+        </Link>
+      ) : null}
+
+      <Link href="/blog" className={linkClassName("/blog")}>
+        Blog
+      </Link>
+      <Link href="/news" className={linkClassName("/news")}>
+        News
+      </Link>
+      <Link href="/about-us" className={linkClassName("/about-us")}>
+        About Us
+      </Link>
     </nav>
   );
 }

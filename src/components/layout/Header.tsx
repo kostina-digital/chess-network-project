@@ -8,6 +8,7 @@ import { useAuthUser } from "@/components/auth/useAuthUser";
 export default function Header() {
   const router = useRouter();
   const { user } = useAuthUser();
+  const userName = user?.userName ?? user?.email;
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
@@ -15,6 +16,7 @@ export default function Header() {
   }
 
   return (
+    <>
     <header className="flex justify-between items-center p-4 gap-4 h-16">
       <Logo />
       <RootNav />
@@ -23,10 +25,10 @@ export default function Header() {
           <>
             <button
               type="button"
-              onClick={() => router.replace(`/user/${user.id}`)}
+              onClick={() => router.replace("/dashboard")}
               className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium"
             >
-              Profile
+              Hello, {user.userName ? user.userName : user.email}!
             </button>
             <button
               type="button"
@@ -56,5 +58,6 @@ export default function Header() {
         )}
       </div>
     </header>
+    </>
   );
 }

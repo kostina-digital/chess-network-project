@@ -112,21 +112,42 @@ function hashPassword(password, saltBytes) {
     const hash = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["pbkdf2Sync"])(password, saltBytes, 310_000, 32, "sha256");
     return hash.toString("base64");
 }
-async function registerUser(email, password) {
+function normalizeUserName(userName) {
+    return userName.trim();
+}
+async function registerUser(email, userName, password) {
     const normalizedEmail = normalizeEmail(email);
+    const normalizedUserName = normalizeUserName(userName);
+    if (normalizedUserName.length < 3) throw new Error("Username must be at least 3 characters long.");
     if (normalizedEmail.length < 4) throw new Error("Email is too short.");
-    if (password.length < 4) throw new Error("Password is too short.");
-    const existing = await __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
-        where: {
-            email: normalizedEmail
-        }
-    });
-    if (existing) throw new Error("User already exists.");
+    if (password.length < 8) throw new Error("Password must be at least 8 characters long.");
+    const [existingEmail, existingName] = await Promise.all([
+        __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
+            where: {
+                email: normalizedEmail
+            }
+        }),
+        __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
+            where: {
+                userName: normalizedUserName
+            }
+        })
+    ]);
+    if (existingEmail && existingName) {
+        throw new Error("This email and username are already registered.");
+    }
+    if (existingEmail) {
+        throw new Error("This email is already registered.");
+    }
+    if (existingName) {
+        throw new Error("This username is already taken.");
+    }
     const saltBytes = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["randomBytes"])(16);
     const passwordHashB64 = hashPassword(password, saltBytes);
     const saltB64 = saltBytes.toString("base64");
     const user = await __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$auth$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].user.create({
         data: {
+            userName: normalizedUserName,
             email: normalizedEmail,
             passwordHashB64,
             saltB64
