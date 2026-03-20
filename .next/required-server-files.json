@@ -104,7 +104,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/Helena_ua",
+    "outputFileTracingRoot": "/Users/Helena_ua/Projects/chess-network-project",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -305,12 +305,12 @@
     "configFileName": "next.config.ts",
     "reactCompiler": true,
     "turbopack": {
-      "root": "/Users/Helena_ua"
+      "root": "/Users/Helena_ua/Projects/chess-network-project"
     },
     "distDirRoot": ".next"
   },
   "appDir": "/Users/Helena_ua/Projects/chess-network-project",
-  "relativeAppDir": "Projects/chess-network-project",
+  "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",
     ".next/server/pages-manifest.json",

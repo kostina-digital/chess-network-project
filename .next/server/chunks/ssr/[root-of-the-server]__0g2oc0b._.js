@@ -1,3 +1,0 @@
-module.exports=[93695,(a,b,c)=>{b.exports=a.x("next/dist/shared/lib/no-fallback-error.external.js",()=>require("next/dist/shared/lib/no-fallback-error.external.js"))},48747,a=>{"use strict";var b=a.i(88121);a.s(["default",0,function(){return(0,b.jsx)("div",{children:(0,b.jsx)("h1",{children:"Connect, Analyze, and Master Chess Together"})})}])},12716,a=>{a.n(a.i(48747))},65141,a=>{a.v("/_next/static/media/favicon.0x3dzn~oxb6tn.ico"+(globalThis.NEXT_CLIENT_ASSET_SUFFIX||""))},96168,a=>{"use strict";let b={src:a.i(65141).default,width:256,height:256};a.s(["default",0,b])}];
-
-//# sourceMappingURL=%5Broot-of-the-server%5D__0g2oc0b._.js.map

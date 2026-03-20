@@ -323,16 +323,16 @@ var _s = __turbopack_context__.k.signature();
 ;
 function Header() {
     _s();
-    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(9);
-    if ($[0] !== "a69b5cb550a84fc768b86f745c2ca901950fc6b7730d64727a8ce3407814b028") {
-        for(let $i = 0; $i < 9; $i += 1){
+    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(10);
+    if ($[0] !== "ba50b46d41ad7ebd98b8a006d82747d151718fe2f4e70198e6c9e91bbdff255f") {
+        for(let $i = 0; $i < 10; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "a69b5cb550a84fc768b86f745c2ca901950fc6b7730d64727a8ce3407814b028";
+        $[0] = "ba50b46d41ad7ebd98b8a006d82747d151718fe2f4e70198e6c9e91bbdff255f";
     }
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$components$2f$auth$2f$useAuthUser$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthUser"])();
-    user?.userName ?? user?.email;
+    const displayName = user ? user.userName || user.email : "";
     let t0;
     if ($[1] !== router) {
         t0 = async function handleLogout() {
@@ -367,7 +367,7 @@ function Header() {
         t2 = $[4];
     }
     let t3;
-    if ($[5] !== handleLogout || $[6] !== router || $[7] !== user) {
+    if ($[5] !== displayName || $[6] !== handleLogout || $[7] !== router || $[8] !== user) {
         t3 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
                 className: "flex justify-between items-center p-4 gap-4 h-16",
@@ -386,7 +386,7 @@ function Header() {
                                     className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
                                     children: [
                                         "Hello, ",
-                                        user.userName ? user.userName : user.email,
+                                        displayName,
                                         "!"
                                     ]
                                 }, void 0, true, {
@@ -402,34 +402,20 @@ function Header() {
                                 }, void 0, false, {
                                     fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
                                     lineNumber: 50,
-                                    columnNumber: 188
+                                    columnNumber: 157
                                 }, this)
                             ]
                         }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: {
-                                        "Header[<button>.onClick]": ()=>router.replace("/login")
-                                    }["Header[<button>.onClick]"],
-                                    className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
-                                    children: "Login"
-                                }, void 0, false, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SignInBtn, {}, void 0, false, {
                                     fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
                                     lineNumber: 50,
-                                    columnNumber: 337
+                                    columnNumber: 306
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: {
-                                        "Header[<button>.onClick]": ()=>router.replace("/register")
-                                    }["Header[<button>.onClick]"],
-                                    className: "bg-[#6c47ff] text-white rounded-full font-medium text-sm h-10 px-5 cursor-pointer",
-                                    children: "Register"
-                                }, void 0, false, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SignUpBtn, {}, void 0, false, {
                                     fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-                                    lineNumber: 52,
-                                    columnNumber: 141
+                                    lineNumber: 50,
+                                    columnNumber: 319
                                 }, this)
                             ]
                         }, void 0, true)
@@ -445,12 +431,13 @@ function Header() {
                 columnNumber: 12
             }, this)
         }, void 0, false);
-        $[5] = handleLogout;
-        $[6] = router;
-        $[7] = user;
-        $[8] = t3;
+        $[5] = displayName;
+        $[6] = handleLogout;
+        $[7] = router;
+        $[8] = user;
+        $[9] = t3;
     } else {
-        t3 = $[8];
+        t3 = $[9];
     }
     return t3;
 }

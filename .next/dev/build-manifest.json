@@ -1,50 +1,13 @@
 {
   "pages": {
-    "/_app": [
-      "static/chunks/0aj2_next_dist_compiled_0j2djr-._.js",
-      "static/chunks/0aj2_next_dist_shared_lib_13~utuz._.js",
-      "static/chunks/0aj2_next_dist_client_0kgq2ce._.js",
-      "static/chunks/0aj2_next_dist_0.wjhdk._.js",
-      "static/chunks/0aj2_next_app_0omfqx9.js",
-      "static/chunks/[next]_entry_page-loader_ts_0-dt98y._.js",
-      "static/chunks/0aj2_react-dom_11oq8iw._.js",
-      "static/chunks/0aj2_0rpidvy._.js",
-      "static/chunks/[root-of-the-server]__0xdw~_1._.js",
-      "static/chunks/Projects_chess-network-project_pages__app_07xvfw~._.js",
-      "static/chunks/turbopack-Projects_chess-network-project_pages__app_0s1h0b6._.js"
-    ],
-    "/_error": [
-      "static/chunks/0aj2_next_dist_compiled_0j2djr-._.js",
-      "static/chunks/0aj2_next_dist_shared_lib_117m9wq._.js",
-      "static/chunks/0aj2_next_dist_client_0kgq2ce._.js",
-      "static/chunks/0aj2_next_dist_0~ti08w._.js",
-      "static/chunks/[next]_entry_page-loader_ts_0nvj8f~._.js",
-      "static/chunks/0aj2_react-dom_11oq8iw._.js",
-      "static/chunks/0aj2_0rpidvy._.js",
-      "static/chunks/[root-of-the-server]__0o_g.fy._.js",
-      "static/chunks/Projects_chess-network-project_pages__error_07xvfw~._.js",
-      "static/chunks/turbopack-Projects_chess-network-project_pages__error_0c10yve._.js"
-    ]
+    "/_app": []
   },
   "devFiles": [],
-  "polyfillFiles": [
-    "static/chunks/0aj2_next_dist_build_polyfills_polyfill-nomodule.js"
-  ],
+  "polyfillFiles": [],
   "lowPriorityFiles": [
     "static/development/_buildManifest.js",
     "static/development/_ssgManifest.js",
     "static/development/_clientMiddlewareManifest.js"
   ],
-  "rootMainFiles": [
-    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_0sh81yr._.js",
-    "static/chunks/0aj2_next_dist_compiled_next-devtools_index_0-bektb.js",
-    "static/chunks/0aj2_next_dist_compiled_react-dom_093ygj1._.js",
-    "static/chunks/0aj2_next_dist_compiled_react-server-dom-turbopack_0ztf6w~._.js",
-    "static/chunks/0aj2_next_dist_compiled_0x.1q-_._.js",
-    "static/chunks/0aj2_next_dist_client_0krdp8z._.js",
-    "static/chunks/0aj2_next_dist_136.udv._.js",
-    "static/chunks/0aj2_@swc_helpers_cjs_0fmenw.._.js",
-    "static/chunks/Projects_chess-network-project_0rqeker._.js",
-    "static/chunks/turbopack-Projects_chess-network-project_0hw2b-s._.js"
-  ]
+  "rootMainFiles": []
 }

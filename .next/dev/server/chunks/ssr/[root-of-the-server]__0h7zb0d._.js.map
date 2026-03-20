@@ -3,5 +3,5 @@
   "sources": [],
   "sections": [
     {"offset": {"line": 13, "column": 0}, "map": {"version":3,"sources":["file:///Users/Helena_ua/Projects/chess-network-project/src/app/favicon.ico.mjs%20%28structured%20image%20object%29"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 256, height: 256 }\n"],"names":["src","width","height"],"mappings":";;;;AAAA;;uCACe;IAAEA,KAAAA,qLAAG;IAAEC,OAAO;IAAKC,QAAQ;AAAI"}},
-    {"offset": {"line": 28, "column": 0}, "map": {"version":3,"sources":["file:///Users/Helena_ua/Projects/chess-network-project/src/app/page.tsx"],"sourcesContent":["import Image from \"next/image\"\nimport HomeImg from \"../../public/images/Home.png\"\n\nexport default function Home() {\n  return (\n    <div>\n      <h1>Connect, Analyze, and Master Chess Together</h1>\n    </div>\n  );\n}"],"names":["Home"],"mappings":";;;;;;AAGe,SAASA;IACtB,qBACE,yRAAC;kBACC,cAAA,yRAAC;sBAAG;;;;;;;;;;;AAGV"}}]
+    {"offset": {"line": 28, "column": 0}, "map": {"version":3,"sources":["file:///Users/Helena_ua/Projects/chess-network-project/src/app/page.tsx"],"sourcesContent":["import Image from \"next/image\"\nimport HomeImg from \"../../public/images/Home.png\"\n\n\nexport default function Home() {\n  return (\n    <HeroSection />\n  );\n}"],"names":["Home","HeroSection"],"mappings":";;;;;;AAIe,SAASA;IACtB,qBACE,yRAACC;;;;;AAEL"}}]
 }

@@ -218,7 +218,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network
 function Header() {
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$src$2f$components$2f$auth$2f$useAuthUser$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuthUser"])();
-    const userName = user?.userName ?? user?.email;
+    const displayName = user ? user.userName || user.email : "";
     async function handleLogout() {
         await fetch("/api/auth/logout", {
             method: "POST"
@@ -249,7 +249,7 @@ function Header() {
                                 className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
                                 children: [
                                     "Hello, ",
-                                    user.userName ? user.userName : user.email,
+                                    displayName,
                                     "!"
                                 ]
                             }, void 0, true, {
@@ -270,24 +270,14 @@ function Header() {
                         ]
                     }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: ()=>router.replace("/login"),
-                                className: "bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md text-sm font-medium",
-                                children: "Login"
-                            }, void 0, false, {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SignInBtn, {}, void 0, false, {
                                 fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
                                 lineNumber: 43,
                                 columnNumber: 13
                             }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: ()=>router.replace("/register"),
-                                className: "bg-[#6c47ff] text-white rounded-full font-medium text-sm h-10 px-5 cursor-pointer",
-                                children: "Register"
-                            }, void 0, false, {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$chess$2d$network$2d$project$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SignUpBtn, {}, void 0, false, {
                                 fileName: "[project]/Projects/chess-network-project/src/components/layout/Header.tsx",
-                                lineNumber: 50,
+                                lineNumber: 44,
                                 columnNumber: 13
                             }, this)
                         ]
