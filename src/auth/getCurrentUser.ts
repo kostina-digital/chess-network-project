@@ -4,6 +4,7 @@ import { getCookieName, verifySession } from "./session";
 
 export type SessionUser = {
   id: number;
+  userName: string;
   email: string;
 };
 
@@ -21,6 +22,6 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   const user = await getUserById(userId);
   if (!user) return null;
 
-  return { id: user.id, email: user.email };
+  return { id: user.id, userName: user.userName, email: user.email };
 }
 

@@ -1,4 +1,6 @@
-@import "tailwindcss";
+/* Явна база сканування: від src/app → уся папка src (інакше класи з компонентів
+   можуть не потрапити в CSS, якщо cwd/корінь проєкту визначився некоректно). */
+@import "tailwindcss" source("..");
 
 :root {
   --background: #ffffff;
@@ -29,4 +31,14 @@ body {
     font-size: 2.5rem;
     line-height: 1.2;
     margin-bottom: 1rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.h3-style {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: 400;
 }

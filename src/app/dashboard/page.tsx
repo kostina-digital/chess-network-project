@@ -7,7 +7,7 @@ export default async function Dashboard() {
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1 className="h1-style">Dashboard</h1>
       <p>Signed in as {user.email}</p>
     </div>
   );

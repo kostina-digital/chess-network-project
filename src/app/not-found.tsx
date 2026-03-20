@@ -4,6 +4,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <>
+    <div className="flex flex-col items-center justify-center gap-8 m-auto">
       <Image
         src="/images/NotFound.png"
         alt="Not Found"
@@ -11,7 +12,8 @@ export default function NotFound() {
         height={400}
         priority
       />
-      <Link href="/">Home</Link>
+      <Link href="/">Back to Home Page</Link>
+    </div>
     </>
   );
 }
