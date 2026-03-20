@@ -4,6 +4,8 @@ import RootNav from "@/app/RootNav";
 import Logo from "./Logo";
 import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/components/auth/useAuthUser";
+import SignInBtn from "@/components/buttons/signInBtn";
+import SignUpBtn from "@/components/buttons/signUpBtn";
 
 export default function Header() {
   const router = useRouter();

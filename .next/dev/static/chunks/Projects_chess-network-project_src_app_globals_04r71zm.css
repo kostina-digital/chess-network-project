@@ -28,7 +28,6 @@
     --text-2xl--line-height: calc(2 / 1.5);
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
-    --font-weight-bold: 700;
     --radius-md: .375rem;
     --radius-lg: .5rem;
     --default-font-family: var(--font-geist-sans);
@@ -327,16 +326,8 @@
     height: calc(var(--spacing) * 16);
   }
 
-  .h-30 {
-    height: calc(var(--spacing) * 30);
-  }
-
   .h-40 {
     height: calc(var(--spacing) * 40);
-  }
-
-  .w-30 {
-    width: calc(var(--spacing) * 30);
   }
 
   .w-40 {
@@ -361,6 +352,10 @@
 
   .flex-col {
     flex-direction: column;
+  }
+
+  .flex-row {
+    flex-direction: row;
   }
 
   .flex-wrap {
@@ -389,6 +384,10 @@
 
   .gap-4 {
     gap: calc(var(--spacing) * 4);
+  }
+
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
   }
 
   .rounded {
@@ -479,11 +478,6 @@
     line-height: var(--tw-leading, var(--text-sm--line-height));
   }
 
-  .font-bold {
-    --tw-font-weight: var(--font-weight-bold);
-    font-weight: var(--font-weight-bold);
-  }
-
   .font-medium {
     --tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium);
@@ -545,6 +539,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.h1-style {
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  line-height: 1.2;
 }
 
 @property --tw-border-style {

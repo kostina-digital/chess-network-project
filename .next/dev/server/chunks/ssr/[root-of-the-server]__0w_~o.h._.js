@@ -259,7 +259,6 @@ async function getCurrentUser() {
     if (!user) return null;
     return {
         id: user.id,
-        userName: user.userName,
         email: user.email
     };
 }
