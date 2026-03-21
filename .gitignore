@@ -7,5 +7,4 @@ node_modules
 .env.local
 .env.*.local
 .env
-# Next.js build output
 .next
