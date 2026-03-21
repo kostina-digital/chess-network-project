@@ -12,7 +12,7 @@ export default function NotFound() {
         height={400}
         priority
       />
-      <Link href="/">Back to Home Page</Link>
+      <Link href="/"> Back to Home Page</Link>
     </div>
     </>
   );

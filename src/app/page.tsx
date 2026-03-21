@@ -10,7 +10,7 @@ export default function Home() {
        {/* Features Section */}
        <section className="py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center mb-12 text-foreground">Why Join ChessConnect?</h2>
+          <h2 className="h3-style text-center mb-12 text-foreground">Why Join ChessConnect?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard 
               icon={Target}
@@ -34,7 +34,7 @@ export default function Home() {
       {/* How It Works Section */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center mb-12 text-foreground">How It Works</h2>
+          <h2 className="h3-style text-center mb-12 text-foreground">How It Works</h2>
           <div className="space-y-8">
             <div className="flex gap-6 items-start">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold">

@@ -1,3 +1,1 @@
-globalThis.__RSC_MANIFEST = globalThis.__RSC_MANIFEST || {};
-globalThis.__RSC_MANIFEST["/api/auth/me/route"] = {"moduleLoading":{"prefix":"","crossOrigin":null},"clientModules":{},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"rscModuleMapping":{},"edgeRscModuleMapping":{},"entryCSSFiles":{},"entryJSFiles":{}};
-
+globalThis.__RSC_MANIFEST=(globalThis.__RSC_MANIFEST||{});globalThis.__RSC_MANIFEST["/api/auth/me/route"]={"moduleLoading":{"prefix":"/_next/"},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"clientModules":{},"entryCSSFiles":{"/Users/Helena_ua/Projects/chess-network-project/src/app/api/auth/me/route":[]},"rscModuleMapping":{},"edgeRscModuleMapping":{}};

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -30,6 +31,7 @@ export default function LoginPage() {
   }
 
   return (
+    <>
     <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-md w-full">
       <h1 className="text-2xl font-semibold">Login</h1>
 
@@ -60,5 +62,10 @@ export default function LoginPage() {
         Login
       </button>
     </form>
+    <div className="flex gap-2">
+    <p>Don't have an account? <Link href="/register"><b>Click here</b></Link></p>
+    <p>Forgot your password? <Link href="/forgot-password"></Link></p>
+    </div>
+    </>
   );
 }
