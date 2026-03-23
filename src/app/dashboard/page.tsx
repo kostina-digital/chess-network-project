@@ -1,27 +1,41 @@
+"use client";
 
-import { useParams, Link } from "react-router";
-import { Navigation } from "../components/Navigation";
-import { PostCard } from "../components/PostCard";
-import { getUserByUsername, getPostsByUserId, currentUser } from "../data/mockData";
-import { UserPlus, UserMinus, Edit2, FileText, Users, UserCheck } from "lucide-react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { useState } from "react";
+import {
+  UserPlus,
+  UserMinus,
+  Edit2,
+  FileText,
+  Users,
+  UserCheck,
+} from "lucide-react";
+import {
+  getUserByUsername,
+  getPostsByUserId,
+  currentUser,
+} from "@/app/data/mockData";
+import { PostCard } from "@/components/PostCard";
 
 export default function ProfilePage() {
-  const { username } = useParams<{ username: string }>();
+  const params = useParams<{ username?: string }>();
+  const username = params.username;
   const user = username ? getUserByUsername(username) : undefined;
   const isOwnProfile = user?.id === currentUser.id;
-  const [isFollowing, setIsFollowing] = useState(user?.isFollowing || false);
+  const [isFollowing, setIsFollowing] = useState(user?.isFollowing ?? false);
 
   if (!user) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
-        <div className="max-w-3xl mx-auto px-4 py-20 text-center">
+        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
           <h1 className="mb-4 text-foreground">User Not Found</h1>
-          <p className="text-muted-foreground mb-6">The user you're looking for doesn't exist.</p>
-          <Link 
-            to="/feed" 
-            className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
+          <p className="mb-6 text-muted-foreground">
+            The user you&apos;re looking for doesn&apos;t exist.
+          </p>
+          <Link
+            href="/blog"
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-primary-foreground transition-opacity hover:opacity-90"
           >
             Back to Feed
           </Link>
@@ -38,87 +52,90 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
-      <div className="max-w-3xl mx-auto px-4 py-8">
-        {/* Profile Header */}
-        <div className="bg-card border border-border rounded-lg p-8 mb-8 shadow-sm">
-          <div className="flex flex-col sm:flex-row gap-6 items-start">
-            <img 
-              src={user.avatarUrl} 
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <div className="mb-8 rounded-lg border border-border bg-card p-8 shadow-sm">
+          <div className="flex flex-col items-start gap-6 sm:flex-row">
+            <img
+              src={user.avatarUrl}
               alt={user.fullName}
-              className="w-24 h-24 rounded-full flex-shrink-0"
+              className="h-24 w-24 flex-shrink-0 rounded-full"
             />
-            
-            <div className="flex-1">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+
+            <div className="min-w-0 flex-1">
+              <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <h1 className="mb-1 text-foreground">{user.fullName}</h1>
                   <p className="text-muted-foreground">@{user.username}</p>
                 </div>
-                
+
                 {isOwnProfile ? (
                   <Link
-                    to="/profile/edit"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-secondary text-secondary-foreground rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+                    href="/profile/edit"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-2.5 text-secondary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                   >
-                    <Edit2 className="w-4 h-4" />
+                    <Edit2 className="h-4 w-4" />
                     Edit Profile
                   </Link>
                 ) : (
                   <button
+                    type="button"
                     onClick={handleFollowToggle}
-                    className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg transition-colors ${
+                    className={`inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 transition-colors ${
                       isFollowing
-                        ? 'bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground'
-                        : 'bg-primary text-primary-foreground hover:opacity-90'
+                        ? "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground"
+                        : "bg-primary text-primary-foreground hover:opacity-90"
                     }`}
                   >
                     {isFollowing ? (
                       <>
-                        <UserMinus className="w-4 h-4" />
+                        <UserMinus className="h-4 w-4" />
                         Unfollow
                       </>
                     ) : (
                       <>
-                        <UserPlus className="w-4 h-4" />
+                        <UserPlus className="h-4 w-4" />
                         Follow
                       </>
                     )}
                   </button>
                 )}
               </div>
-              
-              <p className="text-foreground mb-4 leading-relaxed">{user.bio}</p>
-              
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-                <div className="bg-muted/50 rounded-lg px-4 py-3">
-                  <p className="text-sm text-muted-foreground mb-1">Rating</p>
+
+              <p className="mb-4 leading-relaxed text-foreground">{user.bio}</p>
+
+              <div className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div className="rounded-lg bg-muted/50 px-4 py-3">
+                  <p className="mb-1 text-sm text-muted-foreground">Rating</p>
                   <p className="font-semibold text-foreground">{user.rating}</p>
                 </div>
-                <div className="bg-muted/50 rounded-lg px-4 py-3 col-span-2 sm:col-span-1">
-                  <p className="text-sm text-muted-foreground mb-1">Opening</p>
-                  <p className="font-semibold text-foreground text-sm">{user.favoriteOpening}</p>
+                <div className="col-span-2 rounded-lg bg-muted/50 px-4 py-3 sm:col-span-1">
+                  <p className="mb-1 text-sm text-muted-foreground">Opening</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {user.favoriteOpening}
+                  </p>
                 </div>
               </div>
-              
-              <div className="flex gap-6 text-sm">
+
+              <div className="flex flex-wrap gap-6 text-sm">
                 <div className="flex items-center gap-1.5">
-                  <FileText className="w-4 h-4 text-muted-foreground" />
+                  <FileText className="h-4 w-4 text-muted-foreground" />
                   <span className="text-foreground">
-                    <span className="font-semibold">{user.postsCount}</span> posts
+                    <span className="font-semibold">{user.postsCount}</span>{" "}
+                    posts
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Users className="w-4 h-4 text-muted-foreground" />
+                  <Users className="h-4 w-4 text-muted-foreground" />
                   <span className="text-foreground">
-                    <span className="font-semibold">{user.followersCount}</span> followers
+                    <span className="font-semibold">{user.followersCount}</span>{" "}
+                    followers
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <UserCheck className="w-4 h-4 text-muted-foreground" />
+                  <UserCheck className="h-4 w-4 text-muted-foreground" />
                   <span className="text-foreground">
-                    <span className="font-semibold">{user.followingCount}</span> following
+                    <span className="font-semibold">{user.followingCount}</span>{" "}
+                    following
                   </span>
                 </div>
               </div>
@@ -126,17 +143,16 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* User Posts */}
         <div className="mb-6">
-          <h2 className="mb-4 text-foreground">Posts by {user.fullName}</h2>
+          <h2 className="text-foreground">Posts by {user.fullName}</h2>
         </div>
-        
+
         <div className="space-y-6">
           {userPosts.length > 0 ? (
             userPosts.map((post) => <PostCard key={post.id} post={post} />)
           ) : (
-            <div className="bg-card border border-border rounded-lg p-12 text-center">
-              <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <div className="rounded-lg border border-border bg-card p-12 text-center">
+              <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
               <p className="text-muted-foreground">No posts yet</p>
             </div>
           )}

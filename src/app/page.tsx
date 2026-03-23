@@ -1,7 +1,6 @@
 import HeroSection from "@/components/landingPage/HeroSection";
-import { Link } from "react-router";
-import { Crown, Target, Users, Lightbulb } from "lucide-react";
-import { FeatureCard } from "../components/FeatureCard";
+import { Target, Users, Lightbulb } from "lucide-react";
+import { FeatureCard } from "@/components/FeatureCard";
 
 export default function Home() {
   return (

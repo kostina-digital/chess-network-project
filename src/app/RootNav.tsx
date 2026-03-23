@@ -37,7 +37,7 @@ export default function RootNav() {
       <Link href="/news" className={linkClassName("/news")}>
         News
       </Link>
-      <Link href="/about-us" className={linkClassName("/about-us")}>
+      <Link href="/about" className={linkClassName("/about")}>
         About Us
       </Link>
     </nav>
