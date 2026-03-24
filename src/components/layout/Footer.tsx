@@ -45,27 +45,21 @@ const quickLinks = [
 
 export default function Footer() {
   return (
-    <footer className=" text-neutral-400 mt-auto">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-          <div className="sm:col-span-2 lg:col-span-1">
-              <Logo width={100} height={100} className="h-40 w-40 rounded-lg" />
-            <p className="text-sm leading-relaxed max-w-sm">
-              A social network for chess players of every level. Share games,
-              follow news, and grow your strategic thinking together.
-            </p>
+    <footer className="text-neutral-400 mt-auto">
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:items-start lg:gap-10">
+          <div className="flex flex-col gap-4">
+            <Logo width={100} height={100} className="h-40 w-40 rounded-lg" />
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold text-sm mb-4">
-              Quick Links
-            </h3>
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold text-white">Quick Links</h3>
             <ul className="space-y-3 text-sm">
               {quickLinks.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
-                    className="hover:text-amber-400 transition-colors"
+                    className="transition-colors hover:text-amber-400"
                   >
                     {label}
                   </Link>
@@ -74,37 +68,36 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold text-sm mb-4">Contact</h3>
-            <p className="text-sm mb-1">Email: info@chessconnect.com</p>
-            <p className="text-sm mb-5">Phone: +1 (555) 123-4567</p>
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold text-white">Contact</h3>
+            <p className="text-sm">Email: info@chessconnect.com</p>
+            <p className="text-sm">Phone: +1 (555) 123-4567</p>
             <Link
               href="mailto:info@chessconnect.com?subject=ChessConnect%20contact"
-              className="inline-flex items-center gap-1 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors"
+              className="inline-flex items-center gap-1 text-sm font-medium text-amber-400 transition-colors hover:text-amber-300"
             >
               Contact us
               <ArrowRight className="size-4" aria-hidden />
             </Link>
-            <div className="mt-8">
-              <h3 className="text-white font-semibold text-sm mb-3">
-                Follow us
-              </h3>
-              <ul className="flex flex-wrap items-center gap-3">
-                {socialLinks.map(({ name, href, icon }) => (
-                  <li key={name}>
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={name}
-                      className="flex size-10 items-center justify-center rounded-lg bg-neutral-800 text-neutral-300 hover:bg-neutral-700 hover:text-amber-400 transition-colors"
-                    >
-                      {icon}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold text-white">Follow us</h3>
+            <ul className="flex flex-wrap items-center gap-2">
+              {socialLinks.map(({ name, href, icon }) => (
+                <li key={name}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={name}
+                    className="inline-flex size-10 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:text-amber-400"
+                  >
+                    {icon}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 

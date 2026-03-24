@@ -9,6 +9,10 @@ export default function RootNav() {
   const pathname = usePathname();
   const { user } = useAuthUser();
 
+  if (pathname === "/" || pathname === "/home") {
+    return null;
+  }
+
   const linkClassName = (path: string) => {
     const active =
       pathname === path ||

@@ -6,7 +6,7 @@ import SignUpBtn from "../buttons/signUpBtn";
 export default function HeroSection() {
   return (
     <div className="flex items-center justify-center gap-8">
-      <div className="flex flex-col items-center justify-between gap-8 mr">
+      <div className="mr flex flex-col items-center justify-between gap-8">
         <h1 className="h1-style">
           Connect, Analyze, and Master Chess Together
         </h1>
@@ -21,7 +21,7 @@ export default function HeroSection() {
         </div>
       </div>
       <Image
-        src={HeroImg.src}
+        src={HeroImg}
         alt="Hero Section"
         width={600}
         height={500}
