@@ -56,6 +56,7 @@ export async function registerUser(email: string, userName: string, password: st
       email: normalizedEmail,
       passwordHashB64,
       saltB64,
+      avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(normalizedUserName)}`,
     },
   });
 

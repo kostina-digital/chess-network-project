@@ -8,54 +8,46 @@ import {
   ThumbsUp,
   X,
 } from "lucide-react";
-import {
-  Post,
-  currentUser,
-  getUserById,
-  type PostComment,
-} from "@/app/data/mockData";
+import type { FeedComment, FeedPost } from "@/types/feed";
+import { resolveAvatarUrl } from "@/lib/avatarUrl";
 import { formatDistanceToNow } from "date-fns";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 
-interface PostCardProps {
-  post: Post;
-}
-
-type CommentRow = PostComment & {
-  userVote: "like" | "dislike" | null;
+type PostCardProps = {
+  post: FeedPost;
+  /** Logged-in user id, or null — likes/comments disabled when null. */
+  viewerId: number | null;
+  onPostUpdated?: () => void;
 };
 
-function initCommentRows(items: PostComment[]): CommentRow[] {
-  return items.map((c) => ({
-    ...c,
-    likes: c.likes ?? 0,
-    dislikes: c.dislikes ?? 0,
-    userVote: null,
-  }));
-}
+type CommentRow = FeedComment;
 
-export function PostCard({ post }: PostCardProps) {
-  const author = getUserById(post.authorId);
+export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likesCount, setLikesCount] = useState(post.likes);
+  const [commentsCount, setCommentsCount] = useState(post.commentsCount);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [modalComments, setModalComments] = useState<CommentRow[]>([]);
-  /** Comments added in this session (kept when reopening the modal). */
-  const [persistedExtraComments, setPersistedExtraComments] = useState<
-    CommentRow[]
-  >([]);
+  const [commentsLoading, setCommentsLoading] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setPersistedExtraComments([]);
-  }, [post.id]);
+  const author = post.author;
+  const displayName = author.fullName ?? author.userName;
+  const avatarSrc = resolveAvatarUrl(author.userName, author.avatarUrl);
+  const ts = new Date(post.timestamp);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setIsLiked(post.isLiked);
+    setLikesCount(post.likes);
+    setCommentsCount(post.commentsCount);
+  }, [post.id, post.isLiked, post.likes, post.commentsCount]);
 
   useEffect(() => {
     if (!commentsOpen) return;
@@ -75,87 +67,89 @@ export function PostCard({ post }: PostCardProps) {
     };
   }, [commentsOpen]);
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikesCount(likesCount - 1);
-    } else {
-      setLikesCount(likesCount + 1);
+  const handleLike = async () => {
+    if (!viewerId) return;
+    const prevLiked = isLiked;
+    const prevCount = likesCount;
+    setIsLiked(!prevLiked);
+    setLikesCount(prevLiked ? prevCount - 1 : prevCount + 1);
+    try {
+      const res = await fetch(`/api/posts/${post.id}/like`, { method: "POST" });
+      const data = (await res.json()) as { liked?: boolean; likes?: number };
+      if (!res.ok) throw new Error();
+      if (typeof data.likes === "number") setLikesCount(data.likes);
+      if (typeof data.liked === "boolean") setIsLiked(data.liked);
+      onPostUpdated?.();
+    } catch {
+      setIsLiked(prevLiked);
+      setLikesCount(prevCount);
     }
-    setIsLiked(!isLiked);
   };
 
-  const openComments = () => {
-    setModalComments([
-      ...initCommentRows(post.commentItems),
-      ...persistedExtraComments.map(
-        (c): CommentRow => ({ ...c, userVote: null })
-      ),
-    ]);
+  const loadComments = async () => {
+    setCommentsLoading(true);
+    try {
+      const res = await fetch(`/api/posts/${post.id}/comments`);
+      const data = (await res.json()) as { comments?: FeedComment[] };
+      if (res.ok && Array.isArray(data.comments)) {
+        setModalComments(data.comments);
+      } else {
+        setModalComments([]);
+      }
+    } catch {
+      setModalComments([]);
+    } finally {
+      setCommentsLoading(false);
+    }
+  };
+
+  const openComments = async () => {
     setNewCommentText("");
     setCommentsOpen(true);
+    await loadComments();
   };
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     const text = newCommentText.trim();
-    if (!text) return;
-    const row: CommentRow = {
-      id: `local-${post.id}-${Date.now()}`,
-      authorName: currentUser.fullName,
-      text,
-      likes: 0,
-      dislikes: 0,
-      userVote: null,
-    };
-    setPersistedExtraComments((p) => [...p, row]);
-    setModalComments((m) => [...m, row]);
-    setNewCommentText("");
+    if (!text || !viewerId) return;
+    try {
+      const res = await fetch(`/api/posts/${post.id}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: text }),
+      });
+      const data = (await res.json()) as { comment?: FeedComment; error?: string };
+      if (!res.ok || !data.comment) return;
+      setModalComments((m) => [...m, data.comment!]);
+      setCommentsCount((c) => c + 1);
+      setNewCommentText("");
+      onPostUpdated?.();
+    } catch {
+      /* ignore */
+    }
   };
 
-  const handleCommentVote = (commentId: string, vote: "like" | "dislike") => {
-    setModalComments((prev) =>
-      prev.map((c) => {
-        if (c.id !== commentId) return c;
-        const was = c.userVote;
-
-        if (vote === "like") {
-          if (was === "like") {
-            return { ...c, likes: Math.max(0, c.likes - 1), userVote: null };
-          }
-          if (was === "dislike") {
-            return {
-              ...c,
-              likes: c.likes + 1,
-              dislikes: Math.max(0, c.dislikes - 1),
-              userVote: "like",
-            };
-          }
-          return { ...c, likes: c.likes + 1, userVote: "like" };
-        }
-
-        if (was === "dislike") {
-          return {
-            ...c,
-            dislikes: Math.max(0, c.dislikes - 1),
-            userVote: null,
-          };
-        }
-        if (was === "like") {
-          return {
-            ...c,
-            likes: Math.max(0, c.likes - 1),
-            dislikes: c.dislikes + 1,
-            userVote: "dislike",
-          };
-        }
-        return { ...c, dislikes: c.dislikes + 1, userVote: "dislike" };
-      })
-    );
+  const handleCommentVote = async (
+    commentId: string,
+    vote: "like" | "dislike"
+  ) => {
+    if (!viewerId) return;
+    try {
+      const res = await fetch(`/api/comments/${commentId}/reaction`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: vote }),
+      });
+      const data = (await res.json()) as { comment?: FeedComment };
+      if (!res.ok || !data.comment) return;
+      setModalComments((prev) =>
+        prev.map((c) => (c.id === commentId ? data.comment! : c))
+      );
+    } catch {
+      /* ignore */
+    }
   };
 
-  if (!author) return null;
-
-  const commentsCount =
-    post.commentItems.length + persistedExtraComments.length;
   const commentsLabel = commentsCount === 1 ? "comment" : "comments";
 
   const commentsModal =
@@ -198,7 +192,11 @@ export function PostCard({ post }: PostCardProps) {
               </button>
             </div>
             <ul className="m-0 flex-1 list-none overflow-y-auto bg-white p-0 dark:bg-zinc-900">
-              {modalComments.length === 0 ? (
+              {commentsLoading ? (
+                <li className="px-4 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                  Loading…
+                </li>
+              ) : modalComments.length === 0 ? (
                 <li className="px-4 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
                   No comments yet.
                 </li>
@@ -220,7 +218,8 @@ export function PostCard({ post }: PostCardProps) {
                       <button
                         type="button"
                         onClick={() => handleCommentVote(c.id, "like")}
-                        className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                        disabled={!viewerId}
+                        className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors disabled:opacity-40 ${
                           c.userVote === "like"
                             ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
                             : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
@@ -234,7 +233,8 @@ export function PostCard({ post }: PostCardProps) {
                       <button
                         type="button"
                         onClick={() => handleCommentVote(c.id, "dislike")}
-                        className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                        disabled={!viewerId}
+                        className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors disabled:opacity-40 ${
                           c.userVote === "dislike"
                             ? "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300"
                             : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
@@ -254,31 +254,37 @@ export function PostCard({ post }: PostCardProps) {
               <p className="mb-2 text-xs font-medium text-zinc-600 dark:text-zinc-400">
                 Add a comment
               </p>
-              <div className="flex gap-2">
-                <textarea
-                  value={newCommentText}
-                  onChange={(e) => setNewCommentText(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleAddComment();
-                    }
-                  }}
-                  placeholder="Write something…"
-                  rows={2}
-                  className="min-h-[2.5rem] flex-1 resize-y rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-500 dark:focus:ring-zinc-600"
-                  aria-label="New comment"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddComment}
-                  disabled={!newCommentText.trim()}
-                  className="inline-flex h-10 shrink-0 items-center justify-center self-end rounded-lg bg-zinc-900 px-3 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900"
-                  aria-label="Post comment"
-                >
-                  <Send className="h-4 w-4" />
-                </button>
-              </div>
+              {!viewerId ? (
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  Sign in to comment.
+                </p>
+              ) : (
+                <div className="flex gap-2">
+                  <textarea
+                    value={newCommentText}
+                    onChange={(e) => setNewCommentText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        void handleAddComment();
+                      }
+                    }}
+                    placeholder="Write something…"
+                    rows={2}
+                    className="min-h-[2.5rem] flex-1 resize-y rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-500 dark:focus:ring-zinc-600"
+                    aria-label="New comment"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => void handleAddComment()}
+                    disabled={!newCommentText.trim()}
+                    className="inline-flex h-10 shrink-0 items-center justify-center self-end rounded-lg bg-zinc-900 px-3 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900"
+                    aria-label="Post comment"
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>,
@@ -289,26 +295,29 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
       <div className="flex items-start gap-4">
-        <Link href={`/profile/${author.username}`}>
+        <Link
+          href={`/dashboard/${encodeURIComponent(author.userName)}`}
+          className="shrink-0"
+        >
           <img
-            src={author.avatarUrl}
-            alt={author.fullName}
-            className="h-12 w-12 flex-shrink-0 rounded-full transition-opacity hover:opacity-80"
+            src={avatarSrc}
+            alt={displayName}
+            className="h-12 w-12 rounded-full transition-opacity hover:opacity-80"
           />
         </Link>
 
         <div className="min-w-0 flex-1">
           <div className="mb-2">
             <Link
-              href={`/profile/${author.username}`}
+              href={`/dashboard/${encodeURIComponent(author.userName)}`}
               className="font-semibold text-foreground hover:underline"
             >
-              {author.fullName}
+              {displayName}
             </Link>
-            <span className="text-muted-foreground"> @{author.username}</span>
+            <span className="text-muted-foreground"> @{author.userName}</span>
             <span className="text-muted-foreground"> · </span>
             <span className="text-sm text-muted-foreground">
-              {formatDistanceToNow(post.timestamp, { addSuffix: true })}
+              {formatDistanceToNow(ts, { addSuffix: true })}
             </span>
           </div>
 
@@ -319,8 +328,9 @@ export function PostCard({ post }: PostCardProps) {
           <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
             <button
               type="button"
-              onClick={handleLike}
-              className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-colors ${
+              onClick={() => void handleLike()}
+              disabled={!viewerId}
+              className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                 isLiked
                   ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
                   : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
@@ -334,7 +344,7 @@ export function PostCard({ post }: PostCardProps) {
 
             <button
               type="button"
-              onClick={openComments}
+              onClick={() => void openComments()}
               className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               aria-label={`View ${commentsCount} ${commentsLabel}`}
               aria-haspopup="dialog"

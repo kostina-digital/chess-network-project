@@ -9,9 +9,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="max-w-[1440px] mx-auto p-4 gap-4">
+      <body className="max-w-[1440px] mx-auto p-4 gap-4 min-h-screen flex flex-col">
         <Header />
-        <main>{children}</main>
+        <main className="flex-1 min-h-0">{children}</main>
         <Footer />
       </body>
     </html>

@@ -7,11 +7,81 @@ datasource db {
 }
 
 model User {
-  id               Int      @id @default(autoincrement())
-  userName         String   @unique
-  email            String   @unique
-  passwordHashB64 String
-  saltB64         String
-  createdAt        DateTime @default(now())
+  id               Int       @id @default(autoincrement())
+  userName         String    @unique
+  email            String    @unique
+  passwordHashB64  String
+  saltB64          String
+  createdAt        DateTime  @default(now())
+  fullName         String?
+  bio              String?   @db.Text
+  rating           Int?
+  favoriteOpening  String?
+  avatarUrl        String?
+  followersCount   Int       @default(0)
+  followingCount   Int       @default(0)
+
+  posts            Post[]
+  comments         PostComment[]
+  postLikes        PostLike[]
+  commentReactions CommentReaction[]
 }
 
+model Post {
+  id        Int      @id @default(autoincrement())
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments PostComment[]
+  likes    PostLike[]
+
+  @@index([authorId])
+  @@index([createdAt(sort: Desc)])
+}
+
+model PostComment {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  reactions CommentReaction[]
+
+  @@index([postId])
+}
+
+model PostLike {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([userId])
+}
+
+enum CommentReactionKind {
+  LIKE
+  DISLIKE
+}
+
+model CommentReaction {
+  id        Int                 @id @default(autoincrement())
+  commentId Int
+  comment   PostComment         @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      CommentReactionKind
+  createdAt DateTime            @default(now())
+
+  @@unique([commentId, userId])
+  @@index([commentId])
+}
