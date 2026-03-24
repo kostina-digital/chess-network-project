@@ -19,7 +19,10 @@ export type FeedComment = {
 export type FeedPost = {
   id: string;
   author: FeedAuthor;
+  title: string;
   content: string;
+  /** Public paths under /uploads/posts/… (max 3). */
+  imageUrls: string[];
   timestamp: string;
   likes: number;
   isLiked: boolean;

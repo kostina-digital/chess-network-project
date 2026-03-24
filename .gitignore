@@ -8,3 +8,10 @@ node_modules
 .env.*.local
 .env
 .next
+
+# User-uploaded blog images (keep directory via .gitkeep)
+public/uploads/posts/*
+!public/uploads/posts/.gitkeep
+
+# Prisma client (schema output); run prisma generate or npm install
+src/generated/prisma/

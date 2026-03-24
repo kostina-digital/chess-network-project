@@ -321,6 +321,45 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             </span>
           </div>
 
+          {post.title.trim() ? (
+            <h3 className="mb-3 text-lg font-semibold leading-snug text-foreground">
+              {post.title}
+            </h3>
+          ) : null}
+
+          {post.imageUrls.length > 0 ? (
+            <div
+              className={`mb-4 grid gap-2 ${
+                post.imageUrls.length === 1
+                  ? "grid-cols-1"
+                  : post.imageUrls.length === 2
+                    ? "grid-cols-1 sm:grid-cols-2"
+                    : "grid-cols-1 sm:grid-cols-3"
+              }`}
+            >
+              {post.imageUrls.map((src) => (
+                <a
+                  key={src}
+                  href={src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative block overflow-hidden rounded-lg border border-border bg-muted"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={src}
+                    alt={
+                      post.title.trim()
+                        ? `Image: ${post.title}`
+                        : "Post image"
+                    }
+                    className="max-h-72 w-full object-cover object-center"
+                  />
+                </a>
+              ))}
+            </div>
+          ) : null}
+
           <p className="mb-4 whitespace-pre-wrap leading-relaxed text-foreground">
             {post.content}
           </p>

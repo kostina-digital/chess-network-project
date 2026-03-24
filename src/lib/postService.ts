@@ -1,5 +1,35 @@
 import { prisma } from "@/auth/prisma";
+import { Prisma } from "@/generated/prisma";
 import type { FeedAuthor, FeedComment, FeedPost, ProfileUser } from "@/types/feed";
+
+/** Row shape from raw profile SQL (Postgres bigint for count). */
+type ProfileUserRow = {
+  id: number;
+  userName: string;
+  fullName: string | null;
+  bio: string | null;
+  rating: number | null;
+  favoriteOpening: string | null;
+  avatarUrl: string | null;
+  followersCount: number;
+  followingCount: number;
+  postsCount: bigint | number;
+};
+
+function mapProfileRow(row: ProfileUserRow): ProfileUser {
+  return {
+    id: row.id,
+    userName: row.userName,
+    fullName: row.fullName,
+    bio: row.bio,
+    rating: row.rating,
+    favoriteOpening: row.favoriteOpening,
+    avatarUrl: row.avatarUrl,
+    followersCount: row.followersCount,
+    followingCount: row.followingCount,
+    postsCount: Number(row.postsCount),
+  };
+}
 
 function mapAuthor(u: {
   id: number;
@@ -38,7 +68,9 @@ export async function listFeedPosts(
   return posts.map((p) => ({
     id: String(p.id),
     author: mapAuthor(p.author),
+    title: p.title,
     content: p.content,
+    imageUrls: p.imageUrls,
     timestamp: p.createdAt.toISOString(),
     likes: p._count.likes,
     isLiked:
@@ -71,7 +103,9 @@ export async function listPostsByAuthor(
   return posts.map((p) => ({
     id: String(p.id),
     author: mapAuthor(p.author),
+    title: p.title,
     content: p.content,
+    imageUrls: p.imageUrls,
     timestamp: p.createdAt.toISOString(),
     likes: p._count.likes,
     isLiked:
@@ -80,14 +114,26 @@ export async function listPostsByAuthor(
   }));
 }
 
+export type CreatePostInput = {
+  title: string;
+  content: string;
+  imageUrls: string[];
+};
+
 export async function createPost(
   authorId: number,
-  content: string
+  input: CreatePostInput
 ): Promise<FeedPost> {
-  const trimmed = content.trim();
+  const title = input.title.trim();
+  const trimmed = input.content.trim();
+  if (!title) throw new Error("Title is required");
   if (!trimmed) throw new Error("Content is required");
+  if (input.imageUrls.length > 3) {
+    throw new Error("You can attach up to 3 images per post");
+  }
+
   const p = await prisma.post.create({
-    data: { authorId, content: trimmed },
+    data: { authorId, title, content: trimmed, imageUrls: input.imageUrls },
     include: {
       author: {
         select: { id: true, userName: true, fullName: true, avatarUrl: true },
@@ -97,7 +143,9 @@ export async function createPost(
   return {
     id: String(p.id),
     author: mapAuthor(p.author),
+    title: p.title,
     content: p.content,
+    imageUrls: p.imageUrls,
     timestamp: p.createdAt.toISOString(),
     likes: 0,
     isLiked: false,
@@ -245,65 +293,43 @@ export async function toggleCommentDislike(commentId: number, userId: number) {
 export async function getProfileUserById(
   id: number
 ): Promise<ProfileUser | null> {
-  const u = await prisma.user.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      userName: true,
-      fullName: true,
-      bio: true,
-      rating: true,
-      favoriteOpening: true,
-      avatarUrl: true,
-      followersCount: true,
-      followingCount: true,
-      _count: { select: { posts: true } },
-    },
-  });
-  if (!u) return null;
-  return {
-    id: u.id,
-    userName: u.userName,
-    fullName: u.fullName,
-    bio: u.bio,
-    rating: u.rating,
-    favoriteOpening: u.favoriteOpening,
-    avatarUrl: u.avatarUrl,
-    followersCount: u.followersCount,
-    followingCount: u.followingCount,
-    postsCount: u._count.posts,
-  };
+  const rows = await prisma.$queryRaw<ProfileUserRow[]>(Prisma.sql`
+    SELECT
+      u.id,
+      u."userName",
+      u."fullName",
+      u.bio,
+      u.rating,
+      u."favoriteOpening",
+      u."avatarUrl",
+      u."followersCount",
+      u."followingCount",
+      (SELECT COUNT(*)::bigint FROM "Post" p WHERE p."authorId" = u.id) AS "postsCount"
+    FROM "User" u
+    WHERE u.id = ${id}
+  `);
+  const row = rows[0];
+  return row ? mapProfileRow(row) : null;
 }
 
 export async function getProfileUserByUserName(
   userName: string
 ): Promise<ProfileUser | null> {
-  const u = await prisma.user.findUnique({
-    where: { userName },
-    select: {
-      id: true,
-      userName: true,
-      fullName: true,
-      bio: true,
-      rating: true,
-      favoriteOpening: true,
-      avatarUrl: true,
-      followersCount: true,
-      followingCount: true,
-      _count: { select: { posts: true } },
-    },
-  });
-  if (!u) return null;
-  return {
-    id: u.id,
-    userName: u.userName,
-    fullName: u.fullName,
-    bio: u.bio,
-    rating: u.rating,
-    favoriteOpening: u.favoriteOpening,
-    avatarUrl: u.avatarUrl,
-    followersCount: u.followersCount,
-    followingCount: u.followingCount,
-    postsCount: u._count.posts,
-  };
+  const rows = await prisma.$queryRaw<ProfileUserRow[]>(Prisma.sql`
+    SELECT
+      u.id,
+      u."userName",
+      u."fullName",
+      u.bio,
+      u.rating,
+      u."favoriteOpening",
+      u."avatarUrl",
+      u."followersCount",
+      u."followingCount",
+      (SELECT COUNT(*)::bigint FROM "Post" p WHERE p."authorId" = u.id) AS "postsCount"
+    FROM "User" u
+    WHERE u."userName" = ${userName}
+  `);
+  const row = rows[0];
+  return row ? mapProfileRow(row) : null;
 }

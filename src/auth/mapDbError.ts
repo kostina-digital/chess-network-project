@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma";
 
 /**
  * Turns Prisma / DB errors into something actionable for the UI.

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Post" ADD COLUMN     "title" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "imageUrls" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[];
