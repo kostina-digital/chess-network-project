@@ -9,12 +9,14 @@ import SignUpBtn from "@/components/buttons/signUpBtn";
 
 export default function Header() {
   const router = useRouter();
-  const { user } = useAuthUser();
+  const { user, refresh } = useAuthUser();
   const displayName = user ? (user.userName || user.email) : "";
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
-    router.replace("/login");
+    await refresh();
+    router.replace("/");
+    router.refresh();
   }
 
   return (

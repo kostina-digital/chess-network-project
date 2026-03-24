@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   UserPlus,
   UserMinus,
@@ -30,11 +30,42 @@ export function UserProfileView({
 }: UserProfileViewProps) {
   const isOwnProfile = viewerId !== null && user.id === viewerId;
   const [isFollowing, setIsFollowing] = useState(isFollowingInitial);
+  const [followersCount, setFollowersCount] = useState(user.followersCount);
+  const [followBusy, setFollowBusy] = useState(false);
   const displayName = user.fullName ?? user.userName;
   const avatarSrc = resolveAvatarUrl(user.userName, user.avatarUrl);
 
-  const handleFollowToggle = () => {
-    setIsFollowing(!isFollowing);
+  useEffect(() => {
+    setIsFollowing(isFollowingInitial);
+    setFollowersCount(user.followersCount);
+  }, [user.id, user.followersCount, isFollowingInitial]);
+
+  const handleFollowToggle = async () => {
+    if (!viewerId || followBusy) return;
+    setFollowBusy(true);
+    try {
+      const method = isFollowing ? "DELETE" : "POST";
+      const res = await fetch(`/api/users/${user.id}/follow`, { method });
+      const data = (await res.json()) as {
+        isFollowing?: boolean;
+        followersCount?: number;
+        error?: string;
+      };
+      if (!res.ok) {
+        console.error(data.error ?? "Follow request failed");
+        return;
+      }
+      if (typeof data.isFollowing === "boolean") {
+        setIsFollowing(data.isFollowing);
+      }
+      if (typeof data.followersCount === "number") {
+        setFollowersCount(data.followersCount);
+      }
+    } catch {
+      /* ignore */
+    } finally {
+      setFollowBusy(false);
+    }
   };
 
   return (
@@ -63,11 +94,12 @@ export function UserProfileView({
                     <Edit2 className="h-4 w-4" />
                     Edit Profile
                   </Link>
-                ) : (
+                ) : viewerId ? (
                   <button
                     type="button"
-                    onClick={handleFollowToggle}
-                    className={`inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 transition-colors ${
+                    onClick={() => void handleFollowToggle()}
+                    disabled={followBusy}
+                    className={`inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
                       isFollowing
                         ? "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground"
                         : "bg-primary text-primary-foreground hover:opacity-90"
@@ -85,6 +117,14 @@ export function UserProfileView({
                       </>
                     )}
                   </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    Sign in to follow
+                  </Link>
                 )}
               </div>
 
@@ -121,7 +161,7 @@ export function UserProfileView({
                 <div className="flex items-center gap-1.5">
                   <Users className="h-4 w-4 text-muted-foreground" />
                   <span className="text-foreground">
-                    <span className="font-semibold">{user.followersCount}</span>{" "}
+                    <span className="font-semibold">{followersCount}</span>{" "}
                     followers
                   </span>
                 </div>

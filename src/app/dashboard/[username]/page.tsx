@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/auth/getCurrentUser";
+import { isFollowing } from "@/lib/followService";
 import {
   getProfileUserByUserName,
   listPostsByAuthor,
@@ -37,13 +38,17 @@ export default async function UserDashboardPage({ params }: PageProps) {
   const session = await getCurrentUser();
   const viewerId = session?.id ?? null;
   const posts = await listPostsByAuthor(profile.id, viewerId);
+  const isFollowingInitial =
+    viewerId !== null
+      ? await isFollowing(viewerId, profile.id)
+      : false;
 
   return (
     <UserProfileView
       user={profile}
       posts={posts}
       viewerId={viewerId}
-      isFollowingInitial={false}
+      isFollowingInitial={isFollowingInitial}
     />
   );
 }

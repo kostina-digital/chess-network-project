@@ -1,6 +1,9 @@
 import { getCurrentUser } from "@/auth/getCurrentUser";
 import { createPost, listFeedPosts } from "@/lib/postService";
-import { savePostImages } from "@/lib/savePostImages";
+import { collectImageBlobsFromForm, savePostImages } from "@/lib/savePostImages";
+
+/** Needs Node fs — not Edge. */
+export const runtime = "nodejs";
 
 export async function GET() {
   try {
@@ -38,10 +41,7 @@ export async function POST(request: Request) {
 
   const title = String(form.get("title") ?? "").trim();
   const content = String(form.get("content") ?? "").trim();
-  const rawImages = form.getAll("images");
-  const files = rawImages.filter(
-    (x): x is File => x instanceof File && x.size > 0
-  );
+  const files = collectImageBlobsFromForm(form);
 
   if (!title) {
     return Response.json({ error: "Title is required" }, { status: 400 });

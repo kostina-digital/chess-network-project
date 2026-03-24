@@ -27,6 +27,20 @@ model User {
   comments         PostComment[]
   postLikes        PostLike[]
   commentReactions CommentReaction[]
+  followsOutgoing  UserFollow[] @relation("UserFollowFollower")
+  followsIncoming  UserFollow[] @relation("UserFollowFollowing")
+}
+
+model UserFollow {
+  followerId  Int
+  follower    User     @relation("UserFollowFollower", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId Int
+  following   User     @relation("UserFollowFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@id([followerId, followingId])
+  @@index([followingId])
+  @@index([followerId])
 }
 
 model Post {

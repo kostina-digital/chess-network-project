@@ -1,8 +1,7 @@
 {
-  "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/api/posts/route": "app/api/posts/route.js",
-  "/page": "app/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/blog/page": "app/blog/page.js",
-  "/news/page": "app/news/page.js"
+  "/register/page": "app/register/page.js",
+  "/dashboard/edit/page": "app/dashboard/edit/page.js",
+  "/dashboard/[username]/page": "app/dashboard/[username]/page.js"
 }

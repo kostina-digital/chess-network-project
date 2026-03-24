@@ -1,5 +1,6 @@
 import { prisma } from "@/auth/prisma";
 import { Prisma } from "@/generated/prisma";
+import { normalizePostImageUrls } from "@/lib/postImageUrl";
 import type { FeedAuthor, FeedComment, FeedPost, ProfileUser } from "@/types/feed";
 
 /** Row shape from raw profile SQL (Postgres bigint for count). */
@@ -70,7 +71,7 @@ export async function listFeedPosts(
     author: mapAuthor(p.author),
     title: p.title,
     content: p.content,
-    imageUrls: p.imageUrls,
+    imageUrls: normalizePostImageUrls(p.imageUrls),
     timestamp: p.createdAt.toISOString(),
     likes: p._count.likes,
     isLiked:
@@ -105,7 +106,7 @@ export async function listPostsByAuthor(
     author: mapAuthor(p.author),
     title: p.title,
     content: p.content,
-    imageUrls: p.imageUrls,
+    imageUrls: normalizePostImageUrls(p.imageUrls),
     timestamp: p.createdAt.toISOString(),
     likes: p._count.likes,
     isLiked:
@@ -145,7 +146,7 @@ export async function createPost(
     author: mapAuthor(p.author),
     title: p.title,
     content: p.content,
-    imageUrls: p.imageUrls,
+    imageUrls: normalizePostImageUrls(p.imageUrls),
     timestamp: p.createdAt.toISOString(),
     likes: 0,
     isLiked: false,

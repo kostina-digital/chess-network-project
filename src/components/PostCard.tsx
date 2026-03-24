@@ -24,6 +24,18 @@ type PostCardProps = {
 
 type CommentRow = FeedComment;
 
+/** Long posts are collapsed in the feed until the user expands them. */
+const PREVIEW_MAX_CHARS = 200;
+
+function truncatePostContent(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const slice = text.slice(0, max);
+  const lastBreak = Math.max(slice.lastIndexOf("\n"), slice.lastIndexOf(" "));
+  const cut =
+    lastBreak > max * 0.5 ? slice.slice(0, lastBreak) : slice.trimEnd();
+  return `${cut.trimEnd()}…`;
+}
+
 export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likesCount, setLikesCount] = useState(post.likes);
@@ -33,15 +45,26 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [bodyExpanded, setBodyExpanded] = useState(false);
 
   const author = post.author;
   const displayName = author.fullName ?? author.userName;
   const avatarSrc = resolveAvatarUrl(author.userName, author.avatarUrl);
   const ts = new Date(post.timestamp);
 
+  const needsBodyTruncation = post.content.length > PREVIEW_MAX_CHARS;
+  const shownBody =
+    !needsBodyTruncation || bodyExpanded
+      ? post.content
+      : truncatePostContent(post.content, PREVIEW_MAX_CHARS);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setBodyExpanded(false);
+  }, [post.id]);
 
   useEffect(() => {
     setIsLiked(post.isLiked);
@@ -327,17 +350,17 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             </h3>
           ) : null}
 
-          {post.imageUrls.length > 0 ? (
+          {(post.imageUrls ?? []).length > 0 ? (
             <div
               className={`mb-4 grid gap-2 ${
-                post.imageUrls.length === 1
+                (post.imageUrls ?? []).length === 1
                   ? "grid-cols-1"
-                  : post.imageUrls.length === 2
+                  : (post.imageUrls ?? []).length === 2
                     ? "grid-cols-1 sm:grid-cols-2"
                     : "grid-cols-1 sm:grid-cols-3"
               }`}
             >
-              {post.imageUrls.map((src) => (
+              {(post.imageUrls ?? []).map((src) => (
                 <a
                   key={src}
                   href={src}
@@ -360,8 +383,20 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             </div>
           ) : null}
 
-          <p className="mb-4 whitespace-pre-wrap leading-relaxed text-foreground">
-            {post.content}
+          <p className="mb-4 leading-relaxed text-foreground">
+            <span className="whitespace-pre-wrap">{shownBody}</span>
+            {needsBodyTruncation ? (
+              <>
+                {" "}
+                <button
+                  type="button"
+                  onClick={() => setBodyExpanded((v) => !v)}
+                  className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-sm font-medium text-blue-600 underline-offset-2 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  {bodyExpanded ? "Show less" : "Read full"}
+                </button>
+              </>
+            ) : null}
           </p>
 
           <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">

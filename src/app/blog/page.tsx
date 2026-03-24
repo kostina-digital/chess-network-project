@@ -25,6 +25,8 @@ export default function FeedPage() {
   const [viewerId, setViewerId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [publishError, setPublishError] = useState<string | null>(null);
+  const [publishSuccess, setPublishSuccess] = useState<string | null>(null);
+  const [publishing, setPublishing] = useState(false);
   const [feedError, setFeedError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -91,6 +93,9 @@ export default function FeedPage() {
     const c = postContent.trim();
     if (!t || !c) return;
     setPublishError(null);
+    setPublishSuccess(null);
+    setPublishing(true);
+    const attachedCount = imageFiles.length;
     try {
       const fd = new FormData();
       fd.append("title", t);
@@ -114,6 +119,20 @@ export default function FeedPage() {
       }
       if (data.post) {
         setFeedPosts((prev) => [data.post!, ...prev]);
+        const saved = data.post.imageUrls?.length ?? 0;
+        if (saved > 0) {
+          setPublishSuccess(
+            saved === 1
+              ? "Post published with 1 image."
+              : `Post published with ${saved} images.`
+          );
+        } else if (attachedCount > 0) {
+          setPublishError(
+            "Photos were not saved. Try smaller JPEG/PNG files (max 2 MB each)."
+          );
+        } else {
+          setPublishSuccess("Post published.");
+        }
       }
       setTitle("");
       setPostContent("");
@@ -121,11 +140,16 @@ export default function FeedPage() {
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch {
       setPublishError("Network error");
+    } finally {
+      setPublishing(false);
     }
   };
 
   const canPublish =
-    Boolean(viewerId) && title.trim().length > 0 && postContent.trim().length > 0;
+    Boolean(viewerId) &&
+    title.trim().length > 0 &&
+    postContent.trim().length > 0 &&
+    !publishing;
 
   return (
     <div className="min-h-screen bg-background">
@@ -177,7 +201,7 @@ export default function FeedPage() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/gif,image/webp"
+                accept="image/*"
                 multiple
                 className="hidden"
                 id="blog-post-images"
@@ -196,8 +220,9 @@ export default function FeedPage() {
                 Add images
               </label>
               {imageFiles.length > 0 ? (
-                <span className="text-xs text-muted-foreground">
-                  {imageFiles.length} / {MAX_IMAGES} selected
+                <span className="text-xs font-medium text-foreground">
+                  {imageFiles.length} / {MAX_IMAGES} photo
+                  {imageFiles.length === 1 ? "" : "s"} will be uploaded
                 </span>
               ) : null}
             </div>
@@ -233,6 +258,14 @@ export default function FeedPage() {
               {publishError}
             </p>
           ) : null}
+          {publishSuccess ? (
+            <p
+              className="mt-2 text-sm text-emerald-700 dark:text-emerald-400"
+              role="status"
+            >
+              {publishSuccess}
+            </p>
+          ) : null}
           <div className="mt-4 flex justify-end">
             <button
               type="button"
@@ -241,7 +274,7 @@ export default function FeedPage() {
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
-              Publish
+              {publishing ? "Publishing…" : "Publish"}
             </button>
           </div>
         </div>

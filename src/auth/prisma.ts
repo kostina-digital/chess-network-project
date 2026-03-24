@@ -1,18 +1,12 @@
 import { PrismaClient } from "@/generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-// Avoid creating a new PrismaClient on every hot reload in development.
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+function createPrismaClient() {
+  return new PrismaClient({
     adapter: new PrismaPg({ connectionString: getDatabaseUrl() }),
-    // log: ["query", "error"],
   });
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
 }
 
 function getDatabaseUrl() {
@@ -21,3 +15,22 @@ function getDatabaseUrl() {
   return url;
 }
 
+/** Dev HMR can keep an old PrismaClient without newer model delegates (e.g. `userFollow`). */
+function clientHasUserFollow(client: PrismaClient): boolean {
+  return typeof (client as { userFollow?: { findUnique?: unknown } }).userFollow
+    ?.findUnique === "function";
+}
+
+const existing = globalForPrisma.prisma;
+const reuseExisting =
+  existing &&
+  (process.env.NODE_ENV === "production" || clientHasUserFollow(existing));
+
+export const prisma = reuseExisting ? existing : createPrismaClient();
+
+if (process.env.NODE_ENV !== "production") {
+  if (existing && !reuseExisting) {
+    void existing.$disconnect().catch(() => {});
+  }
+  globalForPrisma.prisma = prisma;
+}
