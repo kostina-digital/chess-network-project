@@ -1,5 +1,4 @@
 import { Target, Users, Lightbulb } from "lucide-react";
-import { FeatureCard } from "@/components/FeatureCard";
 
 export function HomeWhyStickAround() {
   return (

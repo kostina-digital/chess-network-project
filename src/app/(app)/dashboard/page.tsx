@@ -8,10 +8,10 @@ import { UserProfileView } from "@/components/dashboard/UserProfileView";
 
 export default async function DashboardPage() {
   const session = await getCurrentUser();
-  if (!session) redirect("/login");
+  if (!session) redirect("/log-in");
 
   const profile = await getProfileUserById(session.id);
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/log-in");
 
   const posts = await listPostsByAuthor(session.id, session.id);
 

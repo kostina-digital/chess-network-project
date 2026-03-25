@@ -18,7 +18,7 @@ export default async function UserDashboardPage({ params }: PageProps) {
   const session = await getCurrentUser();
   if (!session) {
     redirect(
-      `/login?redirect=${encodeURIComponent(`/dashboard/${username}`)}`
+      `/log-in?redirect=${encodeURIComponent(`/dashboard/${username}`)}`
     );
   }
 

@@ -27,8 +27,20 @@ model User {
   comments         PostComment[]
   postLikes        PostLike[]
   commentReactions CommentReaction[]
-  followsOutgoing  UserFollow[] @relation("UserFollowFollower")
-  followsIncoming  UserFollow[] @relation("UserFollowFollowing")
+  followsOutgoing       UserFollow[]           @relation("UserFollowFollower")
+  followsIncoming       UserFollow[]           @relation("UserFollowFollowing")
+  passwordResetTokens   PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model UserFollow {

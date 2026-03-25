@@ -16,7 +16,7 @@ export default function SignUpBtn({ tone = "default" }: SignUpBtnProps) {
   return (
     <button
       type="button"
-      onClick={() => router.replace("/register")}
+      onClick={() => router.replace("/sign-up")}
       className={base + chromeShadow}
     >
       <b>Sign Up</b>  

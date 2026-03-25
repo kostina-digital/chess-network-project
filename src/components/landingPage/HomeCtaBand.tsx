@@ -15,7 +15,7 @@ export function HomeCtaBand() {
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-col sm:flex-wrap">
           <SignUpBtn />
           <Link
-            href="/login?redirect=%2Fblog"
+            href="/log-in?redirect=%2Fblog"
             className="text-sm font-medium text-primary underline-offset-4 hover:underline"
           >
             Already have an account? Sign in

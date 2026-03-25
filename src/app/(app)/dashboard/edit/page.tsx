@@ -33,7 +33,7 @@ export default function EditProfilePage() {
     void (async () => {
       const res = await fetch("/api/auth/profile");
       if (res.status === 401) {
-        router.replace("/login");
+        router.replace("/log-in");
         return;
       }
       if (!res.ok) {

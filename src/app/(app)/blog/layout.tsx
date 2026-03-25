@@ -8,7 +8,7 @@ export default async function BlogLayout({
 }) {
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/login?redirect=%2Fblog");
+    redirect("/log-in?redirect=%2Fblog");
   }
   return <>{children}</>;
 }

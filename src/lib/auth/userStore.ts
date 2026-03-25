@@ -84,3 +84,21 @@ export async function getUserById(id: number) {
   return prisma.user.findUnique({ where: { id } });
 }
 
+export async function setUserPassword(userId: number, password: string) {
+  if (password.length < 8) {
+    throw new Error("Password must be at least 8 characters long.");
+  }
+  if (password.length > 15) {
+    throw new Error("Password must be at most 15 characters.");
+  }
+
+  const saltBytes = randomBytes(16);
+  const passwordHashB64 = hashPassword(password, saltBytes);
+  const saltB64 = saltBytes.toString("base64");
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHashB64, saltB64 },
+  });
+}
+

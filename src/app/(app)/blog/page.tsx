@@ -158,7 +158,7 @@ export default function FeedPage() {
           <h2 className="mb-4 text-foreground">Share your chess insights</h2>
           {!viewerId ? (
             <p className="mb-4 text-sm text-muted-foreground">
-              <a href="/login" className="underline">
+              <a href="/log-in" className="underline">
                 Sign in
               </a>{" "}
               to publish posts.
