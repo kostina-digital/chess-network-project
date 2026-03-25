@@ -30,14 +30,14 @@ export default function FooterLegalModals() {
         <button
           type="button"
           onClick={() => setOpen("privacy")}
-          className="hover:text-neutral-300 transition-colors text-left"
+          className="text-left transition-colors hover:text-primary"
         >
           Privacy Policy
         </button>
         <button
           type="button"
           onClick={() => setOpen("terms")}
-          className="hover:text-neutral-300 transition-colors text-left"
+          className="text-left transition-colors hover:text-primary"
         >
           Terms of Use
         </button>
@@ -53,20 +53,20 @@ export default function FooterLegalModals() {
           <button
             type="button"
             aria-label="Close dialog"
-            className="absolute inset-0 bg-black/60"
+            className="absolute inset-0 bg-graphite/70"
             onClick={close}
           />
           <div
-            className="relative flex max-h-[min(90vh,720px)] w-full max-w-2xl flex-col rounded-t-2xl sm:rounded-2xl border border-neutral-700 bg-neutral-950 text-neutral-200 shadow-2xl"
+            className="relative flex max-h-[min(90vh,720px)] w-full max-w-2xl flex-col rounded-t-2xl border border-chrome-border bg-chrome text-chrome-foreground shadow-2xl sm:rounded-2xl"
           >
-            <header className="flex shrink-0 items-start justify-between gap-4 border-b border-neutral-800 px-5 py-4">
+            <header className="flex shrink-0 items-start justify-between gap-4 border-b border-chrome-border px-5 py-4">
               <div>
-                <p className="text-xs text-neutral-500 mb-1">
+                <p className="mb-1 text-xs text-chrome-muted">
                   Last updated: March 24, 2026
                 </p>
                 <h2
                   id="legal-modal-title"
-                  className="text-xl font-semibold text-white tracking-tight"
+                  className="text-xl font-semibold tracking-tight text-chrome-foreground"
                 >
                   {open === "privacy" ? "Privacy Policy" : "Terms of Use"}
                 </h2>
@@ -74,7 +74,7 @@ export default function FooterLegalModals() {
               <button
                 type="button"
                 onClick={close}
-                className="rounded-lg p-2 text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors"
+                className="rounded-lg p-2 text-chrome-muted transition-colors hover:bg-chrome-elevated hover:text-chrome-foreground"
                 aria-label="Close"
               >
                 <X className="size-5" />
@@ -96,9 +96,9 @@ export default function FooterLegalModals() {
 
 function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
   return (
-    <div className="space-y-8 text-[15px] leading-relaxed text-neutral-300">
+    <div className="space-y-8 text-[15px] leading-relaxed text-chrome-foreground/85">
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">1. Introduction</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">1. Introduction</h3>
         <p>
           ChessConnect (“we”, “us”, or “our”) operates this website and related
           services. This policy describes how we handle personal information when
@@ -106,29 +106,29 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">
+        <h3 className="text-base font-semibold text-chrome-foreground">
           2. Information we collect
         </h3>
         <ul className="list-disc pl-5 space-y-2">
           <li>
-            <strong className="text-white">Account data:</strong> such as
+            <strong className="text-chrome-foreground">Account data:</strong> such as
             username, email address, and credentials you provide when you register
             or sign in.
           </li>
           <li>
-            <strong className="text-white">Profile and content:</strong>{" "}
+            <strong className="text-chrome-foreground">Profile and content:</strong>{" "}
             information you add to your profile, posts, comments, and other
             content you submit.
           </li>
           <li>
-            <strong className="text-white">Technical data:</strong> such as IP
+            <strong className="text-chrome-foreground">Technical data:</strong> such as IP
             address, browser type, device information, and cookies or similar
             technologies used to keep you signed in and improve the service.
           </li>
         </ul>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">
+        <h3 className="text-base font-semibold text-chrome-foreground">
           3. How we use information
         </h3>
         <p>We use the information above to:</p>
@@ -142,7 +142,7 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
         </ul>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">4. Sharing</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">4. Sharing</h3>
         <p>
           We do not sell your personal information. We may share data with
           service providers who help us host or operate the platform (under
@@ -151,7 +151,7 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">5. Retention</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">5. Retention</h3>
         <p>
           We keep information for as long as your account is active or as needed
           to provide the service, comply with law, resolve disputes, and enforce
@@ -159,7 +159,7 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">6. Your choices</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">6. Your choices</h3>
         <p>
           You may update profile information where the product allows it, and
           contact us to request access, correction, or deletion of your account
@@ -167,7 +167,7 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">7. Security</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">7. Security</h3>
         <p>
           We use reasonable technical and organizational measures to protect your
           information. No method of transmission over the Internet is completely
@@ -175,7 +175,7 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">8. Children</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">8. Children</h3>
         <p>
           ChessConnect is not directed at children under 13 (or the minimum age
           required in your region). We do not knowingly collect personal
@@ -183,19 +183,19 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">9. Changes</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">9. Changes</h3>
         <p>
           We may update this policy from time to time. We will show the revised
           text here and update the “Last updated” date.
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">10. Contact</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">10. Contact</h3>
         <p>
           Questions about this policy:{" "}
           <a
             href="mailto:privacy@chessconnect.com"
-            className="text-amber-400 hover:underline"
+            className="text-primary hover:underline"
           >
             privacy@chessconnect.com
           </a>
@@ -203,7 +203,7 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
           <button
             type="button"
             onClick={onOpenTerms}
-            className="text-amber-400 hover:underline"
+            className="text-primary hover:underline"
           >
             Terms of Use
           </button>
@@ -216,9 +216,9 @@ function PrivacyBody({ onOpenTerms }: { onOpenTerms: () => void }) {
 
 function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
   return (
-    <div className="space-y-8 text-[15px] leading-relaxed text-neutral-300">
+    <div className="space-y-8 text-[15px] leading-relaxed text-chrome-foreground/85">
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">1. Agreement</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">1. Agreement</h3>
         <p>
           These Terms of Use (“Terms”) govern your access to and use of
           ChessConnect’s website, applications, and related services
@@ -227,7 +227,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
           <button
             type="button"
             onClick={onOpenPrivacy}
-            className="text-amber-400 hover:underline"
+            className="text-primary hover:underline"
           >
             Privacy Policy
           </button>
@@ -235,7 +235,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">2. Eligibility</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">2. Eligibility</h3>
         <p>
           You must be able to form a binding contract in your jurisdiction and
           meet any minimum age we require. If you use the Services on behalf of
@@ -244,7 +244,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">3. Your account</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">3. Your account</h3>
         <p>
           You are responsible for your account credentials and for all activity
           under your account. Notify us promptly of any unauthorized use. We may
@@ -253,7 +253,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">4. Acceptable use</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">4. Acceptable use</h3>
         <p>You agree not to:</p>
         <ul className="list-disc pl-5 space-y-2">
           <li>
@@ -275,7 +275,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </ul>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">5. Content</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">5. Content</h3>
         <p>
           You retain rights to content you post. You grant ChessConnect a
           non-exclusive license to host, display, and distribute your content on
@@ -285,7 +285,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">
+        <h3 className="text-base font-semibold text-chrome-foreground">
           6. Intellectual property
         </h3>
         <p>
@@ -295,7 +295,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">
+        <h3 className="text-base font-semibold text-chrome-foreground">
           7. Disclaimers and limitation of liability
         </h3>
         <p>
@@ -307,7 +307,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">8. Indemnity</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">8. Indemnity</h3>
         <p>
           To the extent permitted by law, you agree to defend and indemnify
           ChessConnect against claims arising from your use of the Services,
@@ -315,7 +315,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">9. Termination</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">9. Termination</h3>
         <p>
           You may stop using the Services at any time. We may suspend or
           terminate access for conduct that violates these Terms or for
@@ -324,7 +324,7 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">10. Changes</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">10. Changes</h3>
         <p>
           We may modify these Terms. We will show the updated Terms here and
           update the “Last updated” date. Continued use after changes means you
@@ -332,12 +332,12 @@ function TermsBody({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
         </p>
       </section>
       <section className="space-y-3">
-        <h3 className="text-base font-semibold text-white">11. Contact</h3>
+        <h3 className="text-base font-semibold text-chrome-foreground">11. Contact</h3>
         <p>
           Questions about these Terms:{" "}
           <a
             href="mailto:legal@chessconnect.com"
-            className="text-amber-400 hover:underline"
+            className="text-primary hover:underline"
           >
             legal@chessconnect.com
           </a>

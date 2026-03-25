@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
-import { getCookieName, signSession } from "@/auth/session";
-import { mapDbErrorToMessage } from "@/auth/mapDbError";
-import { normalizeEmail, registerUser } from "@/auth/userStore";
+import { getCookieName, signSession } from "@/lib/auth/session";
+import { mapDbErrorToMessage } from "@/lib/auth/mapDbError";
+import { normalizeEmail, registerUser } from "@/lib/auth/userStore";
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as

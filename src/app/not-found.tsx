@@ -1,5 +1,5 @@
+import BackToHomeBtn from "@/components/buttons/BackToHomeBtn";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function NotFound() {
   return (
@@ -12,7 +12,7 @@ export default function NotFound() {
         height={400}
         priority
       />
-      <Link href="/"> Back to Home Page</Link>
+      <BackToHomeBtn />
     </div>
     </>
   );

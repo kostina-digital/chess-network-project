@@ -19,8 +19,8 @@ export default function RootNav() {
       (path !== "/" && pathname.startsWith(path + "/"));
 
     return active
-      ? "text-gray-400 px-2"
-      : "text-blue-500 hover:underline px-2";
+      ? "px-2 font-medium text-primary"
+      : "px-2 text-chrome-muted transition-colors hover:text-primary";
   };
 
   return (

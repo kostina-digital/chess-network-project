@@ -1,18 +1,25 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 
+type SignUpBtnProps = {
+  tone?: "default" | "chrome";
+};
 
-export default function SignUpBtn() {
-    const router = useRouter();
+export default function SignUpBtn({ tone = "default" }: SignUpBtnProps) {
+  const router = useRouter();
 
-    return (
-        <button
-    type="button"
-    onClick={() => router.replace("/register")}
-    className="bg-[#6c47ff] text-white rounded-full font-medium text-sm h-10 px-5 cursor-pointer"
-        >
-            Sign Up
-        </button>
-    )
+  const base =
+    "inline-flex h-10 cursor-pointer items-center justify-center rounded-lg bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover";
+  const chromeShadow = tone === "chrome" ? " shadow-sm shadow-black/20" : "";
+
+  return (
+    <button
+      type="button"
+      onClick={() => router.replace("/register")}
+      className={base + chromeShadow}
+    >
+      Sign Up
+    </button>
+  );
 }

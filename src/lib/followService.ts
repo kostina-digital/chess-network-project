@@ -1,4 +1,4 @@
-import { prisma } from "@/auth/prisma";
+import { prisma } from "@/lib/auth/prisma";
 import { Prisma } from "@/generated/prisma";
 
 /** Raw SQL so follow works even if a hot-reloaded PrismaClient lacks `userFollow` delegate. */

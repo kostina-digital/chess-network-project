@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/auth/getCurrentUser";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { createPost, listFeedPosts } from "@/lib/postService";
 import { collectImageBlobsFromForm, savePostImages } from "@/lib/savePostImages";
 
@@ -8,7 +8,10 @@ export const runtime = "nodejs";
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    const posts = await listFeedPosts(user?.id ?? null);
+    if (!user) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const posts = await listFeedPosts(user.id);
     return Response.json({ posts });
   } catch (e) {
     console.error("[GET /api/posts]", e);

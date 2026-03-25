@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/auth/getCurrentUser";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { toggleCommentDislike, toggleCommentLike } from "@/lib/postService";
 
 function parseCommentId(raw: string): number | null {

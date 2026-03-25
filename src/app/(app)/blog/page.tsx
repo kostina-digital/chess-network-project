@@ -242,7 +242,7 @@ export default function FeedPage() {
                     <button
                       type="button"
                       onClick={() => removeImageAt(i)}
-                      className="absolute right-0.5 top-0.5 rounded bg-black/60 p-0.5 text-white hover:bg-black/80"
+                      className="absolute right-0.5 top-0.5 rounded bg-graphite/70 p-0.5 text-chrome-foreground hover:bg-graphite"
                       aria-label={`Remove image ${i + 1}`}
                     >
                       <X className="h-3.5 w-3.5" />
@@ -271,7 +271,7 @@ export default function FeedPage() {
               type="button"
               onClick={() => void handlePublish()}
               disabled={!canPublish}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-primary-foreground transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
               {publishing ? "Publishing…" : "Publish"}

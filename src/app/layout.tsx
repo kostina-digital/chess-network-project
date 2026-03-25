@@ -1,7 +1,7 @@
 import "./globals.css";
 import { AuthProvider } from "@/components/auth/AuthProvider";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import HeaderPublic from "@/components/layout/HeaderPublic";
+import FooterPublic from "@/components/layout/FooterPublic";
 
 export default function RootLayout({
   children,
@@ -10,11 +10,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="max-w-[1440px] mx-auto p-4 gap-4 min-h-screen flex flex-col">
+      <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
         <AuthProvider>
-          <Header />
-          <main className="flex-1 min-h-0">{children}</main>
-          <Footer />
+          <HeaderPublic />
+          <main className="mx-auto min-h-0 w-full max-w-[1440px] flex-1 px-4 py-4 sm:px-6 lg:px-8">
+            {children}
+          </main>
+          <FooterPublic />
         </AuthProvider>
       </body>
     </html>

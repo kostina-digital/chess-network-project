@@ -1,24 +1,77 @@
-/* Явна база сканування: від src/app → уся папка src (інакше класи з компонентів
-   можуть не потрапити в CSS, якщо cwd/корінь проєкту визначився некоректно). */
 @import "tailwindcss" source("..");
 
+/*
+  Strict palette — only these base hex values:
+  #ead6af surfaces · #1b1f24 text & secondary buttons · #f2f4f7 text on secondary
+  #c9a44c CTA · #b68f36 CTA hover
+  Borders/muted/accents use color-mix from the above only.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --sand: #fbf8ef;
+  --charcoal: #1b1f24;
+  --gold: #c9a44c;
+  --gold-hover: #b68f36;
+  --mist: #f2f4f7;
+
+  --graphite: var(--charcoal);
+
+  --background: var(--sand);
+  --foreground: var(--charcoal);
+  --card: var(--sand);
+  --card-foreground: var(--charcoal);
+  --muted: color-mix(in srgb, var(--charcoal) 8%, var(--sand));
+  --muted-foreground: color-mix(in srgb, var(--charcoal) 58%, var(--sand));
+  --border: color-mix(in srgb, var(--charcoal) 24%, var(--sand));
+  --input: color-mix(in srgb, var(--charcoal) 22%, var(--sand));
+  --input-background: var(--sand);
+  --ring: var(--gold);
+  --primary: var(--gold);
+  --primary-foreground: var(--charcoal);
+  --primary-hover: var(--gold-hover);
+  --secondary: var(--charcoal);
+  --secondary-foreground: var(--mist);
+  --accent: color-mix(in srgb, var(--charcoal) 12%, var(--sand));
+  --accent-foreground: var(--charcoal);
+  --destructive: var(--charcoal);
+  --destructive-foreground: var(--mist);
+
+  /* Legacy aliases (same as light page tokens) */
+  --chrome: var(--background);
+  --chrome-foreground: var(--foreground);
+  --chrome-muted: var(--muted-foreground);
+  --chrome-border: var(--border);
+  --chrome-elevated: var(--muted);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-chrome: var(--chrome);
+  --color-chrome-foreground: var(--chrome-foreground);
+  --color-chrome-muted: var(--chrome-muted);
+  --color-chrome-border: var(--chrome-border);
+  --color-chrome-elevated: var(--chrome-elevated);
+  --color-graphite: var(--graphite);
+  --color-charcoal: var(--charcoal);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
@@ -28,17 +81,17 @@ body {
 }
 
 .h1-style {
-    font-size: 2.5rem;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    text-align: center;
-    font-weight: 600;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 600;
 }
 
 .h3-style {
-    font-size: 1.5rem;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    text-align: center;
-    font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 400;
 }

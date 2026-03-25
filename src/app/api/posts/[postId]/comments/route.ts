@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/auth/getCurrentUser";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { addPostComment, listCommentsForPost } from "@/lib/postService";
 import type { FeedComment } from "@/types/feed";
 
@@ -17,7 +17,10 @@ export async function GET(
     return Response.json({ error: "Invalid post id" }, { status: 400 });
   }
   const user = await getCurrentUser();
-  const comments = await listCommentsForPost(postId, user?.id ?? null);
+  if (!user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const comments = await listCommentsForPost(postId, user.id);
   return Response.json({ comments });
 }
 

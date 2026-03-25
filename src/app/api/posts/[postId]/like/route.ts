@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/auth/getCurrentUser";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { togglePostLike } from "@/lib/postService";
 
 function parsePostId(raw: string): number | null {

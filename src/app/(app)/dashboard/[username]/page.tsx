@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getCurrentUser } from "@/auth/getCurrentUser";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { isFollowing } from "@/lib/followService";
 import {
   getProfileUserByUserName,
@@ -14,6 +15,13 @@ type PageProps = {
 export default async function UserDashboardPage({ params }: PageProps) {
   const { username: raw } = await params;
   const username = decodeURIComponent(raw);
+  const session = await getCurrentUser();
+  if (!session) {
+    redirect(
+      `/login?redirect=${encodeURIComponent(`/dashboard/${username}`)}`
+    );
+  }
+
   const profile = await getProfileUserByUserName(username);
 
   if (!profile) {
@@ -26,7 +34,7 @@ export default async function UserDashboardPage({ params }: PageProps) {
           </p>
           <Link
             href="/blog"
-            className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-primary-foreground transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-primary-foreground transition-colors hover:bg-primary-hover"
           >
             Back to Feed
           </Link>
@@ -35,13 +43,9 @@ export default async function UserDashboardPage({ params }: PageProps) {
     );
   }
 
-  const session = await getCurrentUser();
-  const viewerId = session?.id ?? null;
+  const viewerId = session.id;
   const posts = await listPostsByAuthor(profile.id, viewerId);
-  const isFollowingInitial =
-    viewerId !== null
-      ? await isFollowing(viewerId, profile.id)
-      : false;
+  const isFollowingInitial = await isFollowing(viewerId, profile.id);
 
   return (
     <UserProfileView

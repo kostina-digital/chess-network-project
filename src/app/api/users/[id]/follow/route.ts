@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/auth/getCurrentUser";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { followUser, unfollowUser } from "@/lib/followService";
 
 function parseUserId(raw: string): number | null {

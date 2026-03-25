@@ -1,4 +1,4 @@
-import { prisma } from "@/auth/prisma";
+import { prisma } from "@/lib/auth/prisma";
 import { Prisma } from "@/generated/prisma";
 import { normalizePostImageUrls } from "@/lib/postImageUrl";
 import type { FeedAuthor, FeedComment, FeedPost, ProfileUser } from "@/types/feed";

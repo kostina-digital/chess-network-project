@@ -45,21 +45,21 @@ const quickLinks = [
 
 export default function Footer() {
   return (
-    <footer className="text-neutral-400 mt-auto">
+    <footer className="mt-auto w-full border-t border-border bg-background text-muted-foreground">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:items-start lg:gap-10">
           <div className="flex flex-col gap-4">
-            <Logo width={100} height={100} className="h-40 w-40 rounded-lg" />
+            <Logo />
           </div>
 
           <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-white">Quick Links</h3>
+            <h3 className="text-sm font-semibold text-foreground">Quick Links</h3>
             <ul className="space-y-3 text-sm">
               {quickLinks.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
-                    className="transition-colors hover:text-amber-400"
+                    className="text-foreground transition-colors hover:text-primary"
                   >
                     {label}
                   </Link>
@@ -69,12 +69,12 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-white">Contact</h3>
-            <p className="text-sm">Email: info@chessconnect.com</p>
-            <p className="text-sm">Phone: +1 (555) 123-4567</p>
+            <h3 className="text-sm font-semibold text-foreground">Contact</h3>
+            <p className="text-sm text-foreground">Email: info@chessconnect.com</p>
+            <p className="text-sm text-foreground">Phone: +1 (555) 123-4567</p>
             <Link
               href="mailto:info@chessconnect.com?subject=ChessConnect%20contact"
-              className="inline-flex items-center gap-1 text-sm font-medium text-amber-400 transition-colors hover:text-amber-300"
+              className="inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary-hover"
             >
               Contact us
               <ArrowRight className="size-4" aria-hidden />
@@ -82,7 +82,7 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-white">Follow us</h3>
+            <h3 className="text-sm font-semibold text-foreground">Follow us</h3>
             <ul className="flex flex-wrap items-center gap-2">
               {socialLinks.map(({ name, href, icon }) => (
                 <li key={name}>
@@ -91,7 +91,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={name}
-                    className="inline-flex size-10 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:text-amber-400"
+                    className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
                   >
                     {icon}
                   </a>
@@ -101,7 +101,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-neutral-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs text-neutral-500">
+        <div className="mt-12 flex flex-col gap-4 border-t border-border pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 ChessConnect. All rights reserved.</p>
           <FooterLegalModals />
         </div>

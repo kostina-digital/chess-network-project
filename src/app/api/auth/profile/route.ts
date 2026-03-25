@@ -1,5 +1,5 @@
-import { getCurrentUser } from "@/auth/getCurrentUser";
-import { prisma } from "@/auth/prisma";
+import { getCurrentUser } from "@/lib/auth/getCurrentUser";
+import { prisma } from "@/lib/auth/prisma";
 
 export async function GET() {
   const session = await getCurrentUser();

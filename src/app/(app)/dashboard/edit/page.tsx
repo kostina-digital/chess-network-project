@@ -278,7 +278,7 @@ export default function EditProfilePage() {
             <div className="flex gap-4 pt-4">
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-primary-foreground transition-opacity hover:opacity-90"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-primary-foreground transition-colors hover:bg-primary-hover"
               >
                 <Save className="h-4 w-4" />
                 Save Changes

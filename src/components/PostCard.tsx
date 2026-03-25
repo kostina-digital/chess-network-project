@@ -184,7 +184,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
         >
           <button
             type="button"
-            className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"
+            className="absolute inset-0 bg-graphite/60 backdrop-blur-[1px]"
             aria-label="Close comments"
             onClick={() => setCommentsOpen(false)}
           />
@@ -192,48 +192,48 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             role="dialog"
             aria-modal="true"
             aria-labelledby={`comments-title-${post.id}`}
-            className="relative z-10 flex max-h-[min(80vh,28rem)] w-full max-w-lg flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white text-zinc-900 shadow-2xl dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+            className="relative z-10 flex max-h-[min(80vh,28rem)] w-full max-w-lg flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-600 dark:bg-zinc-800">
+            <div className="flex shrink-0 items-center justify-between border-b border-border bg-muted px-4 py-3">
               <h2
                 id={`comments-title-${post.id}`}
-                className="text-lg font-semibold text-zinc-900 dark:text-zinc-100"
+                className="text-lg font-semibold text-foreground"
               >
                 Comments
-                <span className="ml-2 text-sm font-normal text-zinc-500 dark:text-zinc-400">
+                <span className="ml-2 text-sm font-normal text-muted-foreground">
                   ({commentsCount})
                 </span>
               </h2>
               <button
                 type="button"
                 onClick={() => setCommentsOpen(false)}
-                className="rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
+                className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 aria-label="Close"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <ul className="m-0 flex-1 list-none overflow-y-auto bg-white p-0 dark:bg-zinc-900">
+            <ul className="m-0 flex-1 list-none overflow-y-auto bg-card p-0">
               {commentsLoading ? (
-                <li className="px-4 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                <li className="px-4 py-8 text-center text-sm text-muted-foreground">
                   Loading…
                 </li>
               ) : modalComments.length === 0 ? (
-                <li className="px-4 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                <li className="px-4 py-8 text-center text-sm text-muted-foreground">
                   No comments yet.
                 </li>
               ) : (
                 modalComments.map((c) => (
                   <li
                     key={c.id}
-                    className="flex items-start gap-3 border-b border-zinc-100 px-4 py-3 last:border-b-0 dark:border-zinc-700"
+                    className="flex items-start gap-3 border-b border-border px-4 py-3 last:border-b-0"
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                      <p className="text-sm font-medium text-foreground">
                         {c.authorName}
                       </p>
-                      <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                         {c.text}
                       </p>
                     </div>
@@ -244,8 +244,8 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                         disabled={!viewerId}
                         className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors disabled:opacity-40 ${
                           c.userVote === "like"
-                            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
-                            : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                            ? "bg-primary/15 text-primary"
+                            : "text-muted-foreground hover:bg-muted"
                         }`}
                         aria-pressed={c.userVote === "like"}
                         aria-label="Like comment"
@@ -259,8 +259,8 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                         disabled={!viewerId}
                         className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors disabled:opacity-40 ${
                           c.userVote === "dislike"
-                            ? "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300"
-                            : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                            ? "bg-destructive/15 text-destructive"
+                            : "text-muted-foreground hover:bg-muted"
                         }`}
                         aria-pressed={c.userVote === "dislike"}
                         aria-label="Dislike comment"
@@ -273,12 +273,12 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                 ))
               )}
             </ul>
-            <div className="shrink-0 border-t border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-600 dark:bg-zinc-800">
-              <p className="mb-2 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+            <div className="shrink-0 border-t border-border bg-muted p-3">
+              <p className="mb-2 text-xs font-medium text-muted-foreground">
                 Add a comment
               </p>
               {!viewerId ? (
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs text-muted-foreground">
                   Sign in to comment.
                 </p>
               ) : (
@@ -294,14 +294,14 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                     }}
                     placeholder="Write something…"
                     rows={2}
-                    className="min-h-[2.5rem] flex-1 resize-y rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-zinc-500 dark:focus:ring-zinc-600"
+                    className="min-h-[2.5rem] flex-1 resize-y rounded-lg border border-border bg-input-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
                     aria-label="New comment"
                   />
                   <button
                     type="button"
                     onClick={() => void handleAddComment()}
                     disabled={!newCommentText.trim()}
-                    className="inline-flex h-10 shrink-0 items-center justify-center self-end rounded-lg bg-zinc-900 px-3 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900"
+                    className="inline-flex h-10 shrink-0 items-center justify-center self-end rounded-lg bg-primary px-3 text-primary-foreground transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
                     aria-label="Post comment"
                   >
                     <Send className="h-4 w-4" />
@@ -391,7 +391,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                 <button
                   type="button"
                   onClick={() => setBodyExpanded((v) => !v)}
-                  className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-sm font-medium text-blue-600 underline-offset-2 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
+                  className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-sm font-medium text-primary underline-offset-2 hover:text-primary-hover hover:underline"
                 >
                   {bodyExpanded ? "Show less" : "Read full"}
                 </button>
@@ -406,7 +406,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
               disabled={!viewerId}
               className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                 isLiked
-                  ? "bg-destructive/10 text-destructive hover:bg-destructive/20"
+                  ? "bg-primary/15 text-primary hover:bg-primary/25"
                   : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
