@@ -32,7 +32,6 @@ export function HomeExploreCards() {
   return (
     <section className="border-b border-border bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             News, about &amp; the member feed
           </h2>
@@ -69,7 +68,7 @@ export function HomeExploreCards() {
             </Link>
           ))}
         </div>
-      </div>
+
     </section>
   );
 }
