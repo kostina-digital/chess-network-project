@@ -71,7 +71,7 @@ export function UserProfileView({
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-3xl px-4 py-8">
-        <Card className="mb-8" padding="lg">
+        <div className="mb-8 rounded-lg border border-border bg-card p-8 shadow-sm">
           <div className="flex flex-col items-start gap-6 sm:flex-row">
             <img
               src={avatarSrc}

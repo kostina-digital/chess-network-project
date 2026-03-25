@@ -12,7 +12,7 @@ export function HomeCtaBand() {
           Registration is free. Sign in to read the feed, publish posts, follow
           others, and comment — there is no guest access to community content.
         </p>
-        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
+        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-col sm:flex-wrap">
           <SignUpBtn />
           <Link
             href="/login?redirect=%2Fblog"

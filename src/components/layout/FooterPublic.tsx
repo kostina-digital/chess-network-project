@@ -46,56 +46,47 @@ const quickLinks = [
 export default function Footer() {
   return (
     <footer className="mt-auto w-full border-t border-border bg-background text-muted-foreground">
-      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:items-start lg:gap-10">
-          <div className="flex flex-col gap-4">
-            <Logo
-              width={100}
-              height={100}
-              className="h-32 w-32 rounded-lg object-contain sm:h-40 sm:w-40"
-            />
-          </div>
-
-          
-
-          <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-foreground">Contact</h3>
-            <p className="text-sm text-foreground">Email: info@chessconnect.com</p>
-            <p className="text-sm text-foreground">Phone: +1 (555) 123-4567</p>
-            <Link
-              href="mailto:info@chessconnect.com?subject=ChessConnect%20contact"
-              className="inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary-hover"
-            >
-              Contact us
-              <ArrowRight className="size-4" aria-hidden />
-            </Link>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-foreground">Follow us</h3>
-            <ul className="flex flex-wrap items-center gap-2">
-              {socialLinks.map(({ name, href, icon }) => (
-                <li key={name}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={name}
-                    className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
-                  >
-                    {icon}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="mx-auto flex w-full max-w-6xl flex-row gap-8 px-4 py-8 md:gap-12">
+        <div className="flex flex-1 items-start">
+          <Logo />
         </div>
-
-        <div className="mt-12 flex flex-col gap-4 border-t border-border pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 ChessConnect. All rights reserved.</p>
-          <FooterLegalModals />
+        <div className="flex flex-1 flex-col gap-4 items-center justify-center">
+          <h3 className="text-sm font-semibold text-foreground">Follow us</h3>
+          <ul className="flex flex-wrap items-center gap-2">
+            {socialLinks.map(({ name, href, icon }) => (
+              <li key={name}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={name}
+                  className="inline-flex size-10 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary"
+                >
+                  {icon}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-1 flex-col gap-4 items-center justify-end">
+          <h3 className="text-sm font-semibold text-foreground">Contacts:</h3>
+          <p className="text-sm text-foreground">Email: info@chessconnect.com</p>
+          <p className="text-sm text-foreground">Phone: +49 (032) 123-4567</p>
+          <Link
+            href="mailto:info@chessconnect.com?subject=ChessConnect%20contact"
+            className="inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary-hover"
+          >
+            Contact us
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
         </div>
       </div>
-    </footer>
+
+
+      <div className="mt-12 flex flex-col gap-4 border-t border-border pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <p>© 2026 ChessConnect. All rights reserved.</p>
+        <FooterLegalModals />
+      </div>
+    </footer >
   );
 }

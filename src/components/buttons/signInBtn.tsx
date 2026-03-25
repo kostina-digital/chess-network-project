@@ -21,7 +21,7 @@ export default function SignInBtn({ tone = "default" }: SignInBtnProps) {
       onClick={() => router.replace("/login")}
       className={tone === "chrome" ? chrome : light}
     >
-      Log in
+      <b>Log in</b>
     </button>
   );
 }

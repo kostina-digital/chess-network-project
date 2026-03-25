@@ -4,34 +4,21 @@ import { FeatureCard } from "@/components/FeatureCard";
 export function HomeWhyStickAround() {
   return (
     <section className="py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Why players stick around
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            ChessConnect is a social layer on top of your study and play — not
-            another isolated app.
-          </p>
+  
+        <div className="grid gap-8 md:grid-cols-3 px-6">
+          <article className="flex flex-col gap-2 border border-border rounded-lg p-6 bg-card center items-center justify-center ">
+            <h3 className="h3-style flex items-center gap-2"><Target /> <b>Analyze games</b></h3>
+            <p className="p-style">Share your games and get feedback from the community. Learn from mistakes and celebrate wins together.</p>
+          </article>
+          <article className="flex flex-col gap-2 border border-border rounded-lg p-6 bg-card center items-center justify-center ">
+            <h3 className="h3-style flex items-center gap-2"><Users /> <b>Find your people</b></h3>
+            <p className="p-style">Connect across skill levels, follow players you admire, and grow a network that matches your goals.</p>
+          </article>
+          <article className="flex flex-col gap-2 border border-border rounded-lg p-6 bg-card center items-center justify-center ">
+            <h3 className="h3-style flex items-center gap-2"><Lightbulb /> <b>Share insights</b></h3>
+            <p className="p-style">Openings, tactics, and training ideas — post what you discover and learn from others in return.</p>
+          </article>
         </div>
-        <div className="grid gap-8 md:grid-cols-3">
-          <FeatureCard
-            icon={Target}
-            title="Analyze games"
-            description="Share your games and get feedback from the community. Learn from mistakes and celebrate wins together."
-          />
-          <FeatureCard
-            icon={Users}
-            title="Find your people"
-            description="Connect across skill levels, follow players you admire, and grow a network that matches your goals."
-          />
-          <FeatureCard
-            icon={Lightbulb}
-            title="Share insights"
-            description="Openings, tactics, and training ideas — post what you discover and learn from others in return."
-          />
-        </div>
-      </div>
     </section>
   );
 }

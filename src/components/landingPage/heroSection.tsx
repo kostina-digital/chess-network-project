@@ -6,10 +6,10 @@ import Logo from "../layout/Logo";
 
 export default function HeroSection() {
     return (
-        <section className="flex relative border-b border-border gap-6 m-6 p-6 min-h-[600px]" style={{ backgroundImage: `url(${HeroImg.src})`, backgroundSize: "cover", backgroundPosition: "left bottom" }}>
+        <section className="flex relative border-b border-border gap-6 m-6 p-6 min-h-[600px]" style={{ backgroundImage: `url(${HeroImg.src})`, backgroundSize: "cover", backgroundPosition: "center bottom" }}>
             <div className="flex flex-col items-center justify-start w-1/2 min-w-0">
                 <Logo />
-                <h1 className="h1-style">
+                <h1 className="h1-style text-center">
                     Connect, analyze, and master chess together
                 </h1>
                 <p className="p-style text-center"><b>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function RegisterPage() {
+export default function SignUpPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError(null);
 
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch("/api/auth/sing-up", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -49,7 +49,7 @@ export default function RegisterPage() {
         onSubmit={handleSubmit}
         className="flex w-full max-w-md flex-col gap-3 rounded-xl border border-border bg-card p-6 shadow-sm"
       >
-        <h1 className="text-2xl font-semibold text-foreground">Register</h1>
+        <h1 className="text-2xl font-semibold text-foreground">Sign Up</h1>
 
         <label className="flex flex-col gap-1 text-sm text-foreground">
           <span>Username*</span>
@@ -144,10 +144,10 @@ export default function RegisterPage() {
       <p className="mt-4 text-sm text-muted-foreground">
         Already have an account?{" "}
         <Link
-          href="/login"
+          href="/log-in"
           className="font-medium text-primary hover:text-primary-hover hover:underline"
         >
-          Login
+          LogIn
         </Link>
       </p>
     </>

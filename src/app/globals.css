@@ -20,7 +20,8 @@
   --card: var(--sand);
   --card-foreground: var(--charcoal);
   --muted: color-mix(in srgb, var(--charcoal) 8%, var(--sand));
-  --muted-foreground: color-mix(in srgb, var(--charcoal) 58%, var(--sand));
+  /* Same as body / headings — one text color site-wide */
+  --muted-foreground: var(--foreground);
   --border: color-mix(in srgb, var(--charcoal) 24%, var(--sand));
   --input: color-mix(in srgb, var(--charcoal) 22%, var(--sand));
   --input-background: var(--sand);
@@ -80,18 +81,35 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/*
+  Site typography — Tailwind @apply. Add spacing/alignment in markup:
+  e.g. className="h2-style mb-4 text-center" or wrap in max-w-2xl mx-auto.
+*/
 .h1-style {
-  font-size: 2.5rem;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-  text-align: center;
-  font-weight: 600;
+  @apply text-4xl font-semibold tracking-tight text-foreground sm:text-5xl;
+}
+
+.h2-style {
+  @apply text-3xl font-semibold tracking-tight text-foreground sm:text-4xl;
 }
 
 .h3-style {
-  font-size: 1.5rem;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-  text-align: center;
-  font-weight: 400;
+  @apply text-xl font-semibold leading-snug text-foreground sm:text-2xl;
+}
+
+.h4-style {
+  @apply text-lg font-semibold leading-snug text-foreground;
+}
+
+.h5-style {
+  @apply text-base font-semibold leading-snug text-foreground;
+}
+
+.h6-style {
+  @apply text-sm font-semibold uppercase tracking-wider text-foreground;
+}
+
+/** Lead / subtitle under section headings */
+.p-style {
+  @apply mt-4 text-base leading-relaxed text-foreground sm:text-lg;
 }
