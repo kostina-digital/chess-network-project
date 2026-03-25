@@ -1,6 +1,5 @@
 import "./globals.css";
 import { AuthProvider } from "@/components/auth/AuthProvider";
-import HeaderPublic from "@/components/layout/HeaderPublic";
 import FooterPublic from "@/components/layout/FooterPublic";
 
 export default function RootLayout({
@@ -10,10 +9,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
+      <body className="flex min-h-screen flex-col bg-background text-foreground antialiased max-w-[1440px] mx-auto">
         <AuthProvider>
-          <HeaderPublic />
-          <main className="mx-auto min-h-0 w-full max-w-[1440px] flex-1 px-4 py-4 sm:px-6 lg:px-8">
+          <main className="min-h-0 w-full flex-1 px-4 py-4 sm:px-6 lg:px-8">
             {children}
           </main>
           <FooterPublic />
