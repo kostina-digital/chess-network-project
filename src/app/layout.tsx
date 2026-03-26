@@ -1,6 +1,6 @@
 import "./globals.css";
 import { AuthProvider } from "@/components/auth/AuthProvider";
-import { PublicFooterGate } from "@/components/layout/PublicFooterGate";
+import Footer from "@/components/layout/Footer";
 
 export default function RootLayout({
   children,
@@ -14,7 +14,7 @@ export default function RootLayout({
           <main className="min-h-0 w-full flex-1 px-4 py-4 sm:px-6 lg:px-8">
             {children}
           </main>
-          <PublicFooterGate />
+          <Footer />
         </AuthProvider>
       </body>
     </html>

@@ -17,6 +17,8 @@ type AuthContextValue = {
   user: ClientUser;
   loading: boolean;
   refresh: () => Promise<void>;
+  /** Clears client auth state immediately (e.g. after logout POST). */
+  clearUser: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -39,12 +41,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const clearUser = useCallback(() => setUser(null), []);
+
   useEffect(() => {
     void refresh();
   }, [refresh]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, refresh }}>
+    <AuthContext.Provider value={{ user, loading, refresh, clearUser }}>
       {children}
     </AuthContext.Provider>
   );

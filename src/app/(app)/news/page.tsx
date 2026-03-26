@@ -67,8 +67,8 @@ export default async function NewsPage({
     const message = e instanceof Error ? e.message : String(e);
     return (
       <div className="mx-auto max-w-3xl px-4 py-10">
-        <h1 className="mb-4 text-2xl font-semibold text-foreground">News</h1>
-        <p className="text-destructive" role="alert">
+        <h1 className="h1-style">News</h1>
+        <p className="p-style">
           {message}
         </p>
       </div>
@@ -79,13 +79,13 @@ export default async function NewsPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="mb-2 text-2xl font-semibold text-foreground">News</h1>
-      <p className="mb-8 text-sm text-muted-foreground">
+      <h1 className="h1-style">News</h1>
+      <p className="p-style">
         Chess-related articles from GNews. Open a row for the full text and a
         link to the original source.
       </p>
 
-      <ul className="m-0 flex list-none flex-col gap-4 p-0">
+      <ul className="m-0 flex list-none flex-col gap-4 p-0 w-full">
         {articles.map((article) => (
           <li key={article.slug}>
             <Link
@@ -111,15 +111,15 @@ export default async function NewsPage({
                 )}
               </div>
               <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 p-4 sm:py-4 sm:pr-5">
-                <h2 className="text-base font-semibold leading-snug text-foreground group-hover:underline">
+                <h4 className="h4-style group-hover:underline">
                   {article.title}
-                </h2>
+                </h4>
                 {article.description ? (
-                  <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                  <p className="p-style-small line-clamp-2">
                     {article.description}
                   </p>
                 ) : null}
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 p-style-xsmall">
                   {article.publishedAt ? (
                     <time dateTime={article.publishedAt}>
                       {new Date(article.publishedAt).toLocaleString("en-US", {

@@ -12,7 +12,7 @@ type LogoProps = {
 export default function Logo({
   width = 200,
   height = 200,
-  className = "h-30 w-35 p-4",
+  className = "h-20 w-25 m-4",
   priority = false,
 }: LogoProps) {
   return (

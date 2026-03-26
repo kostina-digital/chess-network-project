@@ -1,18 +1,18 @@
 import Image from "next/image";
-import AboutUsImg from "../../../public/images/aboutUs.png";
+import AboutUsImg from "../../../../public/images/aboutUs.png";
 
 
 export default function AboutUsPage() {
   return (
-    <div>
-      <h1>About Us</h1>
+    <div className="flex flex-col gap-4 items-center justify-center mt-10">
+      <h1 className="h1-style">About Us</h1>
 
-      <h2>Welcome to ChessConnect — where chess becomes more than a game.</h2>
-      <div className="flex gap-4 justify-center items-center">
-        <div className="flex justify-center items-center">
-          <img src="/images/aboutUs.png" alt="About Us" className="rounded-lg object-cover" />
+      <h2 className="h2-style">Welcome to ChessConnect - where chess becomes more than a game.</h2>
+      <div className="flex gap-8 justify-between items-center">
+        <div className="flex w-1/3 justify-start items-start">
+          <Image src={AboutUsImg} alt="About Us" className="rounded-lg object-cover" />
         </div>
-        <p> At ChessConnect, we believe chess is not just about moves on a board. It is about strategy, growth, connection, and the thrill of challenging yourself with every decision. Our platform was created for adults who love chess, want to improve their skills, meet like-minded players, and enjoy a modern social space built around their passion.
+        <p className="p-style w-2/3"> At ChessConnect, we believe chess is not just about moves on a board. It is about strategy, growth, connection, and the thrill of challenging yourself with every decision. Our platform was created for adults who love chess, want to improve their skills, meet like-minded players, and enjoy a modern social space built around their passion.
 
           We saw a need for something more than a standard chess website. Players do not only want to play — they want to share ideas, discuss memorable games, discover inspiring content, follow strong personalities, and become part of a community that truly understands the beauty of chess. That is exactly why ChessConnect was born.
 

@@ -113,3 +113,11 @@ body {
 .p-style {
   @apply mt-4 text-base leading-relaxed text-foreground sm:text-lg;
 }
+
+.p-style-small {
+  @apply mt-4 text-sm leading-relaxed text-foreground sm:text-base;
+}
+
+.p-style-xsmall {
+  @apply mt-4 text-xs leading-relaxed text-foreground sm:text-sm;
+}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuthUser } from "@/components/auth/useAuthUser";
 
 function isValidEmail(value: string) {
   const t = value.trim();
@@ -12,6 +13,7 @@ function isValidEmail(value: string) {
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { refresh } = useAuthUser();
 
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
@@ -122,7 +124,9 @@ export default function SignUpPage() {
       return;
     }
 
+    await refresh();
     router.replace("/dashboard");
+    router.refresh();
   }
 
   return (

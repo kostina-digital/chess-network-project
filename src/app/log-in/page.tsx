@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { useAuthUser } from "@/components/auth/useAuthUser";
 
 function safeInternalPath(path: string | null): string | null {
   if (!path || !path.startsWith("/") || path.startsWith("//")) return null;
@@ -18,6 +19,7 @@ function isValidEmail(value: string) {
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { refresh } = useAuthUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +77,7 @@ function LoginForm() {
 
     const next =
       safeInternalPath(searchParams.get("redirect")) ?? "/dashboard";
+    await refresh();
     router.replace(next);
     router.refresh();
   }

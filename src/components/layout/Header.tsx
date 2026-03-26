@@ -9,18 +9,19 @@ import SignUpBtn from "@/components/buttons/signUpBtn";
 
 export default function Header() {
   const router = useRouter();
-  const { user, refresh } = useAuthUser();
+  const { user, refresh, clearUser } = useAuthUser();
   const displayName = user ? (user.userName || user.email) : "";
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
+    clearUser();
     await refresh();
     router.replace("/");
     router.refresh();
   }
 
   return (
-    <header className="w-full border-b border-border bg-background text-foreground">
+    <header className="w-full border-b border-border bg-background text-foreground p-4">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Logo />
         <RootNav />
