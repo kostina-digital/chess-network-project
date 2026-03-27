@@ -3,16 +3,19 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
-function createPrismaClient() {
-  return new PrismaClient({
-    adapter: new PrismaPg({ connectionString: getDatabaseUrl() }),
-  });
-}
+/** One concrete client per module instance (serverless / worker). */
+let prismaSingleton: PrismaClient | null = null;
 
 function getDatabaseUrl() {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("Missing DATABASE_URL env var.");
   return url;
+}
+
+function createPrismaClient() {
+  return new PrismaClient({
+    adapter: new PrismaPg({ connectionString: getDatabaseUrl() }),
+  });
 }
 
 /** Dev HMR can keep an old PrismaClient without newer model delegates (e.g. `userFollow`). */
@@ -21,16 +24,45 @@ function clientHasUserFollow(client: PrismaClient): boolean {
     ?.findUnique === "function";
 }
 
-const existing = globalForPrisma.prisma;
-const reuseExisting =
-  existing &&
-  (process.env.NODE_ENV === "production" || clientHasUserFollow(existing));
-
-export const prisma = reuseExisting ? existing : createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  if (existing && !reuseExisting) {
-    void existing.$disconnect().catch(() => {});
+function resolvePrismaClient(): PrismaClient {
+  if (prismaSingleton) {
+    return prismaSingleton;
   }
-  globalForPrisma.prisma = prisma;
+
+  const existing = globalForPrisma.prisma;
+  const reuseExisting =
+    existing &&
+    (process.env.NODE_ENV === "production" || clientHasUserFollow(existing));
+
+  if (reuseExisting) {
+    prismaSingleton = existing;
+    return prismaSingleton;
+  }
+
+  const client = createPrismaClient();
+
+  if (process.env.NODE_ENV !== "production") {
+    if (existing && !clientHasUserFollow(existing)) {
+      void existing.$disconnect().catch(() => {});
+    }
+    globalForPrisma.prisma = client;
+  }
+
+  prismaSingleton = client;
+  return client;
 }
+
+/**
+ * Lazy Prisma: avoid throwing at import time when DATABASE_URL is unset (e.g. misconfigured deploy).
+ * First real DB access still requires a valid `DATABASE_URL`.
+ */
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    const client = resolvePrismaClient();
+    const value = Reflect.get(client as object, prop, client);
+    if (typeof value === "function") {
+      return value.bind(client);
+    }
+    return value;
+  },
+});

@@ -31,6 +31,11 @@ export function mapDbErrorToMessage(error: unknown): string {
 
   if (error instanceof Error) {
     const msg = error.message;
+    if (/Missing \w+ env var/i.test(msg)) {
+      return process.env.NODE_ENV === "production"
+        ? "Configure DATABASE_URL and AUTH_SECRET in Vercel: Project → Settings → Environment Variables (Production), then redeploy."
+        : msg;
+    }
     if (/denied access|P1010|User was denied access/i.test(msg)) {
       return "PostgreSQL denied access — fix DATABASE_URL (user/password must match your local Postgres). Homebrew: often postgresql://$(whoami)@localhost:5432/chessnet?schema=public";
     }

@@ -9,19 +9,26 @@ export type SessionUser = {
 };
 
 export async function getCurrentUser(): Promise<SessionUser | null> {
-  const cookieStore = await cookies();
-  const cookieValue = cookieStore.get(getCookieName())?.value;
-  if (!cookieValue) return null;
+  try {
+    const cookieStore = await cookies();
+    const cookieValue = cookieStore.get(getCookieName())?.value;
+    if (!cookieValue) return null;
 
-  const session = verifySession(cookieValue);
-  if (!session) return null;
+    const session = verifySession(cookieValue);
+    if (!session) return null;
 
-  const userId = Number.parseInt(session.userId, 10);
-  if (!Number.isInteger(userId) || userId < 1) return null;
+    const userId = Number.parseInt(session.userId, 10);
+    if (!Number.isInteger(userId) || userId < 1) return null;
 
-  const user = await getUserById(userId);
-  if (!user) return null;
+    const user = await getUserById(userId);
+    if (!user) return null;
 
-  return { id: user.id, userName: user.userName, email: user.email };
+    return { id: user.id, userName: user.userName, email: user.email };
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("[getCurrentUser]", err);
+    }
+    return null;
+  }
 }
 

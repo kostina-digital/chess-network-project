@@ -15,3 +15,4 @@ public/uploads/posts/*
 
 # Prisma client (schema output); run prisma generate or npm install
 src/generated/prisma/
+.vercel

@@ -198,47 +198,7 @@ export default function EditProfilePage() {
           ) : null}
 
           <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
-            <div className="grid gap-5 md:grid-cols-2">
-              <div>
-                <label htmlFor="fullName" className="mb-2 block text-foreground">
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  name="fullName"
-                  type="text"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  className={`w-full rounded-lg border bg-input-background px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring ${
-                    errors.fullName ? "border-destructive" : "border-border"
-                  }`}
-                />
-                {errors.fullName ? (
-                  <p className="mt-1 text-sm text-destructive">{errors.fullName}</p>
-                ) : null}
-              </div>
-
-              <div>
-                <label htmlFor="username" className="mb-2 block text-foreground">
-                  Username
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className={`w-full rounded-lg border bg-input-background px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring ${
-                    errors.username ? "border-destructive" : "border-border"
-                  }`}
-                />
-                {errors.username ? (
-                  <p className="mt-1 text-sm text-destructive">{errors.username}</p>
-                ) : null}
-              </div>
-            </div>
-
-            <div>
+          <div>
               <span className="mb-2 block text-foreground">Profile photo</span>
               <div className="flex flex-wrap items-center gap-4 rounded-lg border border-border bg-muted/30 p-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -276,6 +236,45 @@ export default function EditProfilePage() {
                     </p>
                   ) : null}
                 </div>
+              </div>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <label htmlFor="fullName" className="mb-2 block text-foreground">
+                  Full Name
+                </label>
+                <input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className={`w-full rounded-lg border bg-input-background px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring ${
+                    errors.fullName ? "border-destructive" : "border-border"
+                  }`}
+                />
+                {errors.fullName ? (
+                  <p className="mt-1 text-sm text-destructive">{errors.fullName}</p>
+                ) : null}
+              </div>
+
+              <div>
+                <label htmlFor="username" className="mb-2 block text-foreground">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className={`w-full rounded-lg border bg-input-background px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring ${
+                    errors.username ? "border-destructive" : "border-border"
+                  }`}
+                />
+                {errors.username ? (
+                  <p className="mt-1 text-sm text-destructive">{errors.username}</p>
+                ) : null}
               </div>
             </div>
 
@@ -330,25 +329,6 @@ export default function EditProfilePage() {
                   className="w-full rounded-lg border border-border bg-input-background px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
-            </div>
-
-            <div>
-              <label htmlFor="avatarUrl" className="mb-2 block text-foreground">
-                Avatar URL (optional)
-              </label>
-              <input
-                id="avatarUrl"
-                name="avatarUrl"
-                type="text"
-                value={formData.avatarUrl}
-                onChange={handleChange}
-                className="w-full rounded-lg border border-border bg-input-background px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="https://… or leave empty after upload"
-              />
-              <p className="mt-1 text-sm text-muted-foreground">
-                Use a link instead of an uploaded file, or clear the field and save
-                to fall back to the generated avatar.
-              </p>
             </div>
 
             <div className="flex gap-4 pt-4">
