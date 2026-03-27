@@ -199,6 +199,53 @@ export async function createPost(
   };
 }
 
+export type UpdatePostInput = {
+  title: string;
+  content: string;
+};
+
+/** Returns null if the post does not exist or is not owned by this author. */
+export async function updatePostForAuthor(
+  authorId: number,
+  postId: number,
+  input: UpdatePostInput
+): Promise<FeedPost | null> {
+  const title = input.title.trim();
+  const content = input.content.trim();
+  if (!title) throw new Error("Title is required");
+  if (!content) throw new Error("Content is required");
+
+  const owned = await prisma.post.findFirst({
+    where: { id: postId, authorId },
+    select: { id: true },
+  });
+  if (!owned) return null;
+
+  const p = await prisma.post.update({
+    where: { id: postId },
+    data: { title, content },
+    include: {
+      author: {
+        select: { id: true, userName: true, fullName: true, avatarUrl: true },
+      },
+      _count: { select: { comments: true, likes: true } },
+      likes: { where: { userId: authorId }, select: { id: true } },
+    },
+  });
+
+  return {
+    id: String(p.id),
+    author: mapAuthor(p.author),
+    title: p.title,
+    content: p.content,
+    imageUrls: normalizePostImageUrls(p.imageUrls),
+    timestamp: p.createdAt.toISOString(),
+    likes: p._count.likes,
+    isLiked: p.likes.length > 0,
+    commentsCount: p._count.comments,
+  };
+}
+
 export async function listCommentsForPost(
   postId: number,
   viewerId: number | null

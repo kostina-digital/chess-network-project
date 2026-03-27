@@ -3,6 +3,7 @@
 import {
   Heart,
   MessageSquare,
+  Pencil,
   Send,
   ThumbsDown,
   ThumbsUp,
@@ -20,6 +21,8 @@ type PostCardProps = {
   /** Logged-in user id, or null — likes/comments disabled when null. */
   viewerId: number | null;
   onPostUpdated?: () => void;
+  /** Called with the post returned by the server after a successful edit. */
+  onPostSaved?: (post: FeedPost) => void;
 };
 
 type CommentRow = FeedComment;
@@ -36,41 +39,68 @@ function truncatePostContent(text: string, max: number): string {
   return `${cut.trimEnd()}…`;
 }
 
-export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
-  const [isLiked, setIsLiked] = useState(post.isLiked);
-  const [likesCount, setLikesCount] = useState(post.likes);
-  const [commentsCount, setCommentsCount] = useState(post.commentsCount);
+export function PostCard({
+  post,
+  viewerId,
+  onPostUpdated,
+  onPostSaved,
+}: PostCardProps) {
+  const [savedOverride, setSavedOverride] = useState<FeedPost | null>(null);
+  const displayPost = savedOverride ?? post;
+
+  const [isLiked, setIsLiked] = useState(displayPost.isLiked);
+  const [likesCount, setLikesCount] = useState(displayPost.likes);
+  const [commentsCount, setCommentsCount] = useState(displayPost.commentsCount);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [modalComments, setModalComments] = useState<CommentRow[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
   const [mounted, setMounted] = useState(false);
   const [bodyExpanded, setBodyExpanded] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState("");
+  const [draftContent, setDraftContent] = useState("");
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
-  const author = post.author;
+  const author = displayPost.author;
   const displayName = author.fullName ?? author.userName;
   const avatarSrc = resolveAvatarUrl(author.userName, author.avatarUrl);
-  const ts = new Date(post.timestamp);
+  const ts = new Date(displayPost.timestamp);
+  const isAuthor = viewerId !== null && viewerId === author.id;
 
-  const needsBodyTruncation = post.content.length > PREVIEW_MAX_CHARS;
+  const needsBodyTruncation = displayPost.content.length > PREVIEW_MAX_CHARS;
   const shownBody =
     !needsBodyTruncation || bodyExpanded
-      ? post.content
-      : truncatePostContent(post.content, PREVIEW_MAX_CHARS);
+      ? displayPost.content
+      : truncatePostContent(displayPost.content, PREVIEW_MAX_CHARS);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    setBodyExpanded(false);
-  }, [post.id]);
+    setSavedOverride(null);
+  }, [post.id, post.content, post.title]);
 
   useEffect(() => {
-    setIsLiked(post.isLiked);
-    setLikesCount(post.likes);
-    setCommentsCount(post.commentsCount);
-  }, [post.id, post.isLiked, post.likes, post.commentsCount]);
+    setBodyExpanded(false);
+  }, [displayPost.id]);
+
+  useEffect(() => {
+    setIsLiked(displayPost.isLiked);
+    setLikesCount(displayPost.likes);
+    setCommentsCount(displayPost.commentsCount);
+  }, [
+    displayPost.id,
+    displayPost.isLiked,
+    displayPost.likes,
+    displayPost.commentsCount,
+  ]);
+
+  useEffect(() => {
+    setEditing(false);
+  }, [post.id]);
 
   useEffect(() => {
     if (!commentsOpen) return;
@@ -90,6 +120,47 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
     };
   }, [commentsOpen]);
 
+  const startEditing = () => {
+    setDraftTitle(displayPost.title);
+    setDraftContent(displayPost.content);
+    setSaveError(null);
+    setEditing(true);
+    setBodyExpanded(true);
+  };
+
+  const cancelEditing = () => {
+    setEditing(false);
+    setSaveError(null);
+  };
+
+  const handleSaveEdit = async () => {
+    const title = draftTitle.trim();
+    const content = draftContent.trim();
+    if (!title || !content || saving) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const res = await fetch(`/api/posts/${displayPost.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, content }),
+      });
+      const data = (await res.json()) as { post?: FeedPost; error?: string };
+      if (!res.ok || !data.post) {
+        setSaveError(data.error ?? "Could not save.");
+        return;
+      }
+      setSavedOverride(data.post);
+      setEditing(false);
+      onPostSaved?.(data.post);
+      onPostUpdated?.();
+    } catch {
+      setSaveError("Network error.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleLike = async () => {
     if (!viewerId) return;
     const prevLiked = isLiked;
@@ -97,7 +168,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
     setIsLiked(!prevLiked);
     setLikesCount(prevLiked ? prevCount - 1 : prevCount + 1);
     try {
-      const res = await fetch(`/api/posts/${post.id}/like`, { method: "POST" });
+      const res = await fetch(`/api/posts/${displayPost.id}/like`, { method: "POST" });
       const data = (await res.json()) as { liked?: boolean; likes?: number };
       if (!res.ok) throw new Error();
       if (typeof data.likes === "number") setLikesCount(data.likes);
@@ -112,7 +183,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
   const loadComments = async () => {
     setCommentsLoading(true);
     try {
-      const res = await fetch(`/api/posts/${post.id}/comments`);
+      const res = await fetch(`/api/posts/${displayPost.id}/comments`);
       const data = (await res.json()) as { comments?: FeedComment[] };
       if (res.ok && Array.isArray(data.comments)) {
         setModalComments(data.comments);
@@ -136,7 +207,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
     const text = newCommentText.trim();
     if (!text || !viewerId) return;
     try {
-      const res = await fetch(`/api/posts/${post.id}/comments`, {
+      const res = await fetch(`/api/posts/${displayPost.id}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: text }),
@@ -191,13 +262,13 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
           <div
             role="dialog"
             aria-modal="true"
-            aria-labelledby={`comments-title-${post.id}`}
+            aria-labelledby={`comments-title-${displayPost.id}`}
             className="relative z-10 flex max-h-[min(80vh,28rem)] w-full max-w-lg flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex shrink-0 items-center justify-between border-b border-border bg-muted px-4 py-3">
               <h2
-                id={`comments-title-${post.id}`}
+                id={`comments-title-${displayPost.id}`}
                 className="text-lg font-semibold text-foreground"
               >
                 Comments
@@ -315,13 +386,19 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
       )
     ) : null;
 
-  const imageCount = (post.imageUrls ?? []).length;
+  const imageCount = (displayPost.imageUrls ?? []).length;
+  const profileHref = `/${encodeURIComponent(author.userName)}`;
+  const canSaveEdit =
+    draftTitle.trim().length > 0 &&
+    draftContent.trim().length > 0 &&
+    (draftTitle.trim() !== displayPost.title.trim() ||
+      draftContent.trim() !== displayPost.content.trim());
 
   return (
     <div className="rounded-lg border border-border/80 bg-card/50 p-3 shadow-none sm:p-4">
       <div className="flex items-start gap-2.5 sm:gap-3">
         <Link
-          href={`/dashboard/${encodeURIComponent(author.userName)}`}
+          href={profileHref}
           className="shrink-0"
         >
           <img
@@ -334,7 +411,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
         <div className="min-w-0 flex-1">
           <div className="mb-1 text-xs text-muted-foreground">
             <Link
-              href={`/dashboard/${encodeURIComponent(author.userName)}`}
+              href={profileHref}
               className="font-medium text-foreground hover:underline"
             >
               {displayName}
@@ -344,66 +421,130 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             <span>{formatDistanceToNow(ts, { addSuffix: true })}</span>
           </div>
 
-          {post.title.trim() ? (
-            <h3 className="mb-1.5 text-sm font-medium leading-normal text-foreground">
-              {post.title}
-            </h3>
-          ) : null}
-
-          {imageCount > 0 ? (
-            <div
-              className={`mb-2 grid gap-1.5 ${
-                imageCount === 1
-                  ? "mx-auto w-full max-w-md grid-cols-1 sm:max-w-lg"
-                  : imageCount === 2
-                    ? "grid-cols-1 sm:grid-cols-2"
-                    : "grid-cols-1 sm:grid-cols-3"
-              }`}
-            >
-              {(post.imageUrls ?? []).map((src) => (
-                <a
-                  key={src}
-                  href={src}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative block overflow-hidden rounded-md border border-border bg-muted"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={src}
-                    alt={
-                      post.title.trim()
-                        ? `Image: ${post.title}`
-                        : "Post image"
-                    }
-                    className="max-h-36 w-full object-cover object-center sm:max-h-40"
-                  />
-                </a>
-              ))}
-            </div>
-          ) : null}
-
-          <p className="mb-2 text-xs leading-relaxed text-foreground sm:text-[13px]">
-            <span className="whitespace-pre-wrap">{shownBody}</span>
-            {needsBodyTruncation ? (
-              <>
-                {" "}
+          {editing ? (
+            <div className="mb-2 space-y-3">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-foreground">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  value={draftTitle}
+                  onChange={(e) => setDraftTitle(e.target.value)}
+                  maxLength={200}
+                  className="w-full rounded-lg border border-border bg-input-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-foreground">
+                  Content
+                </label>
+                <textarea
+                  value={draftContent}
+                  onChange={(e) => setDraftContent(e.target.value)}
+                  rows={6}
+                  className="w-full resize-y rounded-lg border border-border bg-input-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+              {saveError ? (
+                <p className="text-xs text-destructive" role="alert">
+                  {saveError}
+                </p>
+              ) : null}
+              <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={() => setBodyExpanded((v) => !v)}
-                  className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-xs font-medium text-primary underline-offset-2 hover:text-primary-hover hover:underline"
+                  onClick={() => void handleSaveEdit()}
+                  disabled={!canSaveEdit || saving}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  {bodyExpanded ? "Show less" : "Read full"}
+                  {saving ? "Saving…" : "Save"}
                 </button>
-              </>
-            ) : null}
-          </p>
+                <button
+                  type="button"
+                  onClick={cancelEditing}
+                  disabled={saving}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-40"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {displayPost.title.trim() ? (
+                <h3 className="mb-1.5 text-sm font-medium leading-normal text-foreground">
+                  {displayPost.title}
+                </h3>
+              ) : null}
+
+              {imageCount > 0 ? (
+                <div
+                  className={`mb-2 grid gap-1.5 ${
+                    imageCount === 1
+                      ? "w-full max-w-md grid-cols-1 sm:max-w-lg"
+                      : imageCount === 2
+                        ? "grid-cols-1 sm:grid-cols-2"
+                        : "grid-cols-1 sm:grid-cols-3"
+                  }`}
+                >
+                  {(displayPost.imageUrls ?? []).map((src) => (
+                    <a
+                      key={src}
+                      href={src}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative block overflow-hidden rounded-md border border-border bg-muted"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={src}
+                        alt={
+                          displayPost.title.trim()
+                            ? `Image: ${displayPost.title}`
+                            : "Post image"
+                        }
+                        className="max-h-36 w-full object-cover object-center sm:max-h-40"
+                      />
+                    </a>
+                  ))}
+                </div>
+              ) : null}
+
+              <p className="mb-2 text-xs leading-relaxed text-foreground sm:text-[13px]">
+                <span className="whitespace-pre-wrap">{shownBody}</span>
+                {needsBodyTruncation ? (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      onClick={() => setBodyExpanded((v) => !v)}
+                      className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-xs font-medium text-primary underline-offset-2 hover:text-primary-hover hover:underline"
+                    >
+                      {bodyExpanded ? "Show less" : "Read full"}
+                    </button>
+                  </>
+                ) : null}
+              </p>
+            </>
+          )}
 
           <div className="flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-2">
+            {isAuthor && !editing ? (
+              <button
+                type="button"
+                onClick={startEditing}
+                className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                aria-label="Edit post"
+              >
+                <Pencil className="h-3.5 w-3.5 shrink-0" />
+                Edit
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={() => void handleLike()}
-              disabled={!viewerId}
+              disabled={!viewerId || editing}
               className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                 isLiked
                   ? "bg-primary/15 text-primary hover:bg-primary/25"
@@ -419,7 +560,8 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             <button
               type="button"
               onClick={() => void openComments()}
-              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              disabled={editing}
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
               aria-label={`View ${commentsCount} ${commentsLabel}`}
               aria-haspopup="dialog"
             >

@@ -20,6 +20,10 @@ type UserProfileViewProps = {
   viewerId: number | null;
   /** Mock follow state until Follow table exists */
   isFollowingInitial?: boolean;
+  /** When true, skip outer page shell (use inside a parent that already has padding). */
+  embedded?: boolean;
+  /** When false, only the profile header is shown (no post list). */
+  showPosts?: boolean;
 };
 
 export function UserProfileView({
@@ -27,6 +31,8 @@ export function UserProfileView({
   posts,
   viewerId,
   isFollowingInitial = false,
+  embedded = false,
+  showPosts = true,
 }: UserProfileViewProps) {
   const isOwnProfile = viewerId !== null && user.id === viewerId;
   const [isFollowing, setIsFollowing] = useState(isFollowingInitial);
@@ -34,6 +40,12 @@ export function UserProfileView({
   const [followBusy, setFollowBusy] = useState(false);
   const displayName = user.fullName ?? user.userName;
   const avatarSrc = resolveAvatarUrl(user.userName, user.avatarUrl);
+
+  const [postsState, setPostsState] = useState(posts);
+
+  useEffect(() => {
+    setPostsState(posts);
+  }, [posts]);
 
   useEffect(() => {
     setIsFollowing(isFollowingInitial);
@@ -68,9 +80,8 @@ export function UserProfileView({
     }
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-3xl px-4 py-8">
+  const inner = (
+    <>
         <div className="mb-8 rounded-lg border border-border bg-card p-8 shadow-sm">
           <div className="flex flex-col items-start gap-6 sm:flex-row">
             <img
@@ -177,27 +188,45 @@ export function UserProfileView({
           </div>
         </div>
 
-        <div id="my-posts" className="mb-6 scroll-mt-24">
-          <h2 className="text-foreground">Posts by {displayName}</h2>
-        </div>
-
-        <div className="space-y-6">
-          {posts.length > 0 ? (
-            posts.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                viewerId={viewerId}
-              />
-            ))
-          ) : (
-            <div className="rounded-lg border border-border bg-card p-12 text-center">
-              <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-              <p className="text-muted-foreground">No posts yet</p>
+        {showPosts ? (
+          <>
+            <div id="my-posts" className="mb-6 scroll-mt-24">
+              <h2 className="text-foreground">Posts by {displayName}</h2>
             </div>
-          )}
-        </div>
-      </div>
+
+            <div className="space-y-6">
+              {postsState.length > 0 ? (
+                postsState.map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    viewerId={viewerId}
+                    onPostSaved={(updated) =>
+                      setPostsState((prev) =>
+                        prev.map((p) => (p.id === updated.id ? updated : p))
+                      )
+                    }
+                  />
+                ))
+              ) : (
+                <div className="rounded-lg border border-border bg-card p-12 text-center">
+                  <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+                  <p className="text-muted-foreground">No posts yet</p>
+                </div>
+              )}
+            </div>
+          </>
+        ) : null}
+    </>
+  );
+
+  if (embedded) {
+    return inner;
+  }
+
+  return (
+    <div className="min-h-screen w-full bg-background">
+      <div className="w-full min-w-0 p-4">{inner}</div>
     </div>
   );
 }

@@ -60,7 +60,7 @@ export function SearchPageContent() {
   }, [raw, load]);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 py-6">
+    <div className="w-full min-w-0 space-y-6 p-4">
       <h1 className="text-2xl font-semibold text-foreground">Search</h1>
 
       {!raw ? (
@@ -96,24 +96,6 @@ export function SearchPageContent() {
           </ul>
         </>
       )}
-
-      <ul className="list-none space-y-2 border-t border-border pt-6 text-sm">
-        <li>
-          <Link href="/blog" className="font-medium text-primary hover:underline">
-            Blog
-          </Link>
-        </li>
-        <li>
-          <Link href="/news" className="font-medium text-primary hover:underline">
-            News
-          </Link>
-        </li>
-        <li>
-          <Link href="/about" className="font-medium text-primary hover:underline">
-            About Us
-          </Link>
-        </li>
-      </ul>
     </div>
   );
 }

@@ -129,7 +129,13 @@ export async function fetchChessNews(options?: {
 
   let page = Math.min(pageRequested, totalPages);
   if (pageRequested !== page) {
-    ({ articles, totalArticles } = await loadPage(page));
+    // GNews totalPages can disagree with a given `page` request. Re-fetching the clamped
+    // page used to discard non-empty page-2 results and broke `/news/[slug]?page=2` → notFound.
+    if (articles.length === 0) {
+      ({ articles, totalArticles } = await loadPage(page));
+    } else {
+      page = pageRequested;
+    }
   }
 
   return {

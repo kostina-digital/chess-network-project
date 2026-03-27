@@ -1,5 +1,8 @@
 {
+  "/api/auth/me/route": "app/api/auth/me/route.js",
   "/(app)/dashboard/page": "app/(app)/dashboard/page.js",
-  "/(app)/news/page": "app/(app)/news/page.js",
-  "/(app)/blog/page": "app/(app)/blog/page.js"
+  "/(app)/search/page": "app/(app)/search/page.js",
+  "/(app)/dashboard/edit/page": "app/(app)/dashboard/edit/page.js",
+  "/(app)/about/page": "app/(app)/about/page.js",
+  "/(app)/[username]/page": "app/(app)/[username]/page.js"
 }
