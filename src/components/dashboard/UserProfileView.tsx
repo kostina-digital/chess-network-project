@@ -177,7 +177,7 @@ export function UserProfileView({
           </div>
         </div>
 
-        <div className="mb-6">
+        <div id="my-posts" className="mb-6 scroll-mt-24">
           <h2 className="text-foreground">Posts by {displayName}</h2>
         </div>
 

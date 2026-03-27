@@ -1,6 +1,7 @@
 import Header from "@/components/layout/Header";
+import { AppAuthenticatedChrome } from "@/components/layout/AppAuthenticatedChrome";
 
-/** App shell: shared header. Auth state comes from the root `AuthProvider` in `app/layout.tsx`. */
+/** App shell: shared header. Signed-in users get sidebar + site search. */
 export default function AppGroupLayout({
   children,
 }: Readonly<{
@@ -9,7 +10,7 @@ export default function AppGroupLayout({
   return (
     <>
       <Header />
-      {children}
+      <AppAuthenticatedChrome>{children}</AppAuthenticatedChrome>
     </>
   );
 }

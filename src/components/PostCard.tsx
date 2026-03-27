@@ -25,7 +25,7 @@ type PostCardProps = {
 type CommentRow = FeedComment;
 
 /** Long posts are collapsed in the feed until the user expands them. */
-const PREVIEW_MAX_CHARS = 200;
+const PREVIEW_MAX_CHARS = 160;
 
 function truncatePostContent(text: string, max: number): string {
   if (text.length <= max) return text;
@@ -315,9 +315,11 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
       )
     ) : null;
 
+  const imageCount = (post.imageUrls ?? []).length;
+
   return (
-    <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-      <div className="flex items-start gap-4">
+    <div className="rounded-lg border border-border/80 bg-card/50 p-3 shadow-none sm:p-4">
+      <div className="flex items-start gap-2.5 sm:gap-3">
         <Link
           href={`/dashboard/${encodeURIComponent(author.userName)}`}
           className="shrink-0"
@@ -325,37 +327,35 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
           <img
             src={avatarSrc}
             alt={displayName}
-            className="h-12 w-12 rounded-full transition-opacity hover:opacity-80"
+            className="h-8 w-8 rounded-full transition-opacity hover:opacity-80"
           />
         </Link>
 
         <div className="min-w-0 flex-1">
-          <div className="mb-2">
+          <div className="mb-1 text-xs text-muted-foreground">
             <Link
               href={`/dashboard/${encodeURIComponent(author.userName)}`}
-              className="font-semibold text-foreground hover:underline"
+              className="font-medium text-foreground hover:underline"
             >
               {displayName}
             </Link>
-            <span className="text-muted-foreground"> @{author.userName}</span>
-            <span className="text-muted-foreground"> · </span>
-            <span className="text-sm text-muted-foreground">
-              {formatDistanceToNow(ts, { addSuffix: true })}
-            </span>
+            <span> @{author.userName}</span>
+            <span> · </span>
+            <span>{formatDistanceToNow(ts, { addSuffix: true })}</span>
           </div>
 
           {post.title.trim() ? (
-            <h3 className="mb-3 text-lg font-semibold leading-snug text-foreground">
+            <h3 className="mb-1.5 text-sm font-medium leading-normal text-foreground">
               {post.title}
             </h3>
           ) : null}
 
-          {(post.imageUrls ?? []).length > 0 ? (
+          {imageCount > 0 ? (
             <div
-              className={`mb-4 grid gap-2 ${
-                (post.imageUrls ?? []).length === 1
-                  ? "grid-cols-1"
-                  : (post.imageUrls ?? []).length === 2
+              className={`mb-2 grid gap-1.5 ${
+                imageCount === 1
+                  ? "mx-auto w-full max-w-md grid-cols-1 sm:max-w-lg"
+                  : imageCount === 2
                     ? "grid-cols-1 sm:grid-cols-2"
                     : "grid-cols-1 sm:grid-cols-3"
               }`}
@@ -366,7 +366,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                   href={src}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative block overflow-hidden rounded-lg border border-border bg-muted"
+                  className="relative block overflow-hidden rounded-md border border-border bg-muted"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -376,14 +376,14 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                         ? `Image: ${post.title}`
                         : "Post image"
                     }
-                    className="max-h-72 w-full object-cover object-center"
+                    className="max-h-36 w-full object-cover object-center sm:max-h-40"
                   />
                 </a>
               ))}
             </div>
           ) : null}
 
-          <p className="mb-4 leading-relaxed text-foreground">
+          <p className="mb-2 text-xs leading-relaxed text-foreground sm:text-[13px]">
             <span className="whitespace-pre-wrap">{shownBody}</span>
             {needsBodyTruncation ? (
               <>
@@ -391,7 +391,7 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
                 <button
                   type="button"
                   onClick={() => setBodyExpanded((v) => !v)}
-                  className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-sm font-medium text-primary underline-offset-2 hover:text-primary-hover hover:underline"
+                  className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-xs font-medium text-primary underline-offset-2 hover:text-primary-hover hover:underline"
                 >
                   {bodyExpanded ? "Show less" : "Read full"}
                 </button>
@@ -399,19 +399,19 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             ) : null}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-2">
             <button
               type="button"
               onClick={() => void handleLike()}
               disabled={!viewerId}
-              className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+              className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                 isLiked
                   ? "bg-primary/15 text-primary hover:bg-primary/25"
                   : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
-              <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
-              <span className="text-sm">
+              <Heart className={`h-3.5 w-3.5 ${isLiked ? "fill-current" : ""}`} />
+              <span>
                 {likesCount} {likesCount === 1 ? "like" : "likes"}
               </span>
             </button>
@@ -419,11 +419,11 @@ export function PostCard({ post, viewerId, onPostUpdated }: PostCardProps) {
             <button
               type="button"
               onClick={() => void openComments()}
-              className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               aria-label={`View ${commentsCount} ${commentsLabel}`}
               aria-haspopup="dialog"
             >
-              <MessageSquare className="h-4 w-4 shrink-0" />
+              <MessageSquare className="h-3.5 w-3.5 shrink-0" />
               <span>
                 {commentsCount} {commentsLabel}
               </span>

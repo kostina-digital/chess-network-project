@@ -1,7 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import RootNav from "@/app/AppNav";
 import Logo from "./Logo";
+import { SiteSearchBar } from "@/components/layout/SiteSearchBar";
 import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/components/auth/useAuthUser";
 import SignInBtn from "@/components/buttons/signInBtn";
@@ -24,7 +26,22 @@ export default function Header() {
     <header className="w-full border-b border-border bg-background text-foreground p-4">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Logo />
-        <RootNav />
+        <div className="flex min-w-0 flex-1 justify-center px-2 sm:px-4">
+          {!user ? (
+            <RootNav />
+          ) : (
+            <Suspense
+              fallback={
+                <div
+                  className="h-9 w-full max-w-xl shrink rounded-lg border border-border bg-muted/40"
+                  aria-hidden
+                />
+              }
+            >
+              <SiteSearchBar />
+            </Suspense>
+          )}
+        </div>
         <div className="flex shrink-0 items-center gap-2">
           {user ? (
             <>

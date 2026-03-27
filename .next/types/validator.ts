@@ -110,6 +110,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../src/app/(app)/search/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/search">> = Specific
+  const handler = {} as typeof import("../../src/app/(app)/search/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/forgot-password/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/forgot-password">> = Specific
@@ -267,6 +276,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/posts">> = Specific
   const handler = {} as typeof import("../../src/app/api/posts/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/api/search/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/search">> = Specific
+  const handler = {} as typeof import("../../src/app/api/search/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

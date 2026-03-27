@@ -80,6 +80,51 @@ export async function listFeedPosts(
   }));
 }
 
+/** Case-insensitive search over post title and body (Postgres). */
+export async function searchPosts(
+  viewerId: number | null,
+  query: string,
+  take = 30
+): Promise<FeedPost[]> {
+  const q = query.trim();
+  if (!q) return [];
+
+  const posts = await prisma.post.findMany({
+    where: {
+      OR: [
+        { title: { contains: q, mode: "insensitive" } },
+        { content: { contains: q, mode: "insensitive" } },
+      ],
+    },
+    orderBy: { createdAt: "desc" },
+    take,
+    include: {
+      author: {
+        select: { id: true, userName: true, fullName: true, avatarUrl: true },
+      },
+      _count: { select: { comments: true, likes: true } },
+      ...(viewerId
+        ? {
+            likes: { where: { userId: viewerId }, select: { id: true } },
+          }
+        : {}),
+    },
+  });
+
+  return posts.map((p) => ({
+    id: String(p.id),
+    author: mapAuthor(p.author),
+    title: p.title,
+    content: p.content,
+    imageUrls: normalizePostImageUrls(p.imageUrls),
+    timestamp: p.createdAt.toISOString(),
+    likes: p._count.likes,
+    isLiked:
+      viewerId && "likes" in p && Array.isArray(p.likes) ? p.likes.length > 0 : false,
+    commentsCount: p._count.comments,
+  }));
+}
+
 export async function listPostsByAuthor(
   authorId: number,
   viewerId: number | null

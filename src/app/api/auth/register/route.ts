@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    // userName, email, password (+ confirm уже проверен выше). В БД: userName, email, hash, salt — без plain password / confirm.
+    // userName, email, password (confirm already validated above). DB: userName, email, hash, salt — no plain password / confirm stored.
     const user = await registerUser(normalizedEmail, userName.trim(), password);
 
     const exp = Date.now() + 7 * 24 * 60 * 60 * 1000;
