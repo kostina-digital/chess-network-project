@@ -173,6 +173,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/api/auth/avatar/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/avatar">> = Specific
+  const handler = {} as typeof import("../../../src/app/api/auth/avatar/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/api/auth/forgot-password/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/auth/forgot-password">> = Specific
@@ -294,6 +303,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/search">> = Specific
   const handler = {} as typeof import("../../../src/app/api/search/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/api/uploads/avatars/[name]/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/uploads/avatars/[name]">> = Specific
+  const handler = {} as typeof import("../../../src/app/api/uploads/avatars/[name]/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

@@ -1,5 +1,7 @@
 {
-  "/api/auth/me/route": "app/api/auth/me/route.js",
+  "/api/auth/profile/route": "app/api/auth/profile/route.js",
+  "/api/auth/avatar/route": "app/api/auth/avatar/route.js",
+  "/api/uploads/avatars/[name]/route": "app/api/uploads/avatars/[name]/route.js",
   "/(app)/dashboard/page": "app/(app)/dashboard/page.js",
   "/(app)/search/page": "app/(app)/search/page.js",
   "/(app)/dashboard/edit/page": "app/(app)/dashboard/edit/page.js",

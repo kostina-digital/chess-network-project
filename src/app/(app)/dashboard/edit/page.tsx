@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, ImagePlus, Save } from "lucide-react";
+import { resolveAvatarUrl } from "@/lib/avatarUrl";
 
 type FormState = {
   fullName: string;
@@ -28,6 +29,9 @@ export default function EditProfilePage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [avatarUploadBusy, setAvatarUploadBusy] = useState(false);
+  const [avatarUploadError, setAvatarUploadError] = useState<string | null>(null);
+  const avatarFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     void (async () => {
@@ -122,6 +126,36 @@ export default function EditProfilePage() {
     router.push("/dashboard");
   };
 
+  const handleAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setAvatarUploadError(null);
+    setAvatarUploadBusy(true);
+    const fd = new FormData();
+    fd.append("avatar", file);
+    try {
+      const res = await fetch("/api/auth/avatar", {
+        method: "POST",
+        body: fd,
+        credentials: "include",
+      });
+      const data = (await res.json()) as { avatarUrl?: string; error?: string };
+      if (!res.ok) {
+        setAvatarUploadError(data.error ?? "Upload failed");
+        return;
+      }
+      const nextAvatar = data.avatarUrl;
+      if (typeof nextAvatar === "string") {
+        setFormData((prev) => ({ ...prev, avatarUrl: nextAvatar }));
+      }
+    } catch {
+      setAvatarUploadError("Network error.");
+    } finally {
+      setAvatarUploadBusy(false);
+    }
+  };
+
   if (!loaded) {
     return (
       <div className="min-h-screen bg-background px-4 py-16 text-center text-muted-foreground">
@@ -205,6 +239,47 @@ export default function EditProfilePage() {
             </div>
 
             <div>
+              <span className="mb-2 block text-foreground">Profile photo</span>
+              <div className="flex flex-wrap items-center gap-4 rounded-lg border border-border bg-muted/30 p-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={resolveAvatarUrl(
+                    formData.username.trim() || "user",
+                    formData.avatarUrl.trim() || null
+                  )}
+                  alt=""
+                  className="h-20 w-20 shrink-0 rounded-full border border-border bg-card object-cover"
+                />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <input
+                    ref={avatarFileRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    className="hidden"
+                    onChange={(ev) => void handleAvatarFile(ev)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => avatarFileRef.current?.click()}
+                    disabled={avatarUploadBusy}
+                    className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <ImagePlus className="h-4 w-4 shrink-0" aria-hidden />
+                    {avatarUploadBusy ? "Uploading…" : "Upload new photo"}
+                  </button>
+                  <p className="text-xs text-muted-foreground">
+                    JPEG, PNG, GIF or WebP — up to 2 MB. Saved immediately.
+                  </p>
+                  {avatarUploadError ? (
+                    <p className="text-xs text-destructive" role="alert">
+                      {avatarUploadError}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+
+            <div>
               <label htmlFor="bio" className="mb-2 block text-foreground">
                 Bio
               </label>
@@ -259,7 +334,7 @@ export default function EditProfilePage() {
 
             <div>
               <label htmlFor="avatarUrl" className="mb-2 block text-foreground">
-                Avatar URL
+                Avatar URL (optional)
               </label>
               <input
                 id="avatarUrl"
@@ -268,10 +343,11 @@ export default function EditProfilePage() {
                 value={formData.avatarUrl}
                 onChange={handleChange}
                 className="w-full rounded-lg border border-border bg-input-background px-4 py-2.5 text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="https://example.com/avatar.jpg"
+                placeholder="https://… or leave empty after upload"
               />
               <p className="mt-1 text-sm text-muted-foreground">
-                Enter a URL for your avatar image
+                Use a link instead of an uploaded file, or clear the field and save
+                to fall back to the generated avatar.
               </p>
             </div>
 
