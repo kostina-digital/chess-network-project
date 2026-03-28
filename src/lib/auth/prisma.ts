@@ -47,8 +47,25 @@ function parseDatabaseConfig(connectionString: string): PoolConfigWithChannelBin
   return parsed;
 }
 
+
+function logDatabaseConfigDebug(connectionString: string, config: PoolConfigWithChannelBinding) {
+  const url = new URL(connectionString);
+  console.log("[db/prisma] Database config", {
+    host: url.hostname,
+    port: url.port || "5432",
+    database: url.pathname.replace(/^\//, ""),
+    sslmode: url.searchParams.get("sslmode") ?? "(not set)",
+    channelBinding: url.searchParams.get("channel_binding") ?? "(not set)",
+    sslEnabled: Boolean(config.ssl),
+    enableChannelBinding: Boolean(config.enableChannelBinding),
+  });
+}
+
 function createPrismaClient() {
-  const config = parseDatabaseConfig(getDatabaseUrl());
+  const databaseUrl = getDatabaseUrl();
+  const config = parseDatabaseConfig(databaseUrl);
+
+  logDatabaseConfigDebug(databaseUrl, config);
 
   return new PrismaClient({
     adapter: new PrismaPg(config),
