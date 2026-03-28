@@ -1,3 +1,4 @@
+import { Prisma } from "@/generated/prisma";
 import { cookies } from "next/headers";
 import { getCookieName, signSession } from "@/lib/auth/session";
 import { mapDbErrorToMessage } from "@/lib/auth/mapDbError";
@@ -40,6 +41,13 @@ export async function POST(req: Request) {
   }
 
   try {
+    console.log("[auth/register] Attempt", {
+      userName: userName.trim(),
+      email: normalizedEmail,
+      passwordLength: password.length,
+      nodeEnv: process.env.NODE_ENV,
+    });
+
     // userName, email, password (confirm already validated above). DB: userName, email, hash, salt — no plain password / confirm stored.
     const user = await registerUser(normalizedEmail, userName.trim(), password);
 
@@ -55,8 +63,24 @@ export async function POST(req: Request) {
       expires: new Date(exp),
     });
 
+    console.log("[auth/register] Success", {
+      userId: user.id,
+      userName: user.userName,
+      email: user.email,
+    });
+
     return Response.json({ ok: true });
   } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log("[auth/register] Prisma known error", {
+        code: e.code,
+        meta: e.meta,
+        message: e.message,
+      });
+    } else {
+      console.log("[auth/register] Unknown error", e);
+    }
+
     const message = mapDbErrorToMessage(e);
     return Response.json({ ok: false, error: message }, { status: 400 });
   }
