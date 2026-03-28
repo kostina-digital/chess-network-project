@@ -41,6 +41,11 @@ export function mapDbErrorToMessage(error: unknown): string {
     // Unique constraint (race: two signups at once)
     if (error.code === "P2002") {
       const hint = uniqueViolationHint(error);
+      console.log("[auth/mapDbError] Unique violation (P2002)", {
+        hint,
+        target: error.meta?.target,
+        message: error.message,
+      });
       if (hint === "email") return "This email is already registered.";
       if (hint === "userName") return "This username is already taken.";
       return "This email or username is already registered. Try signing in or use different values.";
