@@ -16,12 +16,26 @@ function getDatabaseUrl() {
 
 type PoolConfigWithChannelBinding = PoolConfig & { enableChannelBinding?: boolean };
 
+function normalizeConnectionStringForPgParser(connectionString: string): string {
+  const url = new URL(connectionString);
+
+  // `pg-connection-string` warns for sslmode=require/prefer/verify-ca in pg@8,
+  // because those are currently treated as verify-full aliases and will change in pg@9.
+  // We normalize to verify-full so startup logs stay clean and semantics are explicit.
+  if (url.searchParams.get("sslmode") === "require") {
+    url.searchParams.set("sslmode", "verify-full");
+  }
+
+  return url.toString();
+}
+
 function parseDatabaseConfig(connectionString: string): PoolConfigWithChannelBinding {
-  const parsed = parse(connectionString) as PoolConfigWithChannelBinding;
+  const normalizedConnectionString = normalizeConnectionStringForPgParser(connectionString);
+  const parsed = parse(normalizedConnectionString) as PoolConfigWithChannelBinding;
   const params = new URL(connectionString).searchParams;
 
   const sslMode = params.get("sslmode");
-  if (sslMode === "require" && !parsed.ssl) {
+  if ((sslMode === "require" || sslMode === "verify-full") && !parsed.ssl) {
     parsed.ssl = { rejectUnauthorized: false };
   }
 
