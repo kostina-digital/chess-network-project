@@ -1,8 +1,8 @@
 {
   "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/(app)/[username]/page": "app/(app)/[username]/page.js",
-  "/(app)/news/page": "app/(app)/news/page.js",
-  "/(app)/dashboard/edit/page": "app/(app)/dashboard/edit/page.js",
-  "/(app)/about/page": "app/(app)/about/page.js",
+  "/api/auth/logout/route": "app/api/auth/logout/route.js",
+  "/api/auth/register/route": "app/api/auth/register/route.js",
+  "/page": "app/page.js",
+  "/sign-up/page": "app/sign-up/page.js",
   "/(app)/dashboard/page": "app/(app)/dashboard/page.js"
 }
