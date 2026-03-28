@@ -1,5 +1,7 @@
 import { PrismaClient } from "@/generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
+import type { PoolConfig } from "pg";
+import { parse } from "pg-connection-string";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
@@ -12,9 +14,30 @@ function getDatabaseUrl() {
   return url;
 }
 
+type PoolConfigWithChannelBinding = PoolConfig & { enableChannelBinding?: boolean };
+
+function parseDatabaseConfig(connectionString: string): PoolConfigWithChannelBinding {
+  const parsed = parse(connectionString) as PoolConfigWithChannelBinding;
+  const params = new URL(connectionString).searchParams;
+
+  const sslMode = params.get("sslmode");
+  if (sslMode === "require" && !parsed.ssl) {
+    parsed.ssl = { rejectUnauthorized: false };
+  }
+
+  const channelBinding = params.get("channel_binding");
+  if (channelBinding === "require" || channelBinding === "prefer") {
+    parsed.enableChannelBinding = true;
+  }
+
+  return parsed;
+}
+
 function createPrismaClient() {
+  const config = parseDatabaseConfig(getDatabaseUrl());
+
   return new PrismaClient({
-    adapter: new PrismaPg({ connectionString: getDatabaseUrl() }),
+    adapter: new PrismaPg(config),
   });
 }
 
