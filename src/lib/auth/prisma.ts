@@ -1,5 +1,7 @@
 import { PrismaClient } from "@/generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
+import type { PoolConfig } from "pg";
+import { parse } from "pg-connection-string";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
@@ -12,9 +14,45 @@ function getDatabaseUrl() {
   return url;
 }
 
+type PoolConfigWithChannelBinding = PoolConfig & { enableChannelBinding?: boolean };
+
+function normalizeConnectionStringForPgParser(connectionString: string): string {
+  const url = new URL(connectionString);
+
+  // `pg-connection-string` warns for sslmode=require/prefer/verify-ca in pg@8,
+  // because those are currently treated as verify-full aliases and will change in pg@9.
+  // We normalize to verify-full so startup logs stay clean and semantics are explicit.
+  if (url.searchParams.get("sslmode") === "require") {
+    url.searchParams.set("sslmode", "verify-full");
+  }
+
+  return url.toString();
+}
+
+function parseDatabaseConfig(connectionString: string): PoolConfigWithChannelBinding {
+  const normalizedConnectionString = normalizeConnectionStringForPgParser(connectionString);
+  const parsed = parse(normalizedConnectionString) as PoolConfigWithChannelBinding;
+  const params = new URL(connectionString).searchParams;
+
+  const sslMode = params.get("sslmode");
+  if ((sslMode === "require" || sslMode === "verify-full") && !parsed.ssl) {
+    parsed.ssl = { rejectUnauthorized: false };
+  }
+
+  const channelBinding = params.get("channel_binding");
+  if (channelBinding === "require" || channelBinding === "prefer") {
+    parsed.enableChannelBinding = true;
+  }
+
+  return parsed;
+}
+
+
 function createPrismaClient() {
+  const config = parseDatabaseConfig(getDatabaseUrl());
+
   return new PrismaClient({
-    adapter: new PrismaPg({ connectionString: getDatabaseUrl() }),
+    adapter: new PrismaPg(config),
   });
 }
 
