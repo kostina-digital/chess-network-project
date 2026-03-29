@@ -40,6 +40,7 @@ docs/                  Project documentation
 - [Features](./docs/features.md)
 - [Known issues](./docs/known-issues.md)
 - [Next tasks](./docs/next-tasks.md)
+- [User flows](./docs/user-flows.md)
 
 ## Local Development
 
