@@ -44,9 +44,7 @@ export default async function UserPostsPage({ params }: PageProps) {
 
   return (
     <AppPage>
-      <div className="mb-4">
-        <BackButton fallbackHref={`/${profile.userName}`} label="Back to profile" />
-      </div>
+  
       <UserProfileView
         embedded
         user={profile}

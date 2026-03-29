@@ -13,9 +13,6 @@ export default async function NewPostPage() {
 
   return (
     <AppPage className="max-w-4xl">
-      <div className="mb-4">
-        <BackButton fallbackHref="/blog" label="Back to blog" />
-      </div>
 
       <div className="mb-6 px-1">
         <h1 className="h1-style">Create a new post</h1>
