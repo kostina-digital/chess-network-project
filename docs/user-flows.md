@@ -9,8 +9,9 @@ flowchart TD
         A2 --> A3[Dashboard]
     end
 
+    A3 --> BF["Browse blog feed"]
+    BF --> B1["Create post (text + up to 3 images)"]
     A3 --> P1["Edit profile (update bio, avatar)"]
-    A3 --> B1["Create post (text + up to 3 images)"]
     A3 --> S1[Search users/posts]
     A3 --> N1[Open news]
 
