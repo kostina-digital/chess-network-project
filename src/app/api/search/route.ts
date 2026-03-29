@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/auth/getCurrentUser";
-import { searchPosts } from "@/lib/postService";
+import { searchPosts, searchUsers } from "@/lib/postService";
 
 export const runtime = "nodejs";
 
@@ -12,16 +12,19 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = (searchParams.get("q") ?? "").trim();
   if (!q) {
-    return Response.json({ posts: [] as const });
+    return Response.json({ posts: [] as const, users: [] as const });
   }
 
   try {
-    const posts = await searchPosts(user.id, q);
-    return Response.json({ posts });
+    const [posts, users] = await Promise.all([
+      searchPosts(user.id, q),
+      searchUsers(q),
+    ]);
+    return Response.json({ posts, users });
   } catch (e) {
     console.error("[GET /api/search]", e);
     return Response.json(
-      { posts: [], error: "Search failed" },
+      { posts: [], users: [], error: "Search failed" },
       { status: 500 }
     );
   }

@@ -41,3 +41,11 @@ export type ProfileUser = {
   followingCount: number;
   postsCount: number;
 };
+
+export type UserListItem = {
+  id: number;
+  userName: string;
+  fullName: string | null;
+  avatarUrl: string | null;
+  bio: string | null;
+};

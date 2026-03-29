@@ -88,7 +88,7 @@ function LoginForm() {
         onSubmit={handleSubmit}
         className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl border border-border bg-card p-6 shadow-sm"
       >
-        <h1 className="text-2xl font-semibold text-foreground">Login</h1>
+        <h1 className="h1-style">Login</h1>
 
         <label className="flex w-full flex-col gap-1 text-sm text-foreground">
           <span>Email</span>

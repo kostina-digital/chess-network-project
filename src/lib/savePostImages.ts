@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir, unlink, writeFile } from "fs/promises";
 import path from "path";
 import { randomBytes } from "crypto";
 
@@ -18,6 +18,9 @@ const EXT: Record<string, string> = {
   "image/gif": ".gif",
   "image/webp": ".webp",
 };
+
+export const POST_FILENAME_RE =
+  /^\d+-[a-f0-9]{16}\.(jpg|jpeg|png|gif|webp)$/i;
 
 /** When multipart is parsed in Node, MIME is often missing — sniff magic bytes. */
 function detectImageMime(buf: Buffer): string | null {
@@ -99,6 +102,25 @@ export async function savePostImages(files: Blob[]): Promise<string[]> {
   }
 
   return urls;
+}
+
+export async function deleteStoredPostImages(imageUrls: string[]): Promise<void> {
+  const dir = path.join(process.cwd(), "public", "uploads", "posts");
+  const resolvedDir = path.resolve(dir);
+
+  await Promise.all(
+    imageUrls.map(async (imageUrl) => {
+      if (!imageUrl.startsWith("/api/uploads/posts/")) return;
+      const name = imageUrl.split("/").pop() ?? "";
+      if (!POST_FILENAME_RE.test(name)) return;
+
+      const fp = path.join(dir, name);
+      const resolvedFile = path.resolve(fp);
+      if (path.dirname(resolvedFile) !== resolvedDir) return;
+
+      await unlink(resolvedFile).catch(() => {});
+    })
+  );
 }
 
 /** Collect file parts from multipart (field names vary by browser). */

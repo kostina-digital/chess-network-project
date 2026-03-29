@@ -28,7 +28,7 @@ export default async function UserDashboardPage({ params }: PageProps) {
     return (
       <div className="min-h-screen bg-background">
         <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <h1 className="mb-4 text-foreground">User Not Found</h1>
+          <h1 className="h1-style mb-4">User Not Found</h1>
           <p className="mb-6 text-muted-foreground">
             The user you&apos;re looking for doesn&apos;t exist.
           </p>

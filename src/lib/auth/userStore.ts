@@ -1,5 +1,6 @@
 import { pbkdf2Sync, randomBytes, timingSafeEqual } from "crypto";
 import { prisma } from "./prisma";
+import { createDefaultAvatarUrl } from "@/lib/avatarUrl";
 
 export type AuthUser = {
   id: number;
@@ -56,7 +57,7 @@ export async function registerUser(email: string, userName: string, password: st
       email: normalizedEmail,
       passwordHashB64,
       saltB64,
-      avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(normalizedUserName)}`,
+      avatarUrl: createDefaultAvatarUrl(normalizedUserName),
     },
   });
 
@@ -101,4 +102,3 @@ export async function setUserPassword(userId: number, password: string) {
     data: { passwordHashB64, saltB64 },
   });
 }
-

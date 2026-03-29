@@ -189,7 +189,7 @@ export default function EditProfilePage() {
         </div>
 
         <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
-          <h1 className="mb-6 text-foreground">Edit Profile</h1>
+          <h1 className="h1-style mb-6">Edit Profile</h1>
 
           {submitError ? (
             <p className="mb-4 text-sm text-destructive" role="alert">

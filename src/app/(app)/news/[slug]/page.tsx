@@ -56,7 +56,7 @@ export default async function NewsArticlePage({
           ← Back to news
         </Link>
 
-        <h1 className="mb-3 text-2xl font-semibold leading-tight text-foreground">
+        <h1 className="h1-style mb-3">
           {article.title}
         </h1>
 

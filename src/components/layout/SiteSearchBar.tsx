@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 
@@ -8,15 +8,12 @@ import { Search } from "lucide-react";
 export function SiteSearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    setQuery(searchParams.get("q") ?? "");
-  }, [searchParams]);
+  const currentQuery = searchParams.get("q") ?? "";
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const q = query.trim();
+    const form = new FormData(e.currentTarget as HTMLFormElement);
+    const q = String(form.get("q") ?? "").trim();
     if (!q) return;
     const href = `/search?q=${encodeURIComponent(q)}`;
     router.push(href);
@@ -39,8 +36,8 @@ export function SiteSearchBar() {
         <input
           type="search"
           name="q"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          key={currentQuery}
+          defaultValue={currentQuery}
           placeholder="Search…"
           autoComplete="off"
           className="min-w-0 flex-1 border-0 bg-transparent py-0.5 text-sm text-foreground outline-none placeholder:text-muted-foreground"
@@ -48,7 +45,7 @@ export function SiteSearchBar() {
         />
         <button
           type="submit"
-          className="shrink-0 rounded-md bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+          className="shrink-0 rounded-md border border-border bg-muted/60 px-2.5 py-1 text-xs font-medium text-foreground transition-colors hover:bg-muted"
         >
           Search
         </button>

@@ -1,0 +1,369 @@
+"use client";
+
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import Link from "next/link";
+import type { FeedPost } from "@/types/feed";
+import {
+  ChevronDown,
+  ChevronUp,
+  ImagePlus,
+  Send,
+  SquarePen,
+  X,
+} from "lucide-react";
+
+const MAX_IMAGES = 3;
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+]);
+
+async function parseJsonSafe<T>(res: Response): Promise<T | null> {
+  const text = await res.text();
+  if (!text.trim()) return null;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    return null;
+  }
+}
+
+export type ComposePostSectionProps = {
+  viewerId: number | null;
+  onPublished?: (post: FeedPost) => void;
+  /** Controlled open state (e.g. blog + URL hash). */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  defaultOpen?: boolean;
+  className?: string;
+  /** Root element `id` (e.g. `compose-post` for deep links). */
+  sectionId?: string;
+};
+
+export function ComposePostSection({
+  viewerId,
+  onPublished,
+  open: openControlled,
+  onOpenChange,
+  defaultOpen = false,
+  className = "",
+  sectionId,
+}: ComposePostSectionProps) {
+  const isControlled = openControlled !== undefined;
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const composeOpen = isControlled ? openControlled : internalOpen;
+
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (!isControlled) setInternalOpen(next);
+      onOpenChange?.(next);
+    },
+    [isControlled, onOpenChange]
+  );
+
+  const [title, setTitle] = useState("");
+  const [postContent, setPostContent] = useState("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [publishError, setPublishError] = useState<string | null>(null);
+  const [publishSuccess, setPublishSuccess] = useState<string | null>(null);
+  const [publishing, setPublishing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputId = useId();
+
+  useEffect(() => {
+    if (composeOpen) return;
+    setPublishError(null);
+    setPublishSuccess(null);
+  }, [composeOpen]);
+
+  const imagePreviewUrls = useMemo(
+    () => imageFiles.map((f) => URL.createObjectURL(f)),
+    [imageFiles]
+  );
+
+  useEffect(() => {
+    return () => {
+      imagePreviewUrls.forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, [imagePreviewUrls]);
+
+  const addImagesFromList = (list: FileList | null) => {
+    if (!list?.length) return;
+    setPublishError(null);
+    setPublishSuccess(null);
+
+    const selectedFiles = Array.from(list);
+    const remainingSlots = MAX_IMAGES - imageFiles.length;
+    if (remainingSlots <= 0) {
+      setPublishError(`You can attach up to ${MAX_IMAGES} images per post.`);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    const invalidType = selectedFiles.find((file) => {
+      const mime = file.type.trim().toLowerCase();
+      return mime.length > 0 && !ALLOWED_IMAGE_TYPES.has(mime);
+    });
+    if (invalidType) {
+      setPublishError(
+        "Only JPEG, PNG, GIF, and WebP images are supported for posts."
+      );
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    const oversized = selectedFiles.find((file) => file.size > MAX_IMAGE_BYTES);
+    if (oversized) {
+      setPublishError("Each image must be 2 MB or smaller.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    if (selectedFiles.length > remainingSlots) {
+      setPublishError(`You can attach up to ${MAX_IMAGES} images per post.`);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    setImageFiles((prev) => [...prev, ...selectedFiles]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeImageAt = (index: number) => {
+    setPublishError(null);
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handlePublish = async () => {
+    const t = title.trim();
+    const c = postContent.trim();
+    if (!t || !c) return;
+    setPublishError(null);
+    setPublishSuccess(null);
+    setPublishing(true);
+    const attachedCount = imageFiles.length;
+    try {
+      const fd = new FormData();
+      fd.append("title", t);
+      fd.append("content", c);
+      for (const file of imageFiles) {
+        fd.append("images", file, file.name);
+      }
+
+      const res = await fetch("/api/posts", {
+        method: "POST",
+        body: fd,
+        credentials: "same-origin",
+      });
+      const data = await parseJsonSafe<{ post?: FeedPost; error?: string }>(
+        res
+      );
+      if (!data) {
+        setPublishError("Could not publish (invalid or empty response).");
+        return;
+      }
+      if (!res.ok) {
+        setPublishError(data.error ?? "Could not publish");
+        return;
+      }
+      if (data.post) {
+        onPublished?.(data.post);
+        const saved = data.post.imageUrls?.length ?? 0;
+        if (attachedCount > 0 && saved === 0) {
+          setPublishError(
+            "Photos were not saved. Try smaller JPEG/PNG files (max 2 MB each)."
+          );
+        }
+        setOpen(false);
+      }
+      setTitle("");
+      setPostContent("");
+      setImageFiles([]);
+      setPublishSuccess(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch {
+      setPublishError("Network error");
+    } finally {
+      setPublishing(false);
+    }
+  };
+
+  const canPublish =
+    Boolean(viewerId) &&
+    title.trim().length > 0 &&
+    postContent.trim().length > 0 &&
+    !publishing;
+
+  return (
+    <div
+      id={sectionId}
+      className={`scroll-mt-24 rounded-lg border border-border/80 bg-card/50 shadow-none ${className}`}
+    >
+      {!viewerId ? (
+        <div className="p-3 sm:p-4">
+          <p className="text-sm text-muted-foreground">
+            <Link href="/log-in" className="underline">
+              Sign in
+            </Link>{" "}
+            to publish posts.
+          </p>
+        </div>
+      ) : !composeOpen ? (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="flex w-full items-center justify-between gap-3 rounded-lg p-3 text-left transition-colors hover:bg-muted/50 sm:p-4"
+        >
+          <span className="flex min-w-0 items-center gap-2 text-sm font-medium text-foreground">
+            <SquarePen className="size-4 shrink-0 text-primary" aria-hidden />
+            <span className="truncate">Create a new post</span>
+          </span>
+          <ChevronDown
+            className="size-4 shrink-0 text-muted-foreground"
+            aria-hidden
+          />
+        </button>
+      ) : (
+        <div className="p-3 sm:p-4">
+          <div className="mb-3 flex items-start justify-between gap-2">
+            <h2 className="text-sm font-medium text-foreground">
+              Share your chess insights
+            </h2>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              aria-label="Collapse form"
+            >
+              <ChevronUp className="size-4" aria-hidden />
+            </button>
+          </div>
+
+          <label className="mb-1 block text-xs font-medium text-foreground">
+            Title
+          </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Give your post a clear title…"
+            className="mb-3 w-full rounded-lg border border-border bg-input-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            disabled={!viewerId}
+            maxLength={200}
+          />
+
+          <label className="mb-1 block text-xs font-medium text-foreground">
+            Content
+          </label>
+          <textarea
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
+            placeholder="Game analysis, tactical ideas, or anything chess-related…"
+            className="w-full resize-none rounded-lg border border-border bg-input-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            rows={4}
+            disabled={!viewerId}
+          />
+
+          <div className="mt-4">
+            <p className="mb-2 text-xs font-medium text-foreground">
+              Images{" "}
+              <span className="font-normal text-muted-foreground">
+                (optional, up to {MAX_IMAGES} — JPEG, PNG, GIF, WebP, max 2 MB
+                each)
+              </span>
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                multiple
+                className="hidden"
+                id={fileInputId}
+                disabled={!viewerId || imageFiles.length >= MAX_IMAGES}
+                onChange={(e) => addImagesFromList(e.target.files)}
+              />
+              <label
+                htmlFor={fileInputId}
+                className={`inline-flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border px-4 py-2 text-sm text-foreground transition-colors hover:bg-muted/50 ${
+                  !viewerId || imageFiles.length >= MAX_IMAGES
+                    ? "pointer-events-none opacity-40"
+                    : ""
+                }`}
+              >
+                <ImagePlus className="h-4 w-4" />
+                Add images
+              </label>
+              {imageFiles.length > 0 ? (
+                <span className="text-xs font-medium text-foreground">
+                  {imageFiles.length} / {MAX_IMAGES} photo
+                  {imageFiles.length === 1 ? "" : "s"} will be uploaded
+                </span>
+              ) : null}
+            </div>
+            {imageFiles.length > 0 ? (
+              <ul className="mt-3 flex flex-wrap gap-3">
+                {imageFiles.map((file, i) => (
+                  <li
+                    key={`${file.name}-${file.size}-${i}`}
+                    className="relative h-20 w-20 overflow-hidden rounded-md border border-border"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={imagePreviewUrls[i] ?? ""}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImageAt(i)}
+                      className="absolute right-0.5 top-0.5 rounded bg-graphite/70 p-0.5 text-chrome-foreground hover:bg-graphite"
+                      aria-label={`Remove image ${i + 1}`}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+
+          {publishError ? (
+            <p className="mt-2 text-sm text-destructive" role="alert">
+              {publishError}
+            </p>
+          ) : null}
+          {publishSuccess ? (
+            <p
+              className="mt-2 text-sm text-emerald-700 dark:text-emerald-400"
+              role="status"
+            >
+              {publishSuccess}
+            </p>
+          ) : null}
+          <div className="mt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={() => void handlePublish()}
+              disabled={!canPublish}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-primary-foreground transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Send className="h-4 w-4" />
+              {publishing ? "Publishing…" : "Publish"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

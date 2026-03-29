@@ -96,9 +96,7 @@ function ResetPasswordForm() {
         onSubmit={(e) => void handleSubmit(e)}
         className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl border border-border bg-card p-6 shadow-sm"
       >
-        <h1 className="text-2xl font-semibold text-foreground">
-          New password
-        </h1>
+        <h1 className="h1-style">New password</h1>
 
         {tokenMissing ? (
           <p className="text-sm text-red-600" role="alert">

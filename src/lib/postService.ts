@@ -1,7 +1,13 @@
 import { prisma } from "@/lib/auth/prisma";
 import { Prisma } from "@/generated/prisma";
 import { normalizePostImageUrls } from "@/lib/postImageUrl";
-import type { FeedAuthor, FeedComment, FeedPost, ProfileUser } from "@/types/feed";
+import type {
+  FeedAuthor,
+  FeedComment,
+  FeedPost,
+  ProfileUser,
+  UserListItem,
+} from "@/types/feed";
 
 /** Row shape from raw profile SQL (Postgres bigint for count). */
 type ProfileUserRow = {
@@ -17,6 +23,14 @@ type ProfileUserRow = {
   postsCount: bigint | number;
 };
 
+type UserListItemRow = {
+  id: number;
+  userName: string;
+  fullName: string | null;
+  avatarUrl: string | null;
+  bio: string | null;
+};
+
 function mapProfileRow(row: ProfileUserRow): ProfileUser {
   return {
     id: row.id,
@@ -29,6 +43,16 @@ function mapProfileRow(row: ProfileUserRow): ProfileUser {
     followersCount: row.followersCount,
     followingCount: row.followingCount,
     postsCount: Number(row.postsCount),
+  };
+}
+
+function mapUserListItem(row: UserListItemRow): UserListItem {
+  return {
+    id: row.id,
+    userName: row.userName,
+    fullName: row.fullName,
+    avatarUrl: row.avatarUrl,
+    bio: row.bio,
   };
 }
 
@@ -123,6 +147,40 @@ export async function searchPosts(
       viewerId && "likes" in p && Array.isArray(p.likes) ? p.likes.length > 0 : false,
     commentsCount: p._count.comments,
   }));
+}
+
+export async function searchUsers(
+  query: string,
+  take = 12
+): Promise<UserListItem[]> {
+  const q = query.trim();
+  if (!q) return [];
+
+  const rows = await prisma.$queryRaw<UserListItemRow[]>(Prisma.sql`
+    SELECT
+      u.id,
+      u."userName",
+      u."fullName",
+      u."avatarUrl",
+      u.bio
+    FROM "User" u
+    WHERE
+      u."userName" ILIKE ${`%${q}%`}
+      OR COALESCE(u."fullName", '') ILIKE ${`%${q}%`}
+    ORDER BY
+      CASE
+        WHEN LOWER(u."userName") = LOWER(${q}) THEN 0
+        WHEN LOWER(u."userName") LIKE LOWER(${`${q}%`}) THEN 1
+        WHEN LOWER(COALESCE(u."fullName", '')) = LOWER(${q}) THEN 2
+        WHEN LOWER(COALESCE(u."fullName", '')) LIKE LOWER(${`${q}%`}) THEN 3
+        ELSE 4
+      END,
+      u."followersCount" DESC,
+      u."userName" ASC
+    LIMIT ${take}
+  `);
+
+  return rows.map(mapUserListItem);
 }
 
 export async function listPostsByAuthor(
@@ -229,7 +287,6 @@ export async function createPost(
     if (!isPostIdUniqueConflict(error)) {
       throw error;
     }
-    // eslint-disable-next-line no-console -- one-shot auto-heal for corrupted sequence
     console.warn("[post/create] P2002 on Post.id, repairing sequence and retrying once");
     await repairPostIdSequence();
     p = await prisma.post.create({
@@ -257,6 +314,7 @@ export async function createPost(
 export type UpdatePostInput = {
   title: string;
   content: string;
+  imageUrls: string[];
 };
 
 /** Returns null if the post does not exist or is not owned by this author. */
@@ -269,6 +327,9 @@ export async function updatePostForAuthor(
   const content = input.content.trim();
   if (!title) throw new Error("Title is required");
   if (!content) throw new Error("Content is required");
+  if (input.imageUrls.length > 3) {
+    throw new Error("You can attach up to 3 images per post");
+  }
 
   const owned = await prisma.post.findFirst({
     where: { id: postId, authorId },
@@ -278,7 +339,7 @@ export async function updatePostForAuthor(
 
   const p = await prisma.post.update({
     where: { id: postId },
-    data: { title, content },
+    data: { title, content, imageUrls: input.imageUrls },
     include: {
       author: {
         select: { id: true, userName: true, fullName: true, avatarUrl: true },

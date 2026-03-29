@@ -1,5 +1,24 @@
 import { prisma } from "@/lib/auth/prisma";
 import { Prisma } from "@/generated/prisma";
+import type { UserListItem } from "@/types/feed";
+
+type UserListItemRow = {
+  id: number;
+  userName: string;
+  fullName: string | null;
+  avatarUrl: string | null;
+  bio: string | null;
+};
+
+function mapUserListItem(row: UserListItemRow): UserListItem {
+  return {
+    id: row.id,
+    userName: row.userName,
+    fullName: row.fullName,
+    avatarUrl: row.avatarUrl,
+    bio: row.bio,
+  };
+}
 
 /** Raw SQL so follow works even if a hot-reloaded PrismaClient lacks `userFollow` delegate. */
 
@@ -102,4 +121,38 @@ export async function unfollowUser(
     );
     return { isFollowing: false, followersCount: fc[0]?.c ?? 0 };
   });
+}
+
+export async function listFollowers(userId: number): Promise<UserListItem[]> {
+  const rows = await prisma.$queryRaw<UserListItemRow[]>(Prisma.sql`
+    SELECT
+      u.id,
+      u."userName",
+      u."fullName",
+      u."avatarUrl",
+      u.bio
+    FROM "UserFollow" uf
+    INNER JOIN "User" u ON u.id = uf."followerId"
+    WHERE uf."followingId" = ${userId}
+    ORDER BY COALESCE(u."fullName", u."userName") ASC, u."userName" ASC
+  `);
+
+  return rows.map(mapUserListItem);
+}
+
+export async function listFollowing(userId: number): Promise<UserListItem[]> {
+  const rows = await prisma.$queryRaw<UserListItemRow[]>(Prisma.sql`
+    SELECT
+      u.id,
+      u."userName",
+      u."fullName",
+      u."avatarUrl",
+      u.bio
+    FROM "UserFollow" uf
+    INNER JOIN "User" u ON u.id = uf."followingId"
+    WHERE uf."followerId" = ${userId}
+    ORDER BY COALESCE(u."fullName", u."userName") ASC, u."userName" ASC
+  `);
+
+  return rows.map(mapUserListItem);
 }

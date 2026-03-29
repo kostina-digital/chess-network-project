@@ -31,8 +31,8 @@ type DashboardHubProps = {
 export function DashboardHub({ myPostsHref }: DashboardHubProps) {
   return (
     <header className="mb-8">
-      <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
-      <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+      <h1 className="h1-style">Dashboard</h1>
+      <p className="p-style-small max-w-2xl">
         Jump to your posts, start writing, or update how others see you.
       </p>
       <ul className="mt-6 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
