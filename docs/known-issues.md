@@ -2,7 +2,7 @@
 
 ## Local file storage is not production-scalable
 
-Uploaded avatars and post images are stored on the local filesystem. This is simple and effective for development, but it is not ideal for multi-instance deployments or ephemeral hosting environments.
+Uploaded avatars are stored under `/tmp/uploads/avatars` by default to avoid read-only `public` in serverless, so they are non-persistent across deploys. Post images still live under `public/uploads/posts`. A durable blob/storage backend is needed for production.
 
 ## News quality depends on external data
 

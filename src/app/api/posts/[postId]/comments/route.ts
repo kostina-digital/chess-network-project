@@ -55,7 +55,9 @@ export async function POST(
     const comment: FeedComment = {
       id: String(row.id),
       authorName: row.author.fullName ?? row.author.userName,
+      authorUserName: row.author.userName,
       text: row.content,
+      timestamp: row.createdAt.toISOString(),
       likes: 0,
       dislikes: 0,
       userVote: null,

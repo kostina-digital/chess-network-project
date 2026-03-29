@@ -27,12 +27,14 @@
 - Attach up to three images per post
 - Edit existing posts, including image management
 - Feed and profile post views
+- Missing post images fall back to a bundled 404 illustration
 
 ## Engagement
 
 - Like posts
 - Add comments to posts
 - Like or dislike comments
+- Comments show author link and relative timestamp
 
 ## Search
 
@@ -50,5 +52,6 @@
 
 - Consistent typography helpers
 - Responsive layouts across primary pages
-- Authenticated header search
+- Authenticated header search, centered; layout constrained to 1440px max width
 - Reusable cards and modal patterns
+- Unified red styling for all error messages

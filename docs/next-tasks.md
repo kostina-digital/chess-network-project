@@ -15,7 +15,7 @@
 ## Engineering
 
 - Add automated tests for auth, posts, and follow flows.
-- Move media storage to cloud object storage for production readiness.
+- Move media storage to cloud object storage for production readiness (avatars currently in `/tmp/uploads/avatars`, post images under `public/uploads/posts`).
 - Add a dedicated search ranking strategy or indexed search backend if data volume grows.
 
 ## Documentation

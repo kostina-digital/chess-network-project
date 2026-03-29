@@ -408,9 +408,23 @@ export function PostCard({
                     className="flex items-start gap-3 border-b border-border px-4 py-3 last:border-b-0"
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-foreground">
-                        {c.authorName}
-                      </p>
+                      <div className="mb-0.5 flex flex-wrap items-baseline gap-2">
+                        {c.authorUserName ? (
+                          <Link
+                            href={`/${encodeURIComponent(c.authorUserName)}`}
+                            className="text-sm font-semibold text-foreground hover:underline"
+                          >
+                            {c.authorName}
+                          </Link>
+                        ) : (
+                          <p className="text-sm font-semibold text-foreground">
+                            {c.authorName}
+                          </p>
+                        )}
+                        <span className="text-xs text-muted-foreground">
+                          {formatDistanceToNow(new Date(c.timestamp), { addSuffix: true })}
+                        </span>
+                      </div>
                       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                         {c.text}
                       </p>

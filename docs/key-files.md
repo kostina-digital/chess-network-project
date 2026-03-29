@@ -27,7 +27,7 @@ This file highlights the parts of the codebase that matter most when onboarding 
 ## Posts and feed
 
 - `src/components/posts/PostCard.tsx`
-  Main feed card with likes, comments, editing, and image rendering.
+  Main feed card with likes, comments (timestamps, author links), editing, and image rendering with fallback.
 
 - `src/components/posts/ComposePostSection.tsx`
   Post creation form and client-side image selection.
@@ -66,7 +66,7 @@ This file highlights the parts of the codebase that matter most when onboarding 
 ## Media and uploads
 
 - `src/lib/saveAvatarImage.ts`
-  Avatar validation and saving.
+  Avatar validation and saving to a writable uploads root (`AVATAR_STORAGE_DIR`, defaults to `/tmp/uploads/avatars`).
 
 - `src/lib/savePostImages.ts`
   Post image validation, saving, and cleanup.
@@ -80,4 +80,4 @@ This file highlights the parts of the codebase that matter most when onboarding 
 ## Styling
 
 - `src/app/globals.css`
-  Theme tokens and typography helpers such as `h1-style`, `h2-style`, and paragraph classes.
+  Theme tokens and typography helpers such as `h1-style`, `h2-style`, and paragraph classes. Defines red destructive color and `[role="alert"]` styling for errors.

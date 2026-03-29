@@ -395,7 +395,9 @@ export async function listCommentsForPost(
     return {
       id: String(c.id),
       authorName: c.author.fullName ?? c.author.userName,
+      authorUserName: c.author.userName,
       text: c.content,
+      timestamp: c.createdAt.toISOString(),
       likes: c.reactions.filter((r) => r.kind === "LIKE").length,
       dislikes: c.reactions.filter((r) => r.kind === "DISLIKE").length,
       userVote,

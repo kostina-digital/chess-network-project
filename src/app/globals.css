@@ -33,8 +33,8 @@
   --secondary-foreground: var(--mist);
   --accent: color-mix(in srgb, var(--charcoal) 12%, var(--sand));
   --accent-foreground: var(--charcoal);
-  --destructive: var(--charcoal);
-  --destructive-foreground: var(--mist);
+  --destructive: #c93c30; /* clear red for errors */
+  --destructive-foreground: #fffaf6;
 
   /* Legacy aliases (same as light page tokens) */
   --chrome: var(--background);
@@ -120,4 +120,8 @@ body {
 
 .p-style-xsmall {
   @apply mt-4 text-xs leading-relaxed text-foreground sm:text-sm;
+}
+
+[role="alert"] {
+  color: var(--destructive);
 }

@@ -5,6 +5,7 @@ import { mapDbErrorToMessage } from "@/lib/auth/mapDbError";
 import { prisma } from "@/lib/auth/prisma";
 import {
   AVATAR_FILENAME_RE,
+  AVATAR_STORAGE_DIR,
   saveAvatarImage,
 } from "@/lib/saveAvatarImage";
 
@@ -25,7 +26,7 @@ async function deleteStoredAvatarIfLocal(avatarUrl: string | null) {
   if (!avatarUrl?.startsWith("/api/uploads/avatars/")) return;
   const name = avatarUrl.split("/").pop() ?? "";
   if (!AVATAR_FILENAME_RE.test(name)) return;
-  const dir = path.join(process.cwd(), "public", "uploads", "avatars");
+  const dir = AVATAR_STORAGE_DIR;
   const fp = path.join(dir, name);
   const resolvedDir = path.resolve(dir);
   const resolvedFile = path.resolve(fp);

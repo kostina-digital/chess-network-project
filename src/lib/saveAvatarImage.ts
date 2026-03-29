@@ -3,6 +3,9 @@ import path from "path";
 import { randomBytes } from "crypto";
 
 const MAX_BYTES = 2 * 1024 * 1024;
+/** Writable directory for avatar files (works on serverless, falls back to /tmp). */
+export const AVATAR_STORAGE_DIR =
+  process.env.AVATAR_STORAGE_DIR || path.join("/tmp", "uploads", "avatars");
 
 const ALLOWED = new Set([
   "image/jpeg",
@@ -69,12 +72,11 @@ export async function saveAvatarImage(file: Blob): Promise<string> {
     );
   }
 
-  const dir = path.join(process.cwd(), "public", "uploads", "avatars");
-  await mkdir(dir, { recursive: true });
+  await mkdir(AVATAR_STORAGE_DIR, { recursive: true });
 
   const ext = EXT[mime];
   const name = `${Date.now()}-${randomBytes(8).toString("hex")}${ext}`;
-  await writeFile(path.join(dir, name), buf);
+  await writeFile(path.join(AVATAR_STORAGE_DIR, name), buf);
   return `/api/uploads/avatars/${name}`;
 }
 

@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
-import { AVATAR_FILENAME_RE } from "@/lib/saveAvatarImage";
+import { AVATAR_FILENAME_RE, AVATAR_STORAGE_DIR } from "@/lib/saveAvatarImage";
 
 export const runtime = "nodejs";
 
@@ -31,7 +31,7 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
-  const dir = path.join(process.cwd(), "public", "uploads", "avatars");
+  const dir = AVATAR_STORAGE_DIR;
   const fp = path.join(dir, name);
   const resolvedDir = path.resolve(dir);
   const resolvedFile = path.resolve(fp);

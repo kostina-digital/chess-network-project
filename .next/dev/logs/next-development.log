@@ -1,1 +1,5 @@
 {"timestamp":"00:00:01.883","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:25:52.989","source":"Server","level":"WARN","message":"⚠ Fast Refresh had to perform a full reload due to a runtime error."}
+{"timestamp":"00:25:53.049","source":"Browser","level":"ERROR","message":"uncaughtError: RangeError: Invalid time value"}
+{"timestamp":"00:25:53.084","source":"Server","level":"ERROR","message":"[browser] \"\\u001b[31mUncaught RangeError: Invalid time value\\u001b[39m\\n\\u001b[31m    at map ([native code])\\n    at forEach ([native code])\\n    at map ([native code])\\u001b[39m\""}
+{"timestamp":"00:25:53.084","source":"Browser","level":"ERROR","message":"\u001b[31mUncaught RangeError: Invalid time value\u001b[39m\n\u001b[31m    at map ([native code])\n    at forEach ([native code])\n    at map ([native code])\u001b[39m"}

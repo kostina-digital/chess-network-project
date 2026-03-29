@@ -47,3 +47,9 @@ flowchart TD
 ## Current State
 
 The application already supports the core social and profile flows. Most improvements now sit in consistency, polish, and long-term maintainability rather than in basic product scaffolding.
+
+Recent polish:
+- Layout constrained to 1440px with centered header search for consistent rhythm.
+- Comment modal shows author links and relative timestamps; broken post images fall back to a bundled 404 illustration.
+- Error messages share a unified red color token across the app.
+- Avatar uploads now write to a writable path (`/tmp/uploads/avatars` by default) to work in read-only serverless environments.

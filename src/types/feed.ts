@@ -10,7 +10,9 @@ export type FeedAuthor = {
 export type FeedComment = {
   id: string;
   authorName: string;
+  authorUserName?: string;
   text: string;
+  timestamp: string;
   likes: number;
   dislikes: number;
   userVote: "like" | "dislike" | null;

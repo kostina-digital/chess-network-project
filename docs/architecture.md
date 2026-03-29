@@ -56,7 +56,7 @@ sequenceDiagram
 - Route handlers handle authenticated API reads and mutations.
 - `src/lib` contains domain logic instead of placing business rules directly inside route handlers.
 - Prisma provides access to PostgreSQL, with a generated client committed into the repository output path.
-- Uploaded media is validated and written locally under `public/uploads`.
+- Uploaded media is validated and written under a writable uploads root (`AVATAR_STORAGE_DIR` for avatars, default `/tmp/uploads/avatars`; posts stay under `public/uploads/posts`), and served via `/api/uploads/...` route handlers.
 
 ## Strengths
 
@@ -67,6 +67,6 @@ sequenceDiagram
 
 ## Constraints
 
-- Local upload storage is not ideal for distributed production deployments.
+- Local upload storage is not ideal for distributed production deployments; avatars in `/tmp` are non-persistent and should move to durable storage.
 - Search is database-backed and intentionally lightweight.
 - Some presentation rules still live close to pages instead of a fuller design system.

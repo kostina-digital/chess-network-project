@@ -57,6 +57,8 @@ Create `.env.local` and provide the required values:
 DATABASE_URL=postgresql://...
 AUTH_SECRET=your-secret
 GNEWS_API_KEY=your-key
+# Optional: override default avatar storage (defaults to /tmp/uploads/avatars for serverless)
+AVATAR_STORAGE_DIR=/tmp/uploads/avatars
 ```
 
 ## 3. Prepare the database
