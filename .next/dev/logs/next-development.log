@@ -1,4 +1,10 @@
-{"timestamp":"00:00:03.088","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:14.518","source":"Server","level":"LOG","message":"○ Compiling / ..."}
-{"timestamp":"00:00:20.358","source":"Server","level":"LOG","message":"○ Compiling /dashboard ..."}
-{"timestamp":"00:00:22.475","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:02.759","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:05.834","source":"Server","level":"LOG","message":"○ Compiling /blog ..."}
+{"timestamp":"00:00:16.790","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:19.218","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:20.168","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:02:48.308","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:02:48.364","source":"Browser","level":"WARN","message":"Image with src \"/_next/static/media/Logo.a29ce509.png\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\"eager\"` property if this image is above the fold.\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading"}
+{"timestamp":"00:02:48.406","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mImage with src \\\"/_next/static/media/Logo.a29ce509.png\\\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\\\"eager\\\"` property if this image is above the fold.\\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading\\u001b[39m\""}
+{"timestamp":"00:02:48.407","source":"Browser","level":"WARN","message":"\u001b[33mImage with src \"/_next/static/media/Logo.a29ce509.png\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\"eager\"` property if this image is above the fold.\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading\u001b[39m"}
+{"timestamp":"00:02:50.094","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}

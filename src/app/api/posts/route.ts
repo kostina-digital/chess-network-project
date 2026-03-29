@@ -1,4 +1,6 @@
 import { getCurrentUser } from "@/lib/auth/getCurrentUser";
+import { Prisma } from "@/generated/prisma";
+import { mapDbErrorToMessage } from "@/lib/auth/mapDbError";
 import { createPost, listFeedPosts } from "@/lib/postService";
 import { collectImageBlobsFromForm, savePostImages } from "@/lib/savePostImages";
 
@@ -71,7 +73,18 @@ export async function POST(request: Request) {
     const post = await createPost(user.id, { title, content, imageUrls });
     return Response.json({ post });
   } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      // eslint-disable-next-line no-console -- needed to inspect db write failures in dev
+      console.error("[POST /api/posts] prisma error", {
+        code: e.code,
+        message: e.message,
+        meta: e.meta,
+      });
+    } else {
+      // eslint-disable-next-line no-console -- needed to inspect non-prisma failures
+      console.error("[POST /api/posts] create failed", e);
+    }
+    const message = mapDbErrorToMessage(e);
     return Response.json({ error: message }, { status: 400 });
   }
 }

@@ -166,6 +166,40 @@ export type CreatePostInput = {
   imageUrls: string[];
 };
 
+type CreatedPostWithAuthor = Prisma.PostGetPayload<{
+  include: {
+    author: { select: { id: true; userName: true; fullName: true; avatarUrl: true } };
+  };
+}>;
+
+function isPostIdUniqueConflict(error: unknown): boolean {
+  if (!(error instanceof Prisma.PrismaClientKnownRequestError)) return false;
+  if (error.code !== "P2002") return false;
+  const target = error.meta?.target;
+  if (Array.isArray(target)) {
+    return target.map(String).some((v) => v.toLowerCase() === "id");
+  }
+  if (typeof target === "string") {
+    const t = target.toLowerCase();
+    return t === "id" || t.includes("_pkey") || t.includes("_id_key");
+  }
+  return /fields:\s*\(`?id`?\)/i.test(error.message);
+}
+
+/**
+ * Repairs PostgreSQL sequence after manual imports/truncates.
+ * Without this, `@default(autoincrement())` may try an already-used id.
+ */
+async function repairPostIdSequence(): Promise<void> {
+  await prisma.$executeRaw(Prisma.sql`
+    SELECT setval(
+      pg_get_serial_sequence('"Post"', 'id'),
+      COALESCE((SELECT MAX(id) FROM "Post"), 0) + 1,
+      false
+    )
+  `);
+}
+
 export async function createPost(
   authorId: number,
   input: CreatePostInput
@@ -178,14 +212,35 @@ export async function createPost(
     throw new Error("You can attach up to 3 images per post");
   }
 
-  const p = await prisma.post.create({
-    data: { authorId, title, content: trimmed, imageUrls: input.imageUrls },
-    include: {
-      author: {
-        select: { id: true, userName: true, fullName: true, avatarUrl: true },
+  // Keep sequence in sync with actual max(id); protects against stale sequences after imports/resets.
+  await repairPostIdSequence().catch(() => {});
+
+  let p: CreatedPostWithAuthor;
+  try {
+    p = await prisma.post.create({
+      data: { authorId, title, content: trimmed, imageUrls: input.imageUrls },
+      include: {
+        author: {
+          select: { id: true, userName: true, fullName: true, avatarUrl: true },
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    if (!isPostIdUniqueConflict(error)) {
+      throw error;
+    }
+    // eslint-disable-next-line no-console -- one-shot auto-heal for corrupted sequence
+    console.warn("[post/create] P2002 on Post.id, repairing sequence and retrying once");
+    await repairPostIdSequence();
+    p = await prisma.post.create({
+      data: { authorId, title, content: trimmed, imageUrls: input.imageUrls },
+      include: {
+        author: {
+          select: { id: true, userName: true, fullName: true, avatarUrl: true },
+        },
+      },
+    });
+  }
   return {
     id: String(p.id),
     author: mapAuthor(p.author),

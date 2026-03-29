@@ -1,6 +1,7 @@
 import { unlink } from "fs/promises";
 import path from "path";
 import { getCurrentUser } from "@/lib/auth/getCurrentUser";
+import { mapDbErrorToMessage } from "@/lib/auth/mapDbError";
 import { prisma } from "@/lib/auth/prisma";
 import {
   AVATAR_FILENAME_RE,
@@ -66,18 +67,19 @@ export async function POST(request: Request) {
     return Response.json({ error: message }, { status: 400 });
   }
 
-  const before = await prisma.user.findUnique({
-    where: { id: session.id },
-    select: { avatarUrl: true },
-  });
-
+  let before: { avatarUrl: string | null } | null = null;
   try {
+    before = await prisma.user.findUnique({
+      where: { id: session.id },
+      select: { avatarUrl: true },
+    });
     await prisma.user.update({
       where: { id: session.id },
       data: { avatarUrl: publicUrl },
     });
-  } catch {
-    return Response.json({ error: "Could not update profile" }, { status: 500 });
+  } catch (e) {
+    const message = mapDbErrorToMessage(e);
+    return Response.json({ error: message }, { status: 400 });
   }
 
   if (before?.avatarUrl) {
