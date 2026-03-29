@@ -16,8 +16,8 @@ export function FooterQuickLinks() {
   if (!user) return null;
 
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-sm font-semibold text-foreground">Quick Links</h3>
+    <div className="flex justify-center items-center flex-col gap-4">
+      <h3 className="text-center text-sm font-semibold text-foreground">Quick Links</h3>
       <ul className="space-y-3 text-sm">
         {quickLinks.map(({ href, label }) => (
           <li key={href}>

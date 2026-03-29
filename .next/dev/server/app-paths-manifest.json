@@ -1,9 +1,5 @@
 {
-  "/api/posts/route": "app/api/posts/route.js",
-  "/api/uploads/posts/[name]/route": "app/api/uploads/posts/[name]/route.js",
-  "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/(app)/[username]/posts/page": "app/(app)/[username]/posts/page.js",
-  "/(app)/[username]/page": "app/(app)/[username]/page.js",
+  "/(app)/dashboard/page": "app/(app)/dashboard/page.js",
   "/(app)/news/page": "app/(app)/news/page.js",
   "/(app)/blog/page": "app/(app)/blog/page.js",
   "/(app)/blog/new/page": "app/(app)/blog/new/page.js"

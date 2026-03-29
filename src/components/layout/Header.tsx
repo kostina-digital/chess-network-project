@@ -24,9 +24,9 @@ export default function Header() {
 
   return (
     <header className="w-full border-b border-border bg-background px-4 py-3 text-foreground sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-[1440px] flex-wrap items-center gap-3">
+      <div className="flex w-full flex-wrap items-center gap-3">
         <Logo />
-        <div className="order-3 w-full min-w-0 sm:order-2 sm:flex-1 sm:px-2 lg:px-4">
+        <div className="order-3 w-full min-w-0 sm:order-2 sm:flex-1 sm:px-2 lg:px-4 flex justify-center">
           {!user ? (
             <RootNav />
           ) : (

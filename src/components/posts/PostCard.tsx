@@ -38,6 +38,7 @@ const ALLOWED_IMAGE_TYPES = new Set([
   "image/gif",
   "image/webp",
 ]);
+const IMAGE_FALLBACK_SRC = "/images/post-fallback.png";
 
 function truncatePostContent(text: string, max: number): string {
   if (text.length <= max) return text;
@@ -620,12 +621,18 @@ export function PostCard({
                         key={src}
                         className="relative h-20 w-20 overflow-hidden rounded-md border border-border"
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={src}
-                          alt="Current post image"
-                          className="h-full w-full object-cover"
-                        />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt="Current post image"
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        if (img.dataset.fallbackApplied === "true") return;
+                        img.dataset.fallbackApplied = "true";
+                        img.src = IMAGE_FALLBACK_SRC;
+                      }}
+                    />
                         <button
                           type="button"
                           onClick={() => removeDraftExistingImage(src)}
@@ -788,6 +795,12 @@ export function PostCard({
                         : "Post image"
                     }
                     className="h-40 w-full object-cover object-center sm:h-full sm:min-h-[160px]"
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      if (img.dataset.fallbackApplied === "true") return;
+                      img.dataset.fallbackApplied = "true";
+                      img.src = IMAGE_FALLBACK_SRC;
+                    }}
                   />
                 </a>
               ))}

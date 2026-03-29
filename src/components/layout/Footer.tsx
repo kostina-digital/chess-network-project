@@ -12,7 +12,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto w-full border-t border-border bg-background text-muted-foreground">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto w-full max-w-[1440px] px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
         <div
           className={`grid grid-cols-1 gap-8 sm:grid-cols-2 lg:justify-between lg:gap-10 ${
             user ? "lg:grid-cols-4" : "lg:grid-cols-3"
