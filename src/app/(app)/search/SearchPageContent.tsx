@@ -7,6 +7,7 @@ import { PostCard } from "@/components/posts/PostCard";
 import type { FeedPost, UserListItem } from "@/types/feed";
 import { useAuthUser } from "@/components/auth/useAuthUser";
 import { resolveAvatarUrl } from "@/lib/avatarUrl";
+import { AppPage } from "@/components/layout/AppPage";
 
 async function parseJson<T>(res: Response): Promise<T | null> {
   const text = await res.text();
@@ -70,7 +71,7 @@ export function SearchPageContent() {
   }, [raw, load]);
 
   return (
-    <div className="w-full min-w-0 space-y-6 p-4">
+    <AppPage className="space-y-6">
       <h1 className="h1-style">Search</h1>
 
       {!raw ? (
@@ -145,6 +146,6 @@ export function SearchPageContent() {
           ) : null}
         </>
       )}
-    </div>
+    </AppPage>
   );
 }

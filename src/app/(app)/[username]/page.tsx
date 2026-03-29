@@ -7,6 +7,8 @@ import {
   listPostsByAuthor,
 } from "@/lib/postService";
 import { UserProfileView } from "@/components/dashboard/UserProfileView";
+import { AppPage } from "@/components/layout/AppPage";
+import BackButton from "@/components/buttons/BackButton";
 
 type PageProps = {
   params: Promise<{ username: string }>;
@@ -26,8 +28,7 @@ export default async function UserDashboardPage({ params }: PageProps) {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+      <AppPage className="max-w-4xl">
           <h1 className="h1-style mb-4">User Not Found</h1>
           <p className="mb-6 text-muted-foreground">
             The user you&apos;re looking for doesn&apos;t exist.
@@ -38,8 +39,7 @@ export default async function UserDashboardPage({ params }: PageProps) {
           >
             Back to Feed
           </Link>
-        </div>
-      </div>
+      </AppPage>
     );
   }
 
@@ -48,11 +48,17 @@ export default async function UserDashboardPage({ params }: PageProps) {
   const isFollowingInitial = await isFollowing(viewerId, profile.id);
 
   return (
-    <UserProfileView
-      user={profile}
-      posts={posts}
-      viewerId={viewerId}
-      isFollowingInitial={isFollowingInitial}
-    />
+    <AppPage>
+      <div className="mb-4">
+        <BackButton fallbackHref="/blog" label="Back" />
+      </div>
+      <UserProfileView
+        embedded
+        user={profile}
+        posts={posts}
+        viewerId={viewerId}
+        isFollowingInitial={isFollowingInitial}
+      />
+    </AppPage>
   );
 }

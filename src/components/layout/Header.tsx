@@ -23,10 +23,10 @@ export default function Header() {
   }
 
   return (
-    <header className="w-full border-b border-border bg-background text-foreground p-4">
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="w-full border-b border-border bg-background px-4 py-3 text-foreground sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-[1440px] flex-wrap items-center gap-3">
         <Logo />
-        <div className="flex min-w-0 flex-1 justify-center px-2 sm:px-4">
+        <div className="order-3 w-full min-w-0 sm:order-2 sm:flex-1 sm:px-2 lg:px-4">
           {!user ? (
             <RootNav />
           ) : (
@@ -42,20 +42,20 @@ export default function Header() {
             </Suspense>
           )}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="order-2 ml-auto flex shrink-0 items-center gap-2 sm:order-3">
           {user ? (
             <>
               <button
                 type="button"
                 onClick={() => router.replace("/dashboard")}
-                className="rounded-lg bg-muted px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-primary"
+                className="max-w-[11rem] truncate rounded-lg bg-muted px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-primary sm:px-4"
               >
                 Hello, {displayName}!
               </button>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-lg border-2 border-foreground/35 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
+                className="rounded-lg border-2 border-foreground/35 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground sm:px-4"
               >
                 Logout
               </button>

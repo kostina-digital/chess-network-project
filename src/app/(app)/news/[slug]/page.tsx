@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchChessNews } from "@/lib/gnews";
+import { AppPage } from "@/components/layout/AppPage";
 
 export default async function NewsArticlePage({
   params,
@@ -22,8 +23,7 @@ export default async function NewsArticlePage({
     ({ articles } = await fetchChessNews({ page: listPage }));
   } catch {
     return (
-      <div className="min-h-screen w-full bg-background">
-        <div className="w-full min-w-0 p-4">
+      <AppPage>
           <p className="text-destructive" role="alert">
             Could not load news. Check your GNEWS_API_KEY and network connection.
           </p>
@@ -33,8 +33,7 @@ export default async function NewsArticlePage({
           >
             ← Back to list
           </Link>
-        </div>
-      </div>
+      </AppPage>
     );
   }
 
@@ -47,8 +46,8 @@ export default async function NewsArticlePage({
     article.content?.trim() || article.description?.trim() || "";
 
   return (
-    <div className="min-h-screen w-full bg-background">
-      <article className="w-full min-w-0 p-4">
+    <AppPage>
+      <article className="w-full min-w-0">
         <Link
           href={listPage > 1 ? `/news?page=${listPage}` : "/news"}
           className="mb-6 inline-block text-sm text-muted-foreground hover:text-foreground"
@@ -93,6 +92,6 @@ export default async function NewsArticlePage({
           Read on the publisher&apos;s site →
         </a>
       </article>
-    </div>
+    </AppPage>
   );
 }

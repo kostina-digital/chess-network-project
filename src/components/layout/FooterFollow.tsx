@@ -31,7 +31,7 @@ const socialLinks = [
 
 export function FooterFollow() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex items-center flex-col gap-4">
       <h3 className="text-sm font-semibold text-foreground">Follow us</h3>
       <ul className="flex flex-wrap items-center gap-2">
         {socialLinks.map(({ name, href, icon }) => (

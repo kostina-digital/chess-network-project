@@ -15,7 +15,6 @@ import type { FeedPost, ProfileUser, UserListItem } from "@/types/feed";
 import { resolveAvatarUrl } from "@/lib/avatarUrl";
 import { PostCard } from "@/components/posts/PostCard";
 import { ComposePostSection } from "@/components/posts/ComposePostSection";
-import BackButton from "@/components/buttons/BackButton";
 
 type UserProfileViewProps = {
   user: ProfileUser;
@@ -121,9 +120,6 @@ export function UserProfileView({
 
   const inner = (
     <>
-      <div className="mb-4">
-        <BackButton fallbackHref="/blog" label="Back" />
-      </div>
       <div className="mb-8 rounded-lg border border-border bg-card p-8 shadow-sm">
         <div className="flex flex-col items-start gap-6 sm:flex-row">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -238,7 +234,7 @@ export function UserProfileView({
       {showPosts ? (
         <>
           {isOwnProfile ? (
-            <div id="add-post" className="mb-8 scroll-mt-24">
+            <div className="mb-8">
               <h2 className="h3-style mb-3">Add post</h2>
               <ComposePostSection
                 viewerId={viewerId}
@@ -251,7 +247,7 @@ export function UserProfileView({
             </div>
           ) : null}
 
-          <div id="my-posts" className="mb-6 scroll-mt-24">
+          <div className="mb-6">
             <h2 className="h3-style">Posts by {displayName}</h2>
           </div>
 

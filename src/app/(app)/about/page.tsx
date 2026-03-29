@@ -1,7 +1,9 @@
+import { AppPage } from "@/components/layout/AppPage";
+
 export default function AboutUsPage() {
   return (
-    <div className="min-h-screen w-full bg-background">
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 p-4 sm:p-6">
+    <AppPage>
+      <div className="flex flex-col gap-6">
         <header className="rounded-2xl border border-border bg-card px-6 py-8 shadow-sm">
           <h1 className="h1-style">About ChessConnect</h1>
           <p className="p-style max-w-3xl">
@@ -82,6 +84,6 @@ export default function AboutUsPage() {
           </p>
         </section>
       </div>
-    </div>
+    </AppPage>
   );
 }

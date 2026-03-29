@@ -1,11 +1,7 @@
 {
-  "/api/auth/me/route": "app/api/auth/me/route.js",
-  "/api/posts/route": "app/api/posts/route.js",
-  "/api/uploads/posts/[name]/route": "app/api/uploads/posts/[name]/route.js",
-  "/(app)/search/page": "app/(app)/search/page.js",
+  "/page": "app/page.js",
   "/(app)/dashboard/page": "app/(app)/dashboard/page.js",
-  "/(app)/[username]/page": "app/(app)/[username]/page.js",
-  "/(app)/about/page": "app/(app)/about/page.js",
-  "/(app)/news/page": "app/(app)/news/page.js",
+  "/(app)/search/page": "app/(app)/search/page.js",
+  "/(app)/blog/new/page": "app/(app)/blog/new/page.js",
   "/(app)/blog/page": "app/(app)/blog/page.js"
 }

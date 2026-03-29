@@ -10,9 +10,9 @@ const staticCards = [
   },
   {
     key: "create",
-    href: "/blog#compose-post" as const,
+    href: "/blog/new" as const,
     label: "Create post",
-    description: "Open the blog composer to write something new.",
+    description: "Open the dedicated post creation page.",
     icon: SquarePen,
   },
   {
