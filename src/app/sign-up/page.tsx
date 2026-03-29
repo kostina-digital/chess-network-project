@@ -134,7 +134,7 @@ export default function SignUpPage() {
       <div className="mx-auto flex flex-col items-center justify-center">
         <form
           onSubmit={handleSubmit}
-          className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl border border-border bg-card p-6 shadow-sm"
+          className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl bg-card p-6 shadow-sm"
         >
           <h1 className="h1-style">Sign Up</h1>
 

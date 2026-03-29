@@ -64,6 +64,8 @@ export function PostCard({
   const [modalComments, setModalComments] = useState<CommentRow[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
+  const [commentError, setCommentError] = useState<string | null>(null);
+  const [commentSubmitting, setCommentSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [bodyExpanded, setBodyExpanded] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -267,16 +269,26 @@ export function PostCard({
 
   const loadComments = async () => {
     setCommentsLoading(true);
+    setCommentError(null);
     try {
-      const res = await fetch(`/api/posts/${displayPost.id}/comments`);
-      const data = (await res.json()) as { comments?: FeedComment[] };
+      const res = await fetch(`/api/posts/${displayPost.id}/comments`, {
+        credentials: "same-origin",
+      });
+      const data = (await res.json()) as {
+        comments?: FeedComment[];
+        error?: string;
+      };
       if (res.ok && Array.isArray(data.comments)) {
         setModalComments(data.comments);
       } else {
         setModalComments([]);
+        if (data.error) {
+          setCommentError(data.error);
+        }
       }
     } catch {
       setModalComments([]);
+      setCommentError("Could not load comments.");
     } finally {
       setCommentsLoading(false);
     }
@@ -284,27 +296,36 @@ export function PostCard({
 
   const openComments = async () => {
     setNewCommentText("");
+    setCommentError(null);
     setCommentsOpen(true);
     await loadComments();
   };
 
   const handleAddComment = async () => {
     const text = newCommentText.trim();
-    if (!text || !viewerId) return;
+    if (!text || !viewerId || commentSubmitting) return;
+    setCommentSubmitting(true);
+    setCommentError(null);
     try {
       const res = await fetch(`/api/posts/${displayPost.id}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify({ content: text }),
       });
       const data = (await res.json()) as { comment?: FeedComment; error?: string };
-      if (!res.ok || !data.comment) return;
+      if (!res.ok || !data.comment) {
+        setCommentError(data.error ?? "Could not add comment.");
+        return;
+      }
       setModalComments((m) => [...m, data.comment!]);
       setCommentsCount((c) => c + 1);
       setNewCommentText("");
       onPostUpdated?.();
     } catch {
-      /* ignore */
+      setCommentError("Network error.");
+    } finally {
+      setCommentSubmitting(false);
     }
   };
 
@@ -438,30 +459,40 @@ export function PostCard({
                   Sign in to comment.
                 </p>
               ) : (
-                <div className="flex gap-2">
-                  <textarea
-                    value={newCommentText}
-                    onChange={(e) => setNewCommentText(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        void handleAddComment();
-                      }
-                    }}
-                    placeholder="Write something…"
-                    rows={2}
-                    className="min-h-[2.5rem] flex-1 resize-y rounded-lg border border-border bg-input-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
-                    aria-label="New comment"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => void handleAddComment()}
-                    disabled={!newCommentText.trim()}
-                    className="inline-flex h-10 shrink-0 items-center justify-center self-end rounded-lg bg-primary px-3 text-primary-foreground transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
-                    aria-label="Post comment"
-                  >
-                    <Send className="h-4 w-4" />
-                  </button>
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <textarea
+                      value={newCommentText}
+                      onChange={(e) => {
+                        setNewCommentText(e.target.value);
+                        if (commentError) setCommentError(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          void handleAddComment();
+                        }
+                      }}
+                      placeholder="Write something…"
+                      rows={2}
+                      className="min-h-[2.5rem] flex-1 resize-y rounded-lg border border-border bg-input-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
+                      aria-label="New comment"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => void handleAddComment()}
+                      disabled={!newCommentText.trim() || commentSubmitting}
+                      className="inline-flex h-10 shrink-0 items-center justify-center self-end rounded-lg bg-primary px-3 text-primary-foreground transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
+                      aria-label="Post comment"
+                    >
+                      <Send className="h-4 w-4" />
+                    </button>
+                  </div>
+                  {commentError ? (
+                    <p className="text-xs text-destructive" role="alert">
+                      {commentError}
+                    </p>
+                  ) : null}
                 </div>
               )}
             </div>
@@ -473,6 +504,7 @@ export function PostCard({
 
   const imageCount = (displayPost.imageUrls ?? []).length;
   const profileHref = `/${encodeURIComponent(author.userName)}`;
+  const hasImages = imageCount > 0;
   const imagesChanged =
     draftNewImages.length > 0 ||
     draftExistingImages.length !== (displayPost.imageUrls ?? []).length ||
@@ -487,31 +519,32 @@ export function PostCard({
       imagesChanged);
 
   return (
-    <div className="rounded-lg border border-border/80 bg-card/50 p-3 shadow-none sm:p-4">
-      <div className="flex items-start gap-2.5 sm:gap-3">
-        <Link
-          href={profileHref}
-          className="shrink-0"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={avatarSrc}
-            alt={displayName}
-            className="h-8 w-8 rounded-full transition-opacity hover:opacity-80"
-          />
-        </Link>
-
-        <div className="min-w-0 flex-1">
-          <div className="mb-1 text-xs text-muted-foreground">
-            <Link
-              href={profileHref}
-              className="font-medium text-foreground hover:underline"
-            >
-              {displayName}
+    <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
+      <div className={`flex flex-col ${hasImages ? "sm:flex-row sm:items-stretch" : ""}`}>
+        <div className="min-w-0 flex-1 p-4 sm:py-4 sm:pr-5">
+          <div className="mb-3 flex items-center gap-3">
+            <Link href={profileHref} className="shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={avatarSrc}
+                alt={displayName}
+                className="h-10 w-10 rounded-full transition-opacity hover:opacity-80"
+              />
             </Link>
-            <span> @{author.userName}</span>
-            <span> · </span>
-            <span>{formatDistanceToNow(ts, { addSuffix: true })}</span>
+            <div className="min-w-0">
+              <div className="text-sm text-muted-foreground">
+                <Link
+                  href={profileHref}
+                  className="font-medium text-foreground hover:underline"
+                >
+                  {displayName}
+                </Link>
+                <span> @{author.userName}</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {formatDistanceToNow(ts, { addSuffix: true })}
+              </p>
+            </div>
           </div>
 
           {editing ? (
@@ -658,45 +691,12 @@ export function PostCard({
           ) : (
             <>
               {displayPost.title.trim() ? (
-                <h3 className="mb-1.5 text-sm font-bold leading-normal text-foreground">
+                <h3 className="mb-2 text-lg font-semibold leading-snug text-foreground">
                   {displayPost.title}
                 </h3>
               ) : null}
 
-              {imageCount > 0 ? (
-                <div
-                  className={`mb-2 grid gap-1.5 ${
-                    imageCount === 1
-                      ? "w-full max-w-md grid-cols-1 sm:max-w-lg"
-                      : imageCount === 2
-                        ? "grid-cols-1 sm:grid-cols-2"
-                        : "grid-cols-1 sm:grid-cols-3"
-                  }`}
-                >
-                  {(displayPost.imageUrls ?? []).map((src) => (
-                    <a
-                      key={src}
-                      href={src}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative block overflow-hidden rounded-md border border-border bg-muted"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={src}
-                        alt={
-                          displayPost.title.trim()
-                            ? `Image: ${displayPost.title}`
-                            : "Post image"
-                        }
-                        className="max-h-36 w-full object-cover object-center sm:max-h-40"
-                      />
-                    </a>
-                  ))}
-                </div>
-              ) : null}
-
-              <p className="mb-2 text-xs leading-relaxed text-foreground sm:text-[13px]">
+              <p className="mb-4 text-sm leading-relaxed text-foreground sm:text-[15px]">
                 <span className="whitespace-pre-wrap">{shownBody}</span>
                 {needsBodyTruncation ? (
                   <>
@@ -704,7 +704,7 @@ export function PostCard({
                     <button
                       type="button"
                       onClick={() => setBodyExpanded((v) => !v)}
-                      className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-xs font-medium text-primary underline-offset-2 hover:text-primary-hover hover:underline"
+                      className="inline cursor-pointer border-0 bg-transparent p-0 align-baseline text-sm font-medium text-primary underline-offset-2 hover:text-primary-hover hover:underline"
                     >
                       {bodyExpanded ? "Show less" : "Read full"}
                     </button>
@@ -714,15 +714,15 @@ export function PostCard({
             </>
           )}
 
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-border/70 pt-2">
+          <div className="flex flex-wrap items-center gap-2 border-t border-border pt-3">
             {isAuthor && !editing ? (
               <button
                 type="button"
                 onClick={startEditing}
-                className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 aria-label="Edit post"
               >
-                <Pencil className="h-3.5 w-3.5 shrink-0" />
+                <Pencil className="h-4 w-4 shrink-0" />
                 Edit
               </button>
             ) : null}
@@ -730,13 +730,13 @@ export function PostCard({
               type="button"
               onClick={() => void handleLike()}
               disabled={!viewerId || editing}
-              className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+              className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                 isLiked
                   ? "bg-primary/15 text-primary hover:bg-primary/25"
                   : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
-              <Heart className={`h-3.5 w-3.5 ${isLiked ? "fill-current" : ""}`} />
+              <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
               <span>
                 {likesCount} {likesCount === 1 ? "like" : "likes"}
               </span>
@@ -746,17 +746,54 @@ export function PostCard({
               type="button"
               onClick={() => void openComments()}
               disabled={editing}
-              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
               aria-label={`View ${commentsCount} ${commentsLabel}`}
               aria-haspopup="dialog"
             >
-              <MessageSquare className="h-3.5 w-3.5 shrink-0" />
+              <MessageSquare className="h-4 w-4 shrink-0" />
               <span>
                 {commentsCount} {commentsLabel}
               </span>
             </button>
           </div>
         </div>
+
+        {hasImages ? (
+          <div className="bg-muted sm:order-last sm:w-44 sm:shrink-0 md:w-52">
+            <div
+              className={`grid h-full gap-1.5 ${
+                imageCount === 1
+                  ? "grid-cols-1"
+                  : imageCount === 2
+                    ? "grid-cols-2 sm:grid-cols-1"
+                    : "grid-cols-2 sm:grid-cols-1"
+              }`}
+            >
+              {(displayPost.imageUrls ?? []).map((src, index) => (
+                <a
+                  key={src}
+                  href={src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`relative block overflow-hidden bg-muted ${
+                    imageCount === 3 && index === 0 ? "col-span-2 sm:col-span-1" : ""
+                  }`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={src}
+                    alt={
+                      displayPost.title.trim()
+                        ? `Image: ${displayPost.title}`
+                        : "Post image"
+                    }
+                    className="h-40 w-full object-cover object-center sm:h-full sm:min-h-[160px]"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {commentsModal}

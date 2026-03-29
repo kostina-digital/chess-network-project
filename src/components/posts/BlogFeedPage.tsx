@@ -51,7 +51,7 @@ export function BlogFeedPage({ initialPosts, viewerId }: BlogFeedPageProps) {
 
   return (
     <AppPage>
-      <div className="mb-6 flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-6 flex flex-col gap-4 px-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="h1-style">Blog</h1>
           <p className="p-style-small max-w-2xl">
@@ -66,7 +66,7 @@ export function BlogFeedPage({ initialPosts, viewerId }: BlogFeedPageProps) {
         </Link>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
+      <div className="p-1 sm:p-0">
         <div className="space-y-4 sm:space-y-5">
           {feedError ? (
             <p

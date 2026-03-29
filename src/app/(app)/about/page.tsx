@@ -4,7 +4,7 @@ export default function AboutUsPage() {
   return (
     <AppPage>
       <div className="flex flex-col gap-6">
-        <header className="rounded-2xl border border-border bg-card px-6 py-8 shadow-sm">
+        <header className="px-1 py-1">
           <h1 className="h1-style">About ChessConnect</h1>
           <p className="p-style max-w-3xl">
             ChessConnect is a social platform for adults who want chess to feel

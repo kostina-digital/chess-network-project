@@ -17,14 +17,19 @@ export default async function NewPostPage() {
         <BackButton fallbackHref="/blog" label="Back to blog" />
       </div>
 
-      <div className="mb-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+      <div className="mb-6 px-1">
         <h1 className="h1-style">Create a new post</h1>
         <p className="p-style-small max-w-2xl">
           Share analysis, lessons, ideas, or memorable moments from your chess journey.
         </p>
       </div>
 
-      <ComposePostSection viewerId={user.id} defaultOpen className="rounded-xl" />
+      <ComposePostSection
+        viewerId={user.id}
+        defaultOpen
+        className="rounded-xl"
+        redirectOnPublishHref="/blog"
+      />
 
       <div className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
         <h2 className="h3-style">Publishing tips</h2>

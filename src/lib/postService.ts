@@ -230,7 +230,7 @@ type CreatedPostWithAuthor = Prisma.PostGetPayload<{
   };
 }>;
 
-function isPostIdUniqueConflict(error: unknown): boolean {
+function isPrimaryIdUniqueConflict(error: unknown): boolean {
   if (!(error instanceof Prisma.PrismaClientKnownRequestError)) return false;
   if (error.code !== "P2002") return false;
   const target = error.meta?.target;
@@ -253,6 +253,16 @@ async function repairPostIdSequence(): Promise<void> {
     SELECT setval(
       pg_get_serial_sequence('"Post"', 'id'),
       COALESCE((SELECT MAX(id) FROM "Post"), 0) + 1,
+      false
+    )
+  `);
+}
+
+async function repairPostCommentIdSequence(): Promise<void> {
+  await prisma.$executeRaw(Prisma.sql`
+    SELECT setval(
+      pg_get_serial_sequence('"PostComment"', 'id'),
+      COALESCE((SELECT MAX(id) FROM "PostComment"), 0) + 1,
       false
     )
   `);
@@ -284,7 +294,7 @@ export async function createPost(
       },
     });
   } catch (error) {
-    if (!isPostIdUniqueConflict(error)) {
+    if (!isPrimaryIdUniqueConflict(error)) {
       throw error;
     }
     console.warn("[post/create] P2002 on Post.id, repairing sequence and retrying once");
@@ -402,13 +412,33 @@ export async function addPostComment(
   if (!trimmed) throw new Error("Comment is required");
   const post = await prisma.post.findUnique({ where: { id: postId } });
   if (!post) throw new Error("Post not found");
-  return prisma.postComment.create({
-    data: { postId, authorId, content: trimmed },
-    include: {
-      author: { select: { fullName: true, userName: true } },
-      reactions: { select: { kind: true, userId: true } },
-    },
-  });
+
+  await repairPostCommentIdSequence().catch(() => {});
+
+  try {
+    return await prisma.postComment.create({
+      data: { postId, authorId, content: trimmed },
+      include: {
+        author: { select: { fullName: true, userName: true } },
+        reactions: { select: { kind: true, userId: true } },
+      },
+    });
+  } catch (error) {
+    if (!isPrimaryIdUniqueConflict(error)) {
+      throw error;
+    }
+    console.warn(
+      "[post/comment] P2002 on PostComment.id, repairing sequence and retrying once"
+    );
+    await repairPostCommentIdSequence();
+    return prisma.postComment.create({
+      data: { postId, authorId, content: trimmed },
+      include: {
+        author: { select: { fullName: true, userName: true } },
+        reactions: { select: { kind: true, userId: true } },
+      },
+    });
+  }
 }
 
 export async function togglePostLike(postId: number, userId: number) {

@@ -188,7 +188,7 @@ export default function EditProfilePage() {
           </Link>
         </div>
 
-        <div className="rounded-lg border border-border bg-card p-8 shadow-sm">
+        <div className="px-1">
           <h1 className="h1-style mb-6">Edit Profile</h1>
 
           {submitError ? (
@@ -197,7 +197,10 @@ export default function EditProfilePage() {
             </p>
           ) : null}
 
-          <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
+          <form
+            onSubmit={(e) => void handleSubmit(e)}
+            className="space-y-5 rounded-lg bg-card p-6 shadow-sm sm:p-8"
+          >
           <div>
               <span className="mb-2 block text-foreground">Profile photo</span>
               <div className="flex flex-wrap items-center gap-4 rounded-lg border border-border bg-muted/30 p-4">

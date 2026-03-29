@@ -71,7 +71,7 @@ export default function ForgotPasswordPage() {
     <>
       <form
         onSubmit={(e) => void handleSubmit(e)}
-        className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl border border-border bg-card p-6 shadow-sm"
+        className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl bg-card p-6 shadow-sm"
       >
         <h1 className="h1-style">Reset password</h1>
         <p className="text-sm text-foreground">

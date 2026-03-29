@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { FeedPost } from "@/types/feed";
 import {
   ChevronDown,
@@ -48,6 +49,7 @@ export type ComposePostSectionProps = {
   className?: string;
   /** Root element `id` (e.g. `compose-post` for deep links). */
   sectionId?: string;
+  redirectOnPublishHref?: string;
 };
 
 export function ComposePostSection({
@@ -58,7 +60,9 @@ export function ComposePostSection({
   defaultOpen = false,
   className = "",
   sectionId,
+  redirectOnPublishHref,
 }: ComposePostSectionProps) {
+  const router = useRouter();
   const isControlled = openControlled !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const composeOpen = isControlled ? openControlled : internalOpen;
@@ -191,6 +195,10 @@ export function ComposePostSection({
       setImageFiles([]);
       setPublishSuccess(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
+      if (data.post && redirectOnPublishHref) {
+        router.push(redirectOnPublishHref);
+        router.refresh();
+      }
     } catch {
       setPublishError("Network error");
     } finally {

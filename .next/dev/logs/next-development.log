@@ -28,3 +28,7 @@
 {"timestamp":"00:49:12.844","source":"Browser","level":"WARN","message":"\u001b[33mImage with src \"/_next/static/media/Logo.a29ce509.png\" was detected as the Largest Contentful Paint (LCP). Please add the `loading=\"eager\"` property if this image is above the fold.\nRead more: https://nextjs.org/docs/app/api-reference/components/image#loading\u001b[39m"}
 {"timestamp":"00:58:07.241","source":"Server","level":"WARN","message":"⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload"}
 {"timestamp":"00:59:00.589","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/blog. Falling back to browser navigation. {}"}
+{"timestamp":"01:50:03.726","source":"Server","level":"WARN","message":"⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload"}
+{"timestamp":"01:50:04.273","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/blog. Falling back to browser navigation. {}"}
+{"timestamp":"01:50:04.273","source":"Server","level":"ERROR","message":"[browser] \"Failed to fetch RSC payload for http://localhost:3000/blog. Falling back to browser navigation.\" \"\\u001b[31mTypeError: Load failed\\u001b[39m\""}
+{"timestamp":"01:50:04.273","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/blog. Falling back to browser navigation. \"\\u001b[31mTypeError: Load failed\\u001b[39m\""}

@@ -86,7 +86,7 @@ body {
   e.g. className="h2-style mb-4 text-center" or wrap in max-w-2xl mx-auto.
 */
 .h1-style {
-  @apply text-4xl font-semibold tracking-tight text-foreground sm:text-5xl;
+  @apply text-3xl font-semibold tracking-tight text-foreground sm:text-4xl;
 }
 
 .h2-style {
