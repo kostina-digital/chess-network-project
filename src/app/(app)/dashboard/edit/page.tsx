@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ImagePlus, Save } from "lucide-react";
-import { resolveAvatarUrl } from "@/lib/avatarUrl";
+import { fallbackAvatarUrl, resolveAvatarUrl } from "@/lib/avatarUrl";
 
 type FormState = {
   fullName: string;
@@ -212,6 +212,10 @@ export default function EditProfilePage() {
                   )}
                   alt=""
                   className="h-20 w-20 shrink-0 rounded-full border border-border bg-card object-cover"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    img.src = fallbackAvatarUrl(formData.username.trim() || "user");
+                  }}
                 />
                 <div className="min-w-0 flex-1 space-y-2">
                   <input

@@ -19,17 +19,75 @@ async function parseJsonSafe<T>(res: Response): Promise<T | null> {
 type BlogFeedPageProps = {
   initialPosts: FeedPost[];
   viewerId: number | null;
+  page: number;
+  totalPages: number;
 };
 
-export function BlogFeedPage({ initialPosts, viewerId }: BlogFeedPageProps) {
+function BlogPagination({
+  page,
+  totalPages,
+}: {
+  page: number;
+  totalPages: number;
+}) {
+  if (totalPages <= 1) return null;
+
+  const prev = page > 1 ? page - 1 : null;
+  const next = page < totalPages ? page + 1 : null;
+
+  return (
+    <nav
+      className="mt-10 flex flex-wrap items-center justify-center gap-4 border-t border-border pt-8"
+      aria-label="Blog pagination"
+    >
+      {prev !== null ? (
+        <Link
+          href={prev === 1 ? "/blog" : `/blog?page=${prev}`}
+          className="rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/60"
+        >
+          Previous
+        </Link>
+      ) : (
+        <span className="rounded-md border border-transparent px-4 py-2 text-sm text-muted-foreground">
+          Previous
+        </span>
+      )}
+      <span className="text-sm text-muted-foreground">
+        Page <span className="font-medium text-foreground">{page}</span> of{" "}
+        <span className="font-medium text-foreground">{totalPages}</span>
+      </span>
+      {next !== null ? (
+        <Link
+          href={`/blog?page=${next}`}
+          className="rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/60"
+        >
+          Next
+        </Link>
+      ) : (
+        <span className="rounded-md border border-transparent px-4 py-2 text-sm text-muted-foreground">
+          Next
+        </span>
+      )}
+    </nav>
+  );
+}
+
+export function BlogFeedPage({
+  initialPosts,
+  viewerId,
+  page,
+  totalPages,
+}: BlogFeedPageProps) {
   const [feedPosts, setFeedPosts] = useState(initialPosts);
   const [feedError, setFeedError] = useState<string | null>(null);
 
   const loadFeed = useCallback(async () => {
     setFeedError(null);
-    const postsRes = await fetch("/api/posts");
+    const postsRes = await fetch(`/api/posts?page=${page}&take=10`);
     const postsJson = await parseJsonSafe<{
       posts?: FeedPost[];
+      page?: number;
+      totalPages?: number;
       error?: string;
     }>(postsRes);
 
@@ -47,7 +105,7 @@ export function BlogFeedPage({ initialPosts, viewerId }: BlogFeedPageProps) {
 
     setFeedPosts([]);
     if (postsJson.error) setFeedError(postsJson.error);
-  }, []);
+  }, [page]);
 
   return (
     <AppPage>
@@ -60,7 +118,7 @@ export function BlogFeedPage({ initialPosts, viewerId }: BlogFeedPageProps) {
         </div>
         <Link
           href="/blog/new"
-          className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+          className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
         >
           Create post
         </Link>
@@ -86,10 +144,11 @@ export function BlogFeedPage({ initialPosts, viewerId }: BlogFeedPageProps) {
                 onPostUpdated={loadFeed}
               />
             ))
-          ) : (
+      ) : (
             <p className="text-center text-muted-foreground">No posts yet.</p>
           )}
         </div>
+        <BlogPagination page={page} totalPages={totalPages} />
       </div>
     </AppPage>
   );

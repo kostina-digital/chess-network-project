@@ -71,10 +71,10 @@ export default function ForgotPasswordPage() {
     <>
       <form
         onSubmit={(e) => void handleSubmit(e)}
-        className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl bg-card p-6 shadow-sm"
+        className="mx-auto mt-4 flex w-full max-w-md flex-col gap-2.5 rounded-xl bg-card p-4 shadow-sm sm:mt-8 sm:p-5"
       >
-        <h1 className="h1-style">Reset password</h1>
-        <p className="text-sm text-foreground">
+        <h1 className="h1-style text-3xl sm:text-4xl">Reset password</h1>
+        <p className="text-sm leading-snug text-foreground">
           Enter the email you used to register. We&apos;ll send you a link to
           choose a new password (in development, check the server terminal for
           the link).

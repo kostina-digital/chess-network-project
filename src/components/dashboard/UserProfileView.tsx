@@ -12,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 import type { FeedPost, ProfileUser, UserListItem } from "@/types/feed";
-import { resolveAvatarUrl } from "@/lib/avatarUrl";
+import { fallbackAvatarUrl, resolveAvatarUrl } from "@/lib/avatarUrl";
 import { PostCard } from "@/components/posts/PostCard";
 import { ComposePostSection } from "@/components/posts/ComposePostSection";
 
@@ -127,6 +127,10 @@ export function UserProfileView({
             src={avatarSrc}
             alt={displayName}
             className="h-24 w-24 flex-shrink-0 rounded-full"
+            onError={(e) => {
+              const img = e.currentTarget;
+              img.src = fallbackAvatarUrl(user.userName);
+            }}
           />
 
           <div className="min-w-0 flex-1">
@@ -320,6 +324,10 @@ export function UserProfileView({
                           src={resolveAvatarUrl(item.userName, item.avatarUrl)}
                           alt={item.fullName ?? item.userName}
                           className="h-11 w-11 rounded-full object-cover"
+                          onError={(e) => {
+                            const img = e.currentTarget;
+                            img.src = fallbackAvatarUrl(item.userName);
+                          }}
                         />
                         <div className="min-w-0">
                           <p className="truncate text-sm font-medium text-foreground">

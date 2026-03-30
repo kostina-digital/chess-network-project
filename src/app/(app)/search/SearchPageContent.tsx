@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { PostCard } from "@/components/posts/PostCard";
 import type { FeedPost, UserListItem } from "@/types/feed";
 import { useAuthUser } from "@/components/auth/useAuthUser";
-import { resolveAvatarUrl } from "@/lib/avatarUrl";
+import { fallbackAvatarUrl, resolveAvatarUrl } from "@/lib/avatarUrl";
 import { AppPage } from "@/components/layout/AppPage";
 
 async function parseJson<T>(res: Response): Promise<T | null> {
@@ -110,6 +110,10 @@ export function SearchPageContent() {
                         src={resolveAvatarUrl(item.userName, item.avatarUrl)}
                         alt={item.fullName ?? item.userName}
                         className="h-12 w-12 rounded-full object-cover"
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          img.src = fallbackAvatarUrl(item.userName);
+                        }}
                       />
                       <div className="min-w-0">
                         <p className="truncate font-medium text-foreground">

@@ -31,6 +31,10 @@ export function createDefaultAvatarUrl(userName: string): string {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
+export function fallbackAvatarUrl(userName: string): string {
+  return createDefaultAvatarUrl(userName);
+}
+
 export function resolveAvatarUrl(userName: string, stored: string | null): string {
   const t = stored?.trim();
   if (t) return t;

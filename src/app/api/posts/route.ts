@@ -1,20 +1,31 @@
 import { getCurrentUser } from "@/lib/auth/getCurrentUser";
 import { Prisma } from "@/generated/prisma";
 import { mapDbErrorToMessage } from "@/lib/auth/mapDbError";
-import { createPost, listFeedPosts } from "@/lib/postService";
+import { countFeedPosts, createPost, listFeedPosts } from "@/lib/postService";
 import { collectImageBlobsFromForm, savePostImages } from "@/lib/savePostImages";
 
 /** Needs Node fs — not Edge. */
 export const runtime = "nodejs";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const user = await getCurrentUser();
     if (!user) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const posts = await listFeedPosts(user.id);
-    return Response.json({ posts });
+    const { searchParams } = new URL(request.url);
+    const parsedPage = Number.parseInt(searchParams.get("page") ?? "1", 10);
+    const parsedTake = Number.parseInt(searchParams.get("take") ?? "10", 10);
+    const page = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+    const take =
+      Number.isFinite(parsedTake) && parsedTake > 0
+        ? Math.min(parsedTake, 50)
+        : 10;
+    const totalCount = await countFeedPosts();
+    const totalPages = Math.max(1, Math.ceil(totalCount / take));
+    const safePage = Math.min(page, totalPages);
+    const posts = await listFeedPosts(user.id, take, (safePage - 1) * take);
+    return Response.json({ posts, page: safePage, totalPages, totalCount });
   } catch (e) {
     console.error("[GET /api/posts]", e);
     const message =
@@ -74,14 +85,12 @@ export async function POST(request: Request) {
     return Response.json({ post });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      // eslint-disable-next-line no-console -- needed to inspect db write failures in dev
       console.error("[POST /api/posts] prisma error", {
         code: e.code,
         message: e.message,
         meta: e.meta,
       });
     } else {
-      // eslint-disable-next-line no-console -- needed to inspect non-prisma failures
       console.error("[POST /api/posts] create failed", e);
     }
     const message = mapDbErrorToMessage(e);

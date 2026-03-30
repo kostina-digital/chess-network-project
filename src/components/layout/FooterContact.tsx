@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 export function FooterContact() {
   return (
-    <div className="flex items-center flex-col gap-4">
+    <div className="flex w-full flex-col items-center gap-4 text-center">
       <h3 className="text-sm font-semibold text-foreground">Contact</h3>
       <p className="text-sm text-foreground">Email: info@chessconnect.com</p>
       <p className="text-sm text-foreground">Phone: +49 (123) 456-7890</p>

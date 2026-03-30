@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import type { FeedComment, FeedPost } from "@/types/feed";
-import { resolveAvatarUrl } from "@/lib/avatarUrl";
+import { fallbackAvatarUrl, resolveAvatarUrl } from "@/lib/avatarUrl";
 import { formatDistanceToNow } from "date-fns";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -38,7 +38,7 @@ const ALLOWED_IMAGE_TYPES = new Set([
   "image/gif",
   "image/webp",
 ]);
-const IMAGE_FALLBACK_SRC = "/images/post-fallback.png";
+const IMAGE_FALLBACK_SRC = "/images/no-image-available.svg";
 
 function truncatePostContent(text: string, max: number): string {
   if (text.length <= max) return text;
@@ -544,6 +544,10 @@ export function PostCard({
                 src={avatarSrc}
                 alt={displayName}
                 className="h-10 w-10 rounded-full transition-opacity hover:opacity-80"
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  img.src = fallbackAvatarUrl(author.userName);
+                }}
               />
             </Link>
             <div className="min-w-0">

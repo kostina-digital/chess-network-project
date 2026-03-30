@@ -60,17 +60,17 @@ export function AppSidebar() {
   return (
     <aside className="shrink-0 border-b border-border bg-card md:w-56 md:border-b-0 md:border-r">
       <nav
-        className="flex gap-1 overflow-x-auto p-3 md:flex-col md:gap-0.5"
+        className="flex gap-2 overflow-x-auto px-2 py-3 md:flex-col md:gap-0.5 md:p-3"
         aria-label="Main navigation"
       >
         {items.map(({ href, label, icon: Icon }) => (
           <Link
             key={`${href}-${label}`}
             href={resolveHref(href)}
-            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors md:py-2.5 ${linkClass(href)}`}
+            className={`flex min-w-[5.25rem] shrink-0 flex-col items-center justify-center gap-1 rounded-lg px-2 py-2 text-center text-xs font-medium transition-colors md:min-w-0 md:flex-row md:justify-start md:gap-2 md:px-3 md:py-2.5 md:text-sm ${linkClass(href)}`}
           >
-            <Icon className="size-4 shrink-0 opacity-80" aria-hidden />
-            {label}
+            <Icon className="size-4 shrink-0 opacity-80 md:size-4" aria-hidden />
+            <span className="leading-tight">{label}</span>
           </Link>
         ))}
       </nav>

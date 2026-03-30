@@ -134,9 +134,9 @@ export default function SignUpPage() {
       <div className="mx-auto flex flex-col items-center justify-center">
         <form
           onSubmit={handleSubmit}
-          className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl bg-card p-6 shadow-sm"
+          className="mx-auto mt-4 flex w-full max-w-md flex-col gap-2.5 rounded-xl bg-card p-4 shadow-sm sm:mt-8 sm:p-5"
         >
-          <h1 className="h1-style">Sign Up</h1>
+          <h1 className="h1-style text-3xl sm:text-4xl">Sign Up</h1>
 
           <label className="flex w-full flex-col gap-1 text-sm text-foreground">
             <span>Username*</span>
@@ -232,12 +232,12 @@ export default function SignUpPage() {
 
           <button
             type="submit"
-            className="mt-1 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+            className="mt-1 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
           >
             Create account
           </button>
         </form>
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-3 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
             href="/log-in"

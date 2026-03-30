@@ -1,8 +1,9 @@
 {
-  "/(app)/news/page": "app/(app)/news/page.js",
-  "/(app)/dashboard/edit/page": "app/(app)/dashboard/edit/page.js",
+  "/api/auth/profile/route": "app/api/auth/profile/route.js",
+  "/api/posts/route": "app/api/posts/route.js",
+  "/log-in/page": "app/log-in/page.js",
   "/(app)/[username]/page": "app/(app)/[username]/page.js",
-  "/(app)/[username]/posts/page": "app/(app)/[username]/posts/page.js",
   "/(app)/dashboard/page": "app/(app)/dashboard/page.js",
-  "/(app)/blog/new/page": "app/(app)/blog/new/page.js"
+  "/(app)/dashboard/edit/page": "app/(app)/dashboard/edit/page.js",
+  "/(app)/[username]/posts/page": "app/(app)/[username]/posts/page.js"
 }

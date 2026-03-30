@@ -70,13 +70,19 @@ function mapAuthor(u: {
   };
 }
 
+export async function countFeedPosts(): Promise<number> {
+  return prisma.post.count();
+}
+
 export async function listFeedPosts(
   viewerId: number | null,
-  take = 50
+  take = 50,
+  skip = 0
 ): Promise<FeedPost[]> {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: "desc" },
     take,
+    skip,
     include: {
       author: {
         select: { id: true, userName: true, fullName: true, avatarUrl: true },

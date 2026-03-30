@@ -86,9 +86,9 @@ function LoginForm() {
     <>
       <form
         onSubmit={handleSubmit}
-        className="mx-auto mt-10 flex w-full max-w-[min(50vw,700px)] flex-col gap-3 rounded-xl bg-card p-6 shadow-sm"
+        className="mx-auto mt-4 flex w-full max-w-md flex-col gap-2.5 rounded-xl bg-card p-4 shadow-sm sm:mt-8 sm:p-5"
       >
-        <h1 className="h1-style">Login</h1>
+        <h1 className="h1-style text-3xl sm:text-4xl">Login</h1>
 
         <label className="flex w-full flex-col gap-1 text-sm text-foreground">
           <span>Email</span>
@@ -143,13 +143,13 @@ function LoginForm() {
 
         <button
           type="submit"
-          className="mt-1 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+          className="mt-1 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
         >
           Login
         </button>
       </form>
-      <div className="m-auto mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-        <p>
+      <div className="m-auto mt-4 flex w-full max-w-md flex-col items-center justify-center gap-2 text-sm text-muted-foreground sm:flex-row sm:gap-4">
+        <p className="leading-snug text-center">
           Don&apos;t have an account?{" "}
           <Link
             href="/sign-up"
@@ -158,7 +158,7 @@ function LoginForm() {
             Sign Up
           </Link>
         </p>
-        <p>
+        <p className="leading-snug text-center">
           Forgot your password?{" "}
           <Link href="/forgot-password" className="text-primary hover:underline">
             Reset
