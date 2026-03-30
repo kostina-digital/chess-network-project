@@ -1,6 +1,5 @@
-import { mkdir, unlink, writeFile } from "fs/promises";
+import { unlink } from "fs/promises";
 import path from "path";
-import { randomBytes } from "crypto";
 
 const MAX_FILES = 3;
 const MAX_BYTES = 2 * 1024 * 1024;
@@ -13,13 +12,6 @@ const ALLOWED = new Set([
   "image/gif",
   "image/webp",
 ]);
-
-const EXT: Record<string, string> = {
-  "image/jpeg": ".jpg",
-  "image/png": ".png",
-  "image/gif": ".gif",
-  "image/webp": ".webp",
-};
 
 export const POST_FILENAME_RE =
   /^\d+-[a-f0-9]{16}\.(jpg|jpeg|png|gif|webp)$/i;
@@ -76,9 +68,6 @@ export async function savePostImages(files: Blob[]): Promise<string[]> {
     throw new Error(`You can attach up to ${MAX_FILES} images per post`);
   }
 
-  const dir = POST_IMAGE_STORAGE_DIR;
-  await mkdir(dir, { recursive: true });
-
   const urls: string[] = [];
 
   for (const file of files) {
@@ -97,10 +86,8 @@ export async function savePostImages(files: Blob[]): Promise<string[]> {
       );
     }
 
-    const ext = EXT[mime];
-    const name = `${Date.now()}-${randomBytes(8).toString("hex")}${ext}`;
-    await writeFile(path.join(dir, name), buf);
-    urls.push(`/api/uploads/posts/${name}`);
+    const base64 = buf.toString("base64");
+    urls.push(`data:${mime};base64,${base64}`);
   }
 
   return urls;
