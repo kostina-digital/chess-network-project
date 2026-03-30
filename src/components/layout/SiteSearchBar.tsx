@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 
@@ -9,11 +9,15 @@ export function SiteSearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentQuery = searchParams.get("q") ?? "";
+  const [query, setQuery] = useState(currentQuery);
+
+  useEffect(() => {
+    setQuery(currentQuery);
+  }, [currentQuery]);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const form = new FormData(e.currentTarget as HTMLFormElement);
-    const q = String(form.get("q") ?? "").trim();
+    const q = query.trim();
     if (!q) return;
     const href = `/search?q=${encodeURIComponent(q)}`;
     router.push(href);
@@ -36,8 +40,8 @@ export function SiteSearchBar() {
         <input
           type="search"
           name="q"
-          key={currentQuery}
-          defaultValue={currentQuery}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Search…"
           autoComplete="off"
           className="min-w-0 flex-1 border-0 bg-transparent py-0.5 text-sm text-foreground outline-none placeholder:text-muted-foreground"

@@ -1,5 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
+import { POST_IMAGE_STORAGE_DIR } from "@/lib/savePostImages";
 
 export const runtime = "nodejs";
 
@@ -28,7 +29,7 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
-  const dir = path.join(process.cwd(), "public", "uploads", "posts");
+  const dir = POST_IMAGE_STORAGE_DIR;
   const fp = path.join(dir, name);
   const resolvedDir = path.resolve(dir);
   const resolvedFile = path.resolve(fp);

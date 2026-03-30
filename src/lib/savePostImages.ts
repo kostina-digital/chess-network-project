@@ -4,6 +4,8 @@ import { randomBytes } from "crypto";
 
 const MAX_FILES = 3;
 const MAX_BYTES = 2 * 1024 * 1024;
+export const POST_IMAGE_STORAGE_DIR =
+  process.env.POST_IMAGE_STORAGE_DIR || path.join("/tmp", "uploads", "posts");
 
 const ALLOWED = new Set([
   "image/jpeg",
@@ -68,13 +70,13 @@ function isNonEmptyBlob(v: unknown): v is Blob {
   );
 }
 
-/** Saves images under public/uploads/posts. Returns public paths like /uploads/posts/…. */
+/** Saves images under a writable uploads root and returns /api/uploads/posts/... URLs. */
 export async function savePostImages(files: Blob[]): Promise<string[]> {
   if (files.length > MAX_FILES) {
     throw new Error(`You can attach up to ${MAX_FILES} images per post`);
   }
 
-  const dir = path.join(process.cwd(), "public", "uploads", "posts");
+  const dir = POST_IMAGE_STORAGE_DIR;
   await mkdir(dir, { recursive: true });
 
   const urls: string[] = [];
@@ -105,7 +107,7 @@ export async function savePostImages(files: Blob[]): Promise<string[]> {
 }
 
 export async function deleteStoredPostImages(imageUrls: string[]): Promise<void> {
-  const dir = path.join(process.cwd(), "public", "uploads", "posts");
+  const dir = POST_IMAGE_STORAGE_DIR;
   const resolvedDir = path.resolve(dir);
 
   await Promise.all(
